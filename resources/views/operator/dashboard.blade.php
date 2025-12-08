@@ -8,78 +8,68 @@
 
 @section('content')
 <!-- Page Header -->
-<div class="mb-6">
-    <h1 class="text-3xl font-bold text-gray-900 dark:text-white">Dashboard Operator</h1>
-    <p class="text-gray-600 dark:text-gray-400">Selamat datang, {{ auth()->user()->name }}</p>
+<div class="mb-8 relative rounded-xl overflow-hidden bg-blue-600">
+    <div class="absolute inset-0">
+        <img src="{{ asset('storage/images/background-renged.jpeg') }}" class="w-full h-full object-cover opacity-20" alt="Background">
+        <div class="absolute inset-0 bg-gradient-to-r from-blue-900 via-blue-800 to-transparent"></div>
+    </div>
+    <div class="relative p-8 text-white">
+        <h1 class="text-3xl font-bold mb-2">Selamat Datang, {{ auth()->user()->name }}</h1>
+        <p class="text-blue-100">Selamat bekerja! Pantau terus aktivitas layanan desa hari ini.</p>
+    </div>
 </div>
 
 <!-- Stats Grid -->
-<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
     <!-- Total Assets -->
-    <div class="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
-        <div class="flex items-center">
-            <div class="flex-shrink-0">
-                <div class="w-12 h-12 bg-blue-100 dark:bg-blue-900 rounded-lg flex items-center justify-center">
-                    <svg class="w-6 h-6 text-blue-600 dark:text-blue-300" fill="currentColor" viewBox="0 0 20 20">
-                        <path d="M5 3a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2V5a2 2 0 00-2-2H5zM5 11a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2v-2a2 2 0 00-2-2H5zM11 5a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V5zM11 13a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"/>
-                    </svg>
-                </div>
+    <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6 flex items-center hover:shadow-md transition-shadow">
+        <div class="flex-shrink-0 mr-4">
+            <div class="w-14 h-14 bg-blue-50 rounded-lg flex items-center justify-center text-blue-600">
+                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path></svg>
             </div>
-            <div class="ml-4">
-                <h3 class="text-sm font-medium text-gray-600 dark:text-gray-400">Total Aset</h3>
-                <p class="text-2xl font-bold text-gray-900 dark:text-white">{{ $stats['total_assets'] }}</p>
-            </div>
+        </div>
+        <div>
+            <div class="text-sm font-medium text-gray-500">Total Aset</div>
+            <div class="text-2xl font-bold text-gray-800">{{ $stats['total_assets'] }}</div>
         </div>
     </div>
 
     <!-- Available Assets -->
-    <div class="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
-        <div class="flex items-center">
-            <div class="flex-shrink-0">
-                <div class="w-12 h-12 bg-green-100 dark:bg-green-900 rounded-lg flex items-center justify-center">
-                    <svg class="w-6 h-6 text-green-600 dark:text-green-300" fill="currentColor" viewBox="0 0 20 20">
-                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
-                    </svg>
-                </div>
+    <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6 flex items-center hover:shadow-md transition-shadow">
+        <div class="flex-shrink-0 mr-4">
+            <div class="w-14 h-14 bg-green-50 rounded-lg flex items-center justify-center text-green-600">
+                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
             </div>
-            <div class="ml-4">
-                <h3 class="text-sm font-medium text-gray-600 dark:text-gray-400">Aset Tersedia</h3>
-                <p class="text-2xl font-bold text-gray-900 dark:text-white">{{ $stats['available_assets'] }}</p>
-            </div>
+        </div>
+        <div>
+            <div class="text-sm font-medium text-gray-500">Aset Tersedia</div>
+            <div class="text-2xl font-bold text-gray-800">{{ $stats['available_assets'] }}</div>
         </div>
     </div>
 
     <!-- Pending Loans -->
-    <div class="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
-        <div class="flex items-center">
-            <div class="flex-shrink-0">
-                <div class="w-12 h-12 bg-yellow-100 dark:bg-yellow-900 rounded-lg flex items-center justify-center">
-                    <svg class="w-6 h-6 text-yellow-600 dark:text-yellow-300" fill="currentColor" viewBox="0 0 20 20">
-                        <path d="M10 2a6 6 0 00-6 6v3.586l-.707.707A1 1 0 004 14h12a1 1 0 00.707-1.707L16 11.586V8a6 6 0 00-6-6zM10 18a3 3 0 01-3-3h6a3 3 0 01-3 3z"/>
-                    </svg>
-                </div>
+    <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6 flex items-center hover:shadow-md transition-shadow">
+        <div class="flex-shrink-0 mr-4">
+            <div class="w-14 h-14 bg-yellow-50 rounded-lg flex items-center justify-center text-yellow-600">
+                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
             </div>
-            <div class="ml-4">
-                <h3 class="text-sm font-medium text-gray-600 dark:text-gray-400">Peminjaman Pending</h3>
-                <p class="text-2xl font-bold text-gray-900 dark:text-white">{{ $stats['pending_loans'] }}</p>
-            </div>
+        </div>
+        <div>
+            <div class="text-sm font-medium text-gray-500">Peminjaman Pending</div>
+            <div class="text-2xl font-bold text-gray-800">{{ $stats['pending_loans'] }}</div>
         </div>
     </div>
 
     <!-- Pending Letters -->
-    <div class="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
-        <div class="flex items-center">
-            <div class="flex-shrink-0">
-                <div class="w-12 h-12 bg-purple-100 dark:bg-purple-900 rounded-lg flex items-center justify-center">
-                    <svg class="w-6 h-6 text-purple-600 dark:text-purple-300" fill="currentColor" viewBox="0 0 20 20">
-                        <path d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4z"/>
-                    </svg>
-                </div>
+    <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6 flex items-center hover:shadow-md transition-shadow">
+        <div class="flex-shrink-0 mr-4">
+            <div class="w-14 h-14 bg-purple-50 rounded-lg flex items-center justify-center text-purple-600">
+                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
             </div>
-            <div class="ml-4">
-                <h3 class="text-sm font-medium text-gray-600 dark:text-gray-400">Surat Pending</h3>
-                <p class="text-2xl font-bold text-gray-900 dark:text-white">{{ $stats['pending_letters'] }}</p>
-            </div>
+        </div>
+        <div>
+            <div class="text-sm font-medium text-gray-500">Surat Pending</div>
+            <div class="text-2xl font-bold text-gray-800">{{ $stats['pending_letters'] }}</div>
         </div>
     </div>
 </div>
@@ -87,45 +77,76 @@
 <!-- Recent Activity Grid -->
 <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
     <!-- Pending Loans -->
-    <div class="bg-white dark:bg-gray-800 rounded-lg shadow">
-        <div class="p-6 border-b border-gray-200 dark:border-gray-700">
-            <h2 class="text-xl font-semibold text-gray-900 dark:text-white">Peminjaman Menunggu Approval</h2>
+    <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+        <div class="p-6 border-b border-gray-100 flex justify-between items-center bg-gray-50">
+            <h2 class="font-bold text-gray-900 text-lg">Permintaan Peminjaman</h2>
+            <a href="#" class="text-sm text-blue-600 font-medium hover:underline">Lihat Semua</a>
         </div>
-        <div class="p-6">
+        <div class="divide-y divide-gray-100">
             @forelse($recent_loans as $loan)
-                <div class="mb-4 p-4 bg-gray-50 dark:bg-gray-700 rounded-lg">
+                <div class="p-6 hover:bg-gray-50 transition-colors">
                     <div class="flex justify-between items-start mb-2">
-                        <h4 class="font-semibold text-gray-900 dark:text-white">{{ $loan->asset->name }}</h4>
-                        <span class="text-xs bg-yellow-100 text-yellow-800 px-2 py-1 rounded">Pending</span>
+                        <div class="flex items-center">
+                            <div class="bg-blue-100 text-blue-700 font-bold px-2 py-1 rounded text-xs mr-3">LOAN</div>
+                            <h4 class="font-bold text-gray-900">{{ $loan->asset->name }}</h4>
+                        </div>
+                        <span class="text-xs font-semibold px-2 py-1 bg-yellow-100 text-yellow-800 rounded-full border border-yellow-200">
+                            Menunggu Persetujuan
+                        </span>
                     </div>
-                    <p class="text-sm text-gray-600 dark:text-gray-400">Peminjam: {{ $loan->user->name }}</p>
-                    <p class="text-sm text-gray-600 dark:text-gray-400">Jumlah: {{ $loan->quantity }} unit</p>
-                    <p class="text-sm text-gray-600 dark:text-gray-400">Tanggal: {{ $loan->loan_date->format('d M Y') }}</p>
+                    <div class="pl-12 text-sm text-gray-600 space-y-1">
+                        <p><span class="font-medium text-gray-800">{{ $loan->user->name }}</span> mengajukan peminjaman</p>
+                        <p class="text-gray-500">Jumlah: {{ $loan->quantity }} Unit &bull; {{ $loan->loan_date->format('d M Y') }}</p>
+                    </div>
+                    <div class="mt-4 pl-12 flex space-x-2">
+                        <button class="px-3 py-1.5 bg-green-600 text-white text-xs font-bold rounded hover:bg-green-700 transition">Setujui</button>
+                        <button class="px-3 py-1.5 bg-red-600 text-white text-xs font-bold rounded hover:bg-red-700 transition">Tolak</button>
+                    </div>
                 </div>
             @empty
-                <p class="text-gray-500 dark:text-gray-400 text-center py-4">Tidak ada peminjaman pending</p>
+                <div class="p-8 text-center">
+                    <div class="inline-flex items-center justify-center w-12 h-12 bg-gray-100 rounded-full mb-4 text-gray-400">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                    </div>
+                    <p class="text-gray-500">Tidak ada permintaan peminjaman baru.</p>
+                </div>
             @endforelse
         </div>
     </div>
 
     <!-- Pending Letters -->
-    <div class="bg-white dark:bg-gray-800 rounded-lg shadow">
-        <div class="p-6 border-b border-gray-200 dark:border-gray-700">
-            <h2 class="text-xl font-semibold text-gray-900 dark:text-white">Pengajuan Surat Baru</h2>
+    <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+        <div class="p-6 border-b border-gray-100 flex justify-between items-center bg-gray-50">
+            <h2 class="font-bold text-gray-900 text-lg">Permintaan Surat</h2>
+            <a href="#" class="text-sm text-blue-600 font-medium hover:underline">Lihat Semua</a>
         </div>
-        <div class="p-6">
+        <div class="divide-y divide-gray-100">
             @forelse($recent_letters as $letter)
-                <div class="mb-4 p-4 bg-gray-50 dark:bg-gray-700 rounded-lg">
+                <div class="p-6 hover:bg-gray-50 transition-colors">
                     <div class="flex justify-between items-start mb-2">
-                        <h4 class="font-semibold text-gray-900 dark:text-white">{{ $letter->letterType->name }}</h4>
-                        <span class="text-xs bg-yellow-100 text-yellow-800 px-2 py-1 rounded">Pending</span>
+                         <div class="flex items-center">
+                            <div class="bg-purple-100 text-purple-700 font-bold px-2 py-1 rounded text-xs mr-3">SURAT</div>
+                             <h4 class="font-bold text-gray-900">{{ $letter->letterType->name }}</h4>
+                        </div>
+                        <span class="text-xs font-semibold px-2 py-1 bg-yellow-100 text-yellow-800 rounded-full border border-yellow-200">
+                            Menunggu Verifikasi
+                        </span>
                     </div>
-                    <p class="text-sm text-gray-600 dark:text-gray-400">Pemohon: {{ $letter->user->name }}</p>
-                    <p class="text-sm text-gray-600 dark:text-gray-400">Keperluan: {{ Str::limit($letter->purpose, 50) }}</p>
-                    <p class="text-sm text-gray-600 dark:text-gray-400">Tanggal: {{ $letter->request_date->format('d M Y') }}</p>
+                    <div class="pl-12 text-sm text-gray-600 space-y-1">
+                        <p><span class="font-medium text-gray-800">{{ $letter->user->name }}</span> mengajukan surat</p>
+                        <p class="text-gray-500">Keperluan: {{ Str::limit($letter->purpose, 40) }}</p>
+                    </div>
+                    <div class="mt-4 pl-12 flex space-x-2">
+                        <button class="px-3 py-1.5 bg-blue-600 text-white text-xs font-bold rounded hover:bg-blue-700 transition">Proses Surat</button>
+                    </div>
                 </div>
             @empty
-                <p class="text-gray-500 dark:text-gray-400 text-center py-4">Tidak ada pengajuan surat baru</p>
+                <div class="p-8 text-center">
+                    <div class="inline-flex items-center justify-center w-12 h-12 bg-gray-100 rounded-full mb-4 text-gray-400">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
+                    </div>
+                    <p class="text-gray-500">Tidak ada permintaan surat baru.</p>
+                </div>
             @endforelse
         </div>
     </div>

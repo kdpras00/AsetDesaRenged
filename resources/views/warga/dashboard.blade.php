@@ -3,117 +3,120 @@
 @section('title', 'Dashboard Warga - Desa Renged')
 
 @section('sidebar')
-<ul class="space-y-2 font-medium">
-    <li>
-        <a href="{{ route('warga.dashboard') }}" class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group bg-gray-100 dark:bg-gray-700">
-            <svg class="w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" fill="currentColor" viewBox="0 0 22 21">
-                <path d="M16.975 11H10V4.025a1 1 0 0 0-1.066-.998 8.5 8.5 0 1 0 9.039 9.039.999.999 0 0 0-1-1.066h.002Z"/>
-                <path d="M12.5 0c-.157 0-.311.01-.565.027A1 1 0 0 0 11 1.02V10h8.975a1 1 0 0 0 1-.935c.013-.188.028-.374.028-.565A8.51 8.51 0 0 0 12.5 0Z"/>
-            </svg>
-            <span class="ms-3">Dashboard</span>
-        </a>
-    </li>
-    <li>
-        <a href="#" class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
-            <svg class="w-5 h-5 text-gray-500" fill="currentColor" viewBox="0 0 20 20">
-                <path d="M5 3a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2V5a2 2 0 00-2-2H5zM5 11a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2v-2a2 2 0 00-2-2H5zM11 5a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V5zM11 13a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"/>
-            </svg>
-            <span class="flex-1 ms-3 whitespace-nowrap">Pinjam Aset</span>
-        </a>
-    </li>
-    <li>
-        <a href="#" class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
-            <svg class="w-5 h-5 text-gray-500" fill="currentColor" viewBox="0 0 20 20">
-                <path d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4z"/>
-            </svg>
-            <span class="flex-1 ms-3 whitespace-nowrap">Ajukan Surat</span>
-        </a>
-    </li>
-    <li>
-        <a href="#" class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
-            <svg class="w-5 h-5 text-gray-500" fill="currentColor" viewBox="0 0 20 20">
-                <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"/>
-            </svg>
-            <span class="flex-1 ms-3 whitespace-nowrap">Riwayat Saya</span>
-        </a>
-    </li>
-</ul>
+    @include('warga.sidebar')
 @endsection
 
 @section('content')
-<div class="mb-6">
-    <h1 class="text-3xl font-bold text-gray-900 dark:text-white">Dashboard Warga</h1>
-    <p class="text-gray-600 dark:text-gray-400">Selamat datang, {{ auth()->user()->name }}</p>
-</div>
-
-<!-- Stats -->
-<div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-    <div class="bg-gradient-to-br from-blue-500 to-blue-600 rounded-lg shadow-lg p-6 text-white">
-        <h3 class="text-sm font-medium opacity-90">Peminjaman Aktif</h3>
-        <p class="text-3xl font-bold mt-2">{{ $stats['active_loans'] }}</p>
+<!-- Page Header -->
+<div class="mb-8 relative rounded-xl overflow-hidden bg-green-600">
+    <div class="absolute inset-0">
+        <img src="{{ asset('storage/images/background-renged.jpeg') }}" class="w-full h-full object-cover opacity-20" alt="Background">
+        <div class="absolute inset-0 bg-gradient-to-r from-green-900 via-green-800 to-transparent"></div>
     </div>
-    <div class="bg-gradient-to-br from-yellow-500 to-yellow-600 rounded-lg shadow-lg p-6 text-white">
-        <h3 class="text-sm font-medium opacity-90">Surat Pending</h3>
-        <p class="text-3xl font-bold mt-2">{{ $stats['pending_letters'] }}</p>
-    </div>
-    <div class="bg-gradient-to-br from-green-500 to-green-600 rounded-lg shadow-lg p-6 text-white">
-        <h3 class="text-sm font-medium opacity-90">Surat Terverifikasi</h3>
-        <p class="text-3xl font-bold mt-2">{{ $stats['verified_letters'] }}</p>
+    <div class="relative p-8 text-white">
+        <h1 class="text-3xl font-bold mb-2">Selamat Datang, {{ auth()->user()->name }}</h1>
+        <p class="text-green-100">Akses layanan publik desa dengan mudah dan cepat.</p>
     </div>
 </div>
 
-<!-- Activity -->
-<div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-    <div class="bg-white dark:bg-gray-800 rounded-lg shadow">
-        <div class="p-6 border-b border-gray-200 dark:border-gray-700">
-            <h2 class="text-xl font-semibold text-gray-900 dark:text-white">Riwayat Peminjaman</h2>
+<!-- Stats Grid -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+    <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6 flex items-center hover:shadow-md transition-shadow">
+        <div class="flex-shrink-0 mr-4">
+            <div class="w-14 h-14 bg-blue-50 rounded-lg flex items-center justify-center text-blue-600">
+                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+            </div>
         </div>
-        <div class="p-6">
+        <div>
+            <div class="text-sm font-medium text-gray-500">Peminjaman Aktif</div>
+            <div class="text-2xl font-bold text-gray-800">{{ $stats['active_loans'] }}</div>
+        </div>
+    </div>
+    <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6 flex items-center hover:shadow-md transition-shadow">
+        <div class="flex-shrink-0 mr-4">
+             <div class="w-14 h-14 bg-yellow-50 rounded-lg flex items-center justify-center text-yellow-600">
+                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+            </div>
+        </div>
+        <div>
+            <div class="text-sm font-medium text-gray-500">Surat Pending</div>
+            <div class="text-2xl font-bold text-gray-800">{{ $stats['pending_letters'] }}</div>
+        </div>
+    </div>
+    <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6 flex items-center hover:shadow-md transition-shadow">
+        <div class="flex-shrink-0 mr-4">
+            <div class="w-14 h-14 bg-green-50 rounded-lg flex items-center justify-center text-green-600">
+                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+            </div>
+        </div>
+        <div>
+            <div class="text-sm font-medium text-gray-500">Surat Terverifikasi</div>
+            <div class="text-2xl font-bold text-gray-800">{{ $stats['verified_letters'] }}</div>
+        </div>
+    </div>
+</div>
+
+<!-- Recent Activity -->
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+    <!-- Loan History -->
+    <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+        <div class="p-6 border-b border-gray-100 flex justify-between items-center bg-gray-50">
+            <h2 class="font-bold text-gray-900 text-lg">Riwayat Peminjaman</h2>
+            <a href="{{ route('warga.loans.index') }}" class="text-sm text-green-600 font-medium hover:underline">Lihat Semua</a>
+        </div>
+        <div class="divide-y divide-gray-100">
             @forelse($recent_loans as $loan)
-                <div class="mb-4 p-4 bg-gray-50 dark:bg-gray-700 rounded-lg">
-                    <h4 class="font-semibold text-gray-900 dark:text-white mb-2">{{ $loan->asset->name }}</h4>
-                    <div class="flex items-center justify-between text-sm">
-                        <span class="text-gray-600 dark:text-gray-400">{{ $loan->loan_date->format('d M Y') }}</span>
+                <div class="p-4 hover:bg-gray-50 transition-colors">
+                    <div class="flex justify-between items-start mb-1">
+                        <h4 class="font-semibold text-gray-900 text-sm">{{ $loan->asset->name }}</h4>
                         @if($loan->status == 'pending')
-                            <span class="bg-yellow-100 text-yellow-800 px-2 py-1 rounded text-xs">Pending</span>
+                            <span class="bg-yellow-100 text-yellow-800 text-xs font-bold px-2 py-0.5 rounded">Pending</span>
                         @elseif($loan->status == 'approved')
-                            <span class="bg-green-100 text-green-800 px-2 py-1 rounded text-xs">Disetujui</span>
+                            <span class="bg-blue-100 text-blue-800 text-xs font-bold px-2 py-0.5 rounded">Dipinjam</span>
                         @elseif($loan->status == 'rejected')
-                            <span class="bg-red-100 text-red-800 px-2 py-1 rounded text-xs">Ditolak</span>
+                            <span class="bg-red-100 text-red-800 text-xs font-bold px-2 py-0.5 rounded">Ditolak</span>
                         @else
-                            <span class="bg-gray-100 text-gray-800 px-2 py-1 rounded text-xs">Dikembalikan</span>
+                            <span class="bg-green-100 text-green-800 text-xs font-bold px-2 py-0.5 rounded">Selesai</span>
                         @endif
+                    </div>
+                    <div class="flex justify-between items-center text-xs text-gray-500">
+                        <span>{{ $loan->loan_date->format('d M Y') }}</span>
+                         <span>{{ $loan->quantity }} Unit</span>
                     </div>
                 </div>
             @empty
-                <p class="text-gray-500 dark:text-gray-400 text-center py-4">Belum ada riwayat peminjaman</p>
+                <div class="p-8 text-center text-gray-400 text-sm">Belum ada riwayat peminjaman.</div>
             @endforelse
         </div>
     </div>
 
-    <div class="bg-white dark:bg-gray-800 rounded-lg shadow">
-        <div class="p-6 border-b border-gray-200 dark:border-gray-700">
-            <h2 class="text-xl font-semibold text-gray-900 dark:text-white">Pengajuan Surat</h2>
+    <!-- Letter History -->
+     <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+        <div class="p-6 border-b border-gray-100 flex justify-between items-center bg-gray-50">
+            <h2 class="font-bold text-gray-900 text-lg">Pengajuan Surat</h2>
+            <a href="{{ route('warga.letters.index') }}" class="text-sm text-green-600 font-medium hover:underline">Lihat Semua</a>
         </div>
-        <div class="p-6">
+        <div class="divide-y divide-gray-100">
             @forelse($recent_letters as $letter)
-                <div class="mb-4 p-4 bg-gray-50 dark:bg-gray-700 rounded-lg">
-                    <h4 class="font-semibold text-gray-900 dark:text-white mb-2">{{ $letter->letterType->name }}</h4>
-                    <div class="flex items-center justify-between text-sm">
-                        <span class="text-gray-600 dark:text-gray-400">{{ $letter->request_date->format('d M Y') }}</span>
+                <div class="p-4 hover:bg-gray-50 transition-colors">
+                    <div class="flex justify-between items-start mb-1">
+                        <h4 class="font-semibold text-gray-900 text-sm">{{ $letter->letterType->name }}</h4>
                         @if($letter->status == 'pending')
-                            <span class="bg-yellow-100 text-yellow-800 px-2 py-1 rounded text-xs">Pending</span>
+                            <span class="bg-yellow-100 text-yellow-800 text-xs font-bold px-2 py-0.5 rounded">Pending</span>
                         @elseif($letter->status == 'processed')
-                            <span class="bg-blue-100 text-blue-800 px-2 py-1 rounded text-xs">Diproses</span>
+                             <span class="bg-blue-100 text-blue-800 text-xs font-bold px-2 py-0.5 rounded">Diproses</span>
                         @elseif($letter->status == 'verified')
-                            <span class="bg-green-100 text-green-800 px-2 py-1 rounded text-xs">Terverifikasi</span>
+                            <span class="bg-green-100 text-green-800 text-xs font-bold px-2 py-0.5 rounded">Selesai</span>
                         @else
-                            <span class="bg-red-100 text-red-800 px-2 py-1 rounded text-xs">Ditolak</span>
+                            <span class="bg-red-100 text-red-800 text-xs font-bold px-2 py-0.5 rounded">Ditolak</span>
                         @endif
+                    </div>
+                     <div class="flex justify-between items-center text-xs text-gray-500">
+                        <span>{{ $letter->request_date->format('d M Y') }}</span>
                     </div>
                 </div>
             @empty
-                <p class="text-gray-500 dark:text-gray-400 text-center py-4">Belum ada pengajuan surat</p>
+                <div class="p-8 text-center text-gray-400 text-sm">Belum ada pengajuan surat.</div>
             @endforelse
         </div>
     </div>

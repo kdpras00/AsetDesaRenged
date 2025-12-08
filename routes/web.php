@@ -30,9 +30,17 @@ Route::post('/logout', [LoginController::class, 'logout'])->name('logout')->midd
 Route::middleware(['auth', 'role:operator'])->prefix('operator')->name('operator.')->group(function () {
     Route::get('/dashboard', [OperatorDashboardController::class, 'index'])->name('dashboard');
     
-    // Asset management routes will be added here
-    // Loan approval routes will be added here
-    // Letter processing routes will be added here
+    // Asset management routes
+    Route::resource('assets', \App\Http\Controllers\Operator\AssetController::class);
+    // Loan management
+    Route::get('/loans', [\App\Http\Controllers\Operator\LoanController::class, 'index'])->name('loans.index');
+    Route::post('/loans/{loan}/approve', [\App\Http\Controllers\Operator\LoanController::class, 'approve'])->name('loans.approve');
+    Route::post('/loans/{loan}/reject', [\App\Http\Controllers\Operator\LoanController::class, 'reject'])->name('loans.reject');
+    Route::post('/loans/{loan}/return', [\App\Http\Controllers\Operator\LoanController::class, 'markreturned'])->name('loans.return');
+    // Letter processing
+    Route::get('/letters', [\App\Http\Controllers\Operator\LetterController::class, 'index'])->name('letters.index');
+    Route::post('/letters/{letter}/process', [\App\Http\Controllers\Operator\LetterController::class, 'process'])->name('letters.process');
+    Route::post('/letters/{letter}/reject', [\App\Http\Controllers\Operator\LetterController::class, 'reject'])->name('letters.reject');
     
     // User management
     Route::resource('users', \App\Http\Controllers\Operator\UserController::class);
@@ -42,14 +50,24 @@ Route::middleware(['auth', 'role:operator'])->prefix('operator')->name('operator
 Route::middleware(['auth', 'role:warga'])->prefix('warga')->name('warga.')->group(function () {
     Route::get('/dashboard', [WargaDashboardController::class, 'index'])->name('dashboard');
     
-    // Loan request routes will be added here
-    // Letter request routes will be added here
+    // Loan requests
+    Route::get('/loans', [\App\Http\Controllers\Warga\LoanRequestController::class, 'index'])->name('loans.index');
+    Route::get('/loans/create/{asset}', [\App\Http\Controllers\Warga\LoanRequestController::class, 'create'])->name('loans.create');
+    Route::post('/loans', [\App\Http\Controllers\Warga\LoanRequestController::class, 'store'])->name('loans.store');
+    // Letter requests
+    Route::get('/letters', [\App\Http\Controllers\Warga\LetterRequestController::class, 'index'])->name('letters.index');
+    Route::get('/letters/create/{type}', [\App\Http\Controllers\Warga\LetterRequestController::class, 'create'])->name('letters.create');
+    Route::post('/letters', [\App\Http\Controllers\Warga\LetterRequestController::class, 'store'])->name('letters.store');
 });
 
 // Kepala Desa routes
 Route::middleware(['auth', 'role:kepala_desa'])->prefix('kepala-desa')->name('kepala-desa.')->group(function () {
     Route::get('/dashboard', [KepalaDasaDashboardController::class, 'index'])->name('dashboard');
     
-    // Letter verification routes will be added here
-    // Report routes will be added here
+    // Letter verification
+    Route::get('/letters', [\App\Http\Controllers\KepalaDesa\LetterVerificationController::class, 'index'])->name('letters.index');
+    Route::post('/letters/{letter}/verify', [\App\Http\Controllers\KepalaDesa\LetterVerificationController::class, 'verify'])->name('letters.verify');
+    Route::post('/letters/{letter}/reject', [\App\Http\Controllers\KepalaDesa\LetterVerificationController::class, 'reject'])->name('letters.reject');
+    // Report routes
+    Route::get('/reports', [\App\Http\Controllers\KepalaDesa\ReportController::class, 'index'])->name('reports.index');
 });
