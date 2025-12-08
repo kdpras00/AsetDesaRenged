@@ -68,9 +68,9 @@
                         <td class="px-6 py-4 text-center">
                             @if($letter->status == 'processed')
                                 <div class="flex justify-center space-x-2">
-                                    <form action="{{ route('kepala-desa.letters.verify', $letter) }}" method="POST">
+                                    <form id="verify-form-{{ $letter->id }}" action="{{ route('kepala-desa.letters.verify', $letter) }}" method="POST">
                                         @csrf
-                                        <button type="submit" class="text-white bg-green-600 hover:bg-green-700 focus:ring-4 focus:ring-green-300 font-medium rounded text-xs px-3 py-1.5 focus:outline-none transition flex items-center" onclick="return confirm('Apakah Anda yakin ingin menyetujui dan menandatangani surat ini?')">
+                                        <button type="button" onclick="confirmVerify({{ $letter->id }})" class="text-white bg-green-600 hover:bg-green-700 focus:ring-4 focus:ring-green-300 font-medium rounded text-xs px-3 py-1.5 focus:outline-none transition flex items-center">
                                             <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
                                             ACC / Tanda Tangan
                                         </button>
@@ -127,6 +127,23 @@
 </div>
 
 <script>
+    function confirmVerify(id) {
+        Swal.fire({
+            title: 'Setujui & Tanda Tangani?',
+            text: "Surat akan diverifikasi dan QR Code akan digenerate yang berfungsi sebagai tanda tangan elektronik sah.",
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonColor: '#16a34a',
+            cancelButtonColor: '#6b7280',
+            confirmButtonText: 'Ya, Setujui',
+            cancelButtonText: 'Batal'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                document.getElementById('verify-form-' + id).submit();
+            }
+        })
+    }
+
     function openRejectModal(url) {
         document.getElementById('rejectForm').action = url;
         document.getElementById('rejectModal').classList.remove('hidden');

@@ -37,18 +37,22 @@ class LetterVerificationController extends Controller
             return back()->with('error', 'Hanya surat yang sudah diproses admin yang dapat diverifikasi.');
         }
 
-        // Generate Verification Code (Simple for now)
-        $verificationCode = strtoupper(uniqid('VERIFY-'));
-
+        // Update letter status
         $letter->update([
             'status' => 'verified',
             'kepala_desa_id' => auth()->id(),
             'approved_date' => now(),
-            'verification_code' => $verificationCode,
-            // QR Code logic normally goes here
         ]);
 
-        return redirect()->back()->with('success', 'Surat berhasil diverifikasi dan ditandatangani secara digital.');
+        // Generate SHA-256 hash and QR code
+        try {
+            $letter->generateSHA256Hash();
+        } catch (\Exception $e) {
+            \Log::error('Failed to generate SHA-256 hash for letter: ' . $e->getMessage());
+            return back()->with('warning', 'Surat berhasil diverifikasi, namun gagal generate QR code. Silakan hubungi admin.');
+        }
+
+        return redirect()->back()->with('success', 'Surat berhasil diverifikasi dan QR code telah di-generate.');
     }
 
     /**

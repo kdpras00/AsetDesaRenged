@@ -82,23 +82,8 @@
 
     @stack('scripts')
     
-    <!-- SweetAlert2 -->
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
-        // Global Toast Configuration
-        const Toast = Swal.mixin({
-            toast: true,
-            position: 'top-end',
-            showConfirmButton: false,
-            timer: 3000,
-            timerProgressBar: true,
-            didOpen: (toast) => {
-                toast.addEventListener('mouseenter', Swal.stopTimer)
-                toast.addEventListener('mouseleave', Swal.resumeTimer)
-            }
-        });
-
-        // Handle Session Flash Messages
+        // Handle Session Flash Messages (using Swal from app.js)
         @if(session('success'))
             Toast.fire({
                 icon: 'success',
@@ -117,6 +102,13 @@
             Toast.fire({
                 icon: 'warning',
                 title: "{{ session('warning') }}"
+            });
+        @endif
+
+        @if(session('info'))
+            Toast.fire({
+                icon: 'info',
+                title: "{{ session('info') }}"
             });
         @endif
 

@@ -39,8 +39,8 @@ class LoanRequestController extends Controller
      */
     public function create(Asset $asset)
     {
-        if ($asset->status !== 'tersedia') {
-            return back()->with('error', 'Aset tidak tersedia untuk dipinjam.');
+        if ($asset->status !== 'tersedia' || $asset->rentable_stock <= 0) {
+            return back()->with('error', 'Aset tidak tersedia atau stok habis.');
         }
         return view('warga.loans.create', compact('asset'));
     }
@@ -60,9 +60,9 @@ class LoanRequestController extends Controller
 
         $asset = Asset::findOrFail($request->asset_id);
         
-        // Simple stock check
-        if ($request->quantity > $asset->quantity) {
-             return back()->withInput()->with('error', 'Jumlah permintaan melebihi stok tersedia (' . $asset->quantity . ').');
+        // Strict stock check using dynamic availability
+        if ($request->quantity > $asset->rentable_stock) {
+             return back()->withInput()->with('error', 'Jumlah permintaan melebihi stok tersedia. Sisa stok saat ini: ' . $asset->rentable_stock . ' unit.');
         }
 
         Loan::create([

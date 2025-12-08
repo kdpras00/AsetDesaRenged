@@ -91,7 +91,7 @@
                                     </button>
                                 </div>
                             @elseif($letter->status == 'verified')
-                                <a href="#" target="_blank" class="text-blue-600 hover:underline text-xs">Unduh</a>
+                                <a href="{{ route('operator.letters.download', $letter) }}" target="_blank" class="text-blue-600 hover:underline text-xs">Unduh</a>
                             @else
                                 <span class="text-gray-400 text-xs">-</span>
                             @endif

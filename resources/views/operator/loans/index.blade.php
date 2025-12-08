@@ -52,14 +52,54 @@
                 </thead>
                 <tbody class="divide-y divide-gray-100">
                     @forelse($loans as $loan)
-                    <tr class="bg-white hover:bg-gray-50 transition-colors">
+                    @php
+                        $rentableStock = $loan->asset->rentable_stock;
+                        // For pending loans, the rentable stock logic (Total - Pending - Approved) ALREADY subtracts this pending loan.
+                        // So to check if there is ENOUGH for THIS loan, we need to add it back to see the pool available for it.
+                        // Wait, if rentable_stock is calculated as (Total - All Pending & Approved),
+                        // then if rentable_stock >= 0, it means we are good?
+                        // Actually no. If Total=10, Pending=1 (this one). Rentable = 9.
+                        // We want to know if 1 <= 10. Yes.
+                        // If Total=1, Pending=1 (this one). Rentable = 0.
+                        // We want to know if 1 <= 1. Yes.
+                        // If Total=1, Pending=2 (this one + another). Rentable = -1.
+                        // We want to know if 1 <= (1 - 1 other) = 0? No.
+                        
+                        // Let's use the logic: available_for_this = rentable_stock + quantity_of_this_loan.
+                        // If available_for_this < loan->quantity, then Warning.
+                        // Simplification: valid if rentable_stock >= 0 ??
+                        // If Rentable is -1, it means we are short 1.
+                        // So yes, generally if rentable_stock < 0, we have a problem.
+                        
+                        // Let's stick to the controller logic for consistency:
+                        // currentUsage = Other Loans (Pending/Approved)
+                        // available = Total - currentUsage
+                        // if available < quantity -> Warning.
+                        
+                        $otherActiveLoans = \App\Models\Loan::where('asset_id', $loan->asset_id)
+                            ->where('id', '!=', $loan->id)
+                            ->whereIn('status', ['approved', 'pending'])
+                            ->sum('quantity');
+                        $availableForThis = $loan->asset->quantity - $otherActiveLoans;
+                        $isStockInsufficient = $availableForThis < $loan->quantity;
+                    @endphp
+                    <tr class="bg-white hover:bg-gray-50 transition-colors {{ $isStockInsufficient && $loan->status == 'pending' ? 'bg-red-50' : '' }}">
                         <td class="px-6 py-4 font-medium text-gray-900">
                             {{ $loan->user->name }}
                             <div class="text-xs text-gray-500">{{ $loan->user->email }}</div>
                         </td>
                         <td class="px-6 py-4">
                             <span class="font-bold text-gray-800">{{ $loan->asset->name }}</span>
-                            <div class="text-xs text-blue-600">Jml: {{ $loan->quantity }} Unit</div>
+                            <div class="text-xs text-blue-600 mb-1">Jml: {{ $loan->quantity }} Unit</div>
+                            
+                            @if($loan->status == 'pending')
+                                <div class="text-xs font-semibold {{ $isStockInsufficient ? 'text-red-600' : 'text-green-600' }}">
+                                    Stok: {{ $availableForThis }} Unit
+                                    @if($isStockInsufficient)
+                                        <span class="block text-red-700 font-bold mt-1">⚠️ Stok Kurang!</span>
+                                    @endif
+                                </div>
+                            @endif
                         </td>
                         <td class="px-6 py-4">
                             <div>{{ \Carbon\Carbon::parse($loan->loan_date)->translatedFormat('d M Y') }}</div>
@@ -82,9 +122,9 @@
                         <td class="px-6 py-4 text-center">
                             @if($loan->status == 'pending')
                                 <div class="flex justify-center space-x-2">
-                                    <form action="{{ route('operator.loans.approve', $loan) }}" method="POST">
+                                    <form action="{{ route('operator.loans.approve', $loan) }}" method="POST" id="approve-form-{{ $loan->id }}">
                                         @csrf
-                                        <button type="submit" class="text-white bg-green-600 hover:bg-green-700 focus:ring-4 focus:ring-green-300 font-medium rounded text-xs px-3 py-1.5 focus:outline-none transition" onclick="return confirm('Setujui peminjaman ini?')">
+                                        <button type="button" onclick="confirmApprove({{ $loan->id }})" class="text-white bg-green-600 hover:bg-green-700 focus:ring-4 focus:ring-green-300 font-medium rounded text-xs px-3 py-1.5 focus:outline-none transition">
                                             Terima
                                         </button>
                                     </form>
@@ -93,9 +133,9 @@
                                     </button>
                                 </div>
                             @elseif($loan->status == 'approved')
-                                <form action="{{ route('operator.loans.return', $loan) }}" method="POST">
+                                <form action="{{ route('operator.loans.return', $loan) }}" method="POST" id="return-form-{{ $loan->id }}">
                                     @csrf
-                                    <button type="submit" class="text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 font-medium rounded text-xs px-3 py-1.5 focus:outline-none transition" onclick="return confirm('Konfirmasi pengembalian aset ini?')">
+                                    <button type="button" onclick="confirmReturn({{ $loan->id }})" class="text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 font-medium rounded text-xs px-3 py-1.5 focus:outline-none transition">
                                         Terima Kembali
                                     </button>
                                 </form>
@@ -153,6 +193,40 @@
     function closeRejectModal() {
         document.getElementById('rejectModal').classList.add('hidden');
         document.getElementById('rejectModal').classList.remove('flex');
+    }
+
+    function confirmApprove(id) {
+        Swal.fire({
+            title: 'Setujui Peminjaman?',
+            text: "Aset akan dipinjamkan kepada pemohon",
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonColor: '#16a34a',
+            cancelButtonColor: '#6b7280',
+            confirmButtonText: 'Ya, Setujui!',
+            cancelButtonText: 'Batal'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                document.getElementById('approve-form-' + id).submit();
+            }
+        })
+    }
+
+    function confirmReturn(id) {
+        Swal.fire({
+            title: 'Konfirmasi Pengembalian?',
+            text: "Aset telah dikembalikan oleh peminjam",
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonColor: '#2563eb',
+            cancelButtonColor: '#6b7280',
+            confirmButtonText: 'Ya, Terima Kembali!',
+            cancelButtonText: 'Batal'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                document.getElementById('return-form-' + id).submit();
+            }
+        })
     }
 </script>
 @endsection

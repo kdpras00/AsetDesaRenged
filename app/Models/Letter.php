@@ -24,6 +24,7 @@ class Letter extends Model
         'status',
         'qr_code',
         'verification_code',
+        'sha256_hash',
         'operator_notes',
         'rejection_reason',
         'attachment',
@@ -54,6 +55,11 @@ class Letter extends Model
     public function letterType()
     {
         return $this->belongsTo(LetterType::class);
+    }
+
+    public function documentVerification()
+    {
+        return $this->hasOne(DocumentVerification::class);
     }
 
     // Scopes
@@ -103,6 +109,36 @@ class Letter extends Model
         $this->save();
 
         return $this->qr_code;
+    }
+
+    public function generateSHA256Hash()
+    {
+        $hashService = new \App\Services\DocumentHashService();
+        $qrService = new \App\Services\QRCodeService();
+
+        // Generate SHA-256 hash
+        $hash = $hashService->generateHash($this);
+        
+        // Generate verification URL
+        $verificationUrl = $hashService->generateVerificationUrl($hash);
+        
+        // Generate QR code
+        $qrCodePath = $qrService->generate($verificationUrl, 'qr_' . $hash);
+        
+        // Save hash ke letter
+        $this->sha256_hash = $hash;
+        $this->qr_code = $qrCodePath;
+        $this->save();
+        
+        // Create document verification record
+        $this->documentVerification()->create([
+            'sha256_hash' => $hash,
+            'verification_url' => $verificationUrl,
+            'issued_at' => now(),
+            'expires_at' => null, // No expiry by default
+        ]);
+        
+        return $hash;
     }
 
     public function isPending()

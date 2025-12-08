@@ -15,6 +15,11 @@ Route::get('/layanan', [HomeController::class, 'layanan'])->name('public.layanan
 Route::get('/statistik', [HomeController::class, 'statistik'])->name('public.stats');
 Route::get('/verify', [VerificationController::class, 'index'])->name('verification.index');
 Route::post('/verify', [VerificationController::class, 'verify'])->name('verification.verify');
+Route::get('/verify/{hash}', [VerificationController::class, 'verifyByHash'])
+    ->middleware('throttle:10,1')
+    ->name('verify.hash');
+Route::get('/captcha/refresh', [VerificationController::class, 'refreshCaptcha'])->name('captcha.refresh');
+Route::post('/verify/captcha', [VerificationController::class, 'submitCaptcha'])->name('verification.captcha.submit');
 
 // Auth routes
 Route::middleware('guest')->group(function () {
@@ -41,6 +46,7 @@ Route::middleware(['auth', 'role:operator'])->prefix('operator')->name('operator
     Route::get('/letters', [\App\Http\Controllers\Operator\LetterController::class, 'index'])->name('letters.index');
     Route::post('/letters/{letter}/process', [\App\Http\Controllers\Operator\LetterController::class, 'process'])->name('letters.process');
     Route::post('/letters/{letter}/reject', [\App\Http\Controllers\Operator\LetterController::class, 'reject'])->name('letters.reject');
+    Route::get('/letters/{letter}/download', [\App\Http\Controllers\Operator\LetterController::class, 'download'])->name('letters.download');
     
     // User management
     Route::resource('users', \App\Http\Controllers\Operator\UserController::class);
@@ -58,6 +64,7 @@ Route::middleware(['auth', 'role:warga'])->prefix('warga')->name('warga.')->grou
     Route::get('/letters', [\App\Http\Controllers\Warga\LetterRequestController::class, 'index'])->name('letters.index');
     Route::get('/letters/create/{type}', [\App\Http\Controllers\Warga\LetterRequestController::class, 'create'])->name('letters.create');
     Route::post('/letters', [\App\Http\Controllers\Warga\LetterRequestController::class, 'store'])->name('letters.store');
+    Route::get('/letters/{letter}/download', [\App\Http\Controllers\Warga\LetterRequestController::class, 'download'])->name('letters.download');
 });
 
 // Kepala Desa routes

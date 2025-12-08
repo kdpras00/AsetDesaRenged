@@ -40,7 +40,7 @@
                     </div>
                     <div class="mt-2 text-sm text-gray-600 flex items-center">
                         <svg class="w-4 h-4 mr-1 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path></svg>
-                         Stok Tersedia: <span class="font-bold text-gray-900 ml-1">{{ $asset->quantity }} Unit</span>
+                         Stok Tersedia: <span class="font-bold text-gray-900 ml-1">{{ $asset->rentable_stock }} Unit</span>
                     </div>
                 </div>
             </div>
@@ -87,11 +87,11 @@
                                 <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                                     <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path></svg>
                                 </div>
-                                <input type="number" name="quantity" value="{{ old('quantity', 1) }}" min="1" max="{{ $asset->quantity }}" required
+                                <input type="number" name="quantity" value="{{ old('quantity', 1) }}" min="1" max="{{ $asset->rentable_stock }}" required
                                     class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-3 transition-all focus:bg-white placeholder-gray-400" placeholder="1">
                             </div>
                             <p class="text-xs text-gray-500 mt-2 flex items-center">
-                                <span class="bg-blue-100 text-blue-700 text-xs font-semibold px-2 py-0.5 rounded mr-2">Stok: {{ $asset->quantity }}</span>
+                                <span class="bg-blue-100 text-blue-700 text-xs font-semibold px-2 py-0.5 rounded mr-2">Stok: {{ $asset->rentable_stock }}</span>
                                 Maksimal yang dapat dipinjam.
                             </p>
                         </div>

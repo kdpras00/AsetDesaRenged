@@ -72,4 +72,17 @@ class LetterController extends Controller
 
         return redirect()->back()->with('success', 'Pengajuan surat ditolak.');
     }
+    /**
+     * Download the letter as PDF (Operator View).
+     */
+    public function download(Letter $letter)
+    {
+        // Operator can download any letter, but maybe usually Processed or Verified?
+        // Let's allow downloading at any stage for previewing content.
+        
+        $pdf = \Barryvdh\DomPDF\Facade\Pdf::loadView('pdf.letter', compact('letter'));
+        $pdf->setPaper('A4', 'portrait');
+        
+        return $pdf->download('Surat-' . str_replace('/', '-', $letter->letter_number ?? 'DRAFT') . '.pdf');
+    }
 }

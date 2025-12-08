@@ -64,4 +64,24 @@ class LetterRequestController extends Controller
 
         return redirect()->route('warga.letters.index', ['view' => 'history'])->with('success', 'Permohonan surat berhasil diajukan. Menunggu verifikasi.');
     }
+    /**
+     * Download the letter as PDF.
+     */
+    public function download(Letter $letter)
+    {
+        // Authorization: Warga can only download their own letters
+        if ($letter->user_id !== auth()->id()) {
+            abort(403);
+        }
+
+        // Ideally only verified letters
+        if ($letter->status !== 'verified') {
+            return back()->with('error', 'Surat belum terverifikasi.');
+        }
+
+        $pdf = \Barryvdh\DomPDF\Facade\Pdf::loadView('pdf.letter', compact('letter'));
+        $pdf->setPaper('A4', 'portrait');
+        
+        return $pdf->download('Surat-' . str_replace('/', '-', $letter->letter_number) . '.pdf');
+    }
 }

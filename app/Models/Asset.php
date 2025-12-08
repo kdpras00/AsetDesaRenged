@@ -58,10 +58,22 @@ class Asset extends Model
 
     public function getAvailableQuantity()
     {
+        // Calculate borrowed items (pending + approved)
+        // returned status means asset is back in stock
+        // rejected status means asset was never taken
         $borrowed = $this->loans()
             ->whereIn('status', ['pending', 'approved'])
             ->sum('quantity');
         
-        return $this->quantity - $borrowed;
+        return max(0, $this->quantity - $borrowed);
+    }
+
+    /**
+     * Get dynamic rentable stock attribute.
+     * Usage: $asset->rentable_stock
+     */
+    public function getRentableStockAttribute()
+    {
+        return $this->getAvailableQuantity();
     }
 }

@@ -24,31 +24,27 @@
         </div>
     </div>
 
-    @if(request('view') == 'history')
-        @include('warga.letters.history')
-    @else
-        <!-- Letters Grid -->
-        <div class="p-6">
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                @forelse($letterTypes as $type)
-                <div class="bg-white rounded-xl border border-gray-200 p-6 hover:shadow-lg transition-all duration-300 flex flex-col items-center text-center">
-                    <div class="w-16 h-16 bg-blue-50 rounded-full flex items-center justify-center text-blue-600 mb-4">
-                        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
-                    </div>
-                    <h3 class="font-bold text-gray-900 text-lg mb-2">{{ $type->name }}</h3>
-                    <p class="text-sm text-gray-500 mb-4 flex-1">{{ $type->description ?? 'Surat keterangan resmi dari pemerintah desa.' }}</p>
-                    
-                    <a href="{{ route('warga.letters.create', $type) }}" class="w-full inline-flex justify-center items-center text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center transition shadow hover:shadow-md">
-                        Ajukan Sekarang
-                    </a>
+    <!-- Letters Grid -->
+    <div class="p-6">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            @forelse($letterTypes as $type)
+            <div class="bg-white rounded-xl border border-gray-200 p-6 hover:shadow-lg transition-all duration-300 flex flex-col items-center text-center">
+                <div class="w-16 h-16 bg-blue-50 rounded-full flex items-center justify-center text-blue-600 mb-4">
+                    <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
                 </div>
-                @empty
-                <div class="col-span-full py-12 text-center">
-                    <p class="text-gray-500">Belum ada layanan surat tersedia saat ini.</p>
-                </div>
-                @endforelse
+                <h3 class="font-bold text-gray-900 text-lg mb-2">{{ $type->name }}</h3>
+                <p class="text-sm text-gray-500 mb-4 flex-1">{{ $type->description ?? 'Surat keterangan resmi dari pemerintah desa.' }}</p>
+                
+                <a href="{{ route('warga.letters.create', $type) }}" class="w-full inline-flex justify-center items-center text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center transition shadow hover:shadow-md">
+                    Ajukan Sekarang
+                </a>
             </div>
+            @empty
+            <div class="col-span-full py-12 text-center">
+                <p class="text-gray-500">Belum ada layanan surat tersedia saat ini.</p>
+            </div>
+            @endforelse
         </div>
-    @endif
+    </div>
 </div>
 @endsection

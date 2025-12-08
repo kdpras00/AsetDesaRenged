@@ -75,77 +75,107 @@
 </div>
 
 <!-- Recent Activity Grid -->
-<div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+<!-- Recent Activity Grid -->
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
     <!-- Pending Loans -->
-    <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
-        <div class="p-6 border-b border-gray-100 flex justify-between items-center bg-gray-50">
-            <h2 class="font-bold text-gray-900 text-lg">Permintaan Peminjaman</h2>
-            <a href="#" class="text-sm text-blue-600 font-medium hover:underline">Lihat Semua</a>
+    <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden flex flex-col h-full">
+        <div class="p-6 border-b border-gray-100 flex justify-between items-center bg-gray-50/50">
+            <h2 class="font-bold text-gray-900 text-lg flex items-center">
+                <svg class="w-5 h-5 mr-2 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                Permintaan Peminjaman
+            </h2>
+            <a href="{{ route('operator.loans.index') }}" class="text-sm text-blue-600 font-medium hover:text-blue-700 hover:underline">Lihat Semua &rarr;</a>
         </div>
-        <div class="divide-y divide-gray-100">
+        <div class="divide-y divide-gray-100 flex-1">
             @forelse($recent_loans as $loan)
-                <div class="p-6 hover:bg-gray-50 transition-colors">
-                    <div class="flex justify-between items-start mb-2">
-                        <div class="flex items-center">
-                            <div class="bg-blue-100 text-blue-700 font-bold px-2 py-1 rounded text-xs mr-3">LOAN</div>
-                            <h4 class="font-bold text-gray-900">{{ $loan->asset->name }}</h4>
+                <div class="group p-6 hover:bg-blue-50/30 transition-all duration-200">
+                    <div class="flex justify-between items-start mb-3">
+                        <div class="flex flex-col">
+                            <h4 class="font-bold text-gray-900 text-base mb-1">{{ $loan->asset->name }}</h4>
+                            <div class="text-xs font-medium text-gray-500 bg-gray-100 px-2 py-1 rounded-full inline-block w-max">
+                                {{ $loan->quantity }} Unit
+                            </div>
                         </div>
-                        <span class="text-xs font-semibold px-2 py-1 bg-yellow-100 text-yellow-800 rounded-full border border-yellow-200">
+                        <span class="text-xs font-semibold px-2.5 py-1 bg-yellow-100 text-yellow-800 rounded-full border border-yellow-200 shadow-sm">
                             Menunggu Persetujuan
                         </span>
                     </div>
-                    <div class="pl-12 text-sm text-gray-600 space-y-1">
-                        <p><span class="font-medium text-gray-800">{{ $loan->user->name }}</span> mengajukan peminjaman</p>
-                        <p class="text-gray-500">Jumlah: {{ $loan->quantity }} Unit &bull; {{ $loan->loan_date->format('d M Y') }}</p>
+                    
+                    <div class="flex items-center text-sm text-gray-600 mb-2">
+                        <div class="w-8 h-8 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center font-bold text-xs mr-3">
+                            {{ substr($loan->user->name, 0, 1) }}
+                        </div>
+                        <div>
+                            <p class="text-gray-900 font-medium">{{ $loan->user->name }}</p>
+                            <p class="text-xs text-gray-500">{{ $loan->loan_date->format('d M Y') }}</p>
+                        </div>
                     </div>
-                    <div class="mt-4 pl-12 flex space-x-2">
-                        <button class="px-3 py-1.5 bg-green-600 text-white text-xs font-bold rounded hover:bg-green-700 transition">Setujui</button>
-                        <button class="px-3 py-1.5 bg-red-600 text-white text-xs font-bold rounded hover:bg-red-700 transition">Tolak</button>
+
+                    <div class="mt-4 flex justify-end">
+                        <a href="{{ route('operator.loans.index') }}" class="inline-flex items-center px-4 py-2 bg-white border border-gray-300 rounded-lg font-semibold text-xs text-gray-700 tracking-widest shadow-sm hover:bg-gray-50 hover:text-blue-600 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:opacity-25 transition ease-in-out duration-150">
+                            Lihat Detail
+                        </a>
                     </div>
                 </div>
             @empty
-                <div class="p-8 text-center">
-                    <div class="inline-flex items-center justify-center w-12 h-12 bg-gray-100 rounded-full mb-4 text-gray-400">
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                <div class="p-12 text-center flex flex-col items-center justify-center h-64">
+                    <div class="w-16 h-16 bg-gray-50 rounded-full flex items-center justify-center mb-4 text-gray-300">
+                        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"></path></svg>
                     </div>
-                    <p class="text-gray-500">Tidak ada permintaan peminjaman baru.</p>
+                    <h3 class="text-lg font-medium text-gray-900">Tidak ada permintaan</h3>
+                    <p class="text-gray-500 mt-1">Belum ada peminjaman aset baru.</p>
                 </div>
             @endforelse
         </div>
     </div>
 
     <!-- Pending Letters -->
-    <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
-        <div class="p-6 border-b border-gray-100 flex justify-between items-center bg-gray-50">
-            <h2 class="font-bold text-gray-900 text-lg">Permintaan Surat</h2>
-            <a href="#" class="text-sm text-blue-600 font-medium hover:underline">Lihat Semua</a>
+    <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden flex flex-col h-full">
+        <div class="p-6 border-b border-gray-100 flex justify-between items-center bg-gray-50/50">
+            <h2 class="font-bold text-gray-900 text-lg flex items-center">
+                <svg class="w-5 h-5 mr-2 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
+                Permintaan Surat
+            </h2>
+            <a href="{{ route('operator.letters.index') }}" class="text-sm text-blue-600 font-medium hover:text-blue-700 hover:underline">Lihat Semua &rarr;</a>
         </div>
-        <div class="divide-y divide-gray-100">
+        <div class="divide-y divide-gray-100 flex-1">
             @forelse($recent_letters as $letter)
-                <div class="p-6 hover:bg-gray-50 transition-colors">
-                    <div class="flex justify-between items-start mb-2">
-                         <div class="flex items-center">
-                            <div class="bg-purple-100 text-purple-700 font-bold px-2 py-1 rounded text-xs mr-3">SURAT</div>
-                             <h4 class="font-bold text-gray-900">{{ $letter->letterType->name }}</h4>
+                <div class="group p-6 hover:bg-purple-50/30 transition-all duration-200">
+                    <div class="flex justify-between items-start mb-3">
+                        <div class="flex flex-col">
+                            <h4 class="font-bold text-gray-900 text-base mb-1">{{ $letter->letterType->name }}</h4>
+                            <div class="text-xs font-medium text-gray-500 bg-gray-100 px-2 py-1 rounded-full inline-block w-max">
+                                {{ \Carbon\Carbon::parse($letter->created_at)->diffForHumans() }}
+                            </div>
                         </div>
-                        <span class="text-xs font-semibold px-2 py-1 bg-yellow-100 text-yellow-800 rounded-full border border-yellow-200">
+                        <span class="text-xs font-semibold px-2.5 py-1 bg-yellow-100 text-yellow-800 rounded-full border border-yellow-200 shadow-sm">
                             Menunggu Verifikasi
                         </span>
                     </div>
-                    <div class="pl-12 text-sm text-gray-600 space-y-1">
-                        <p><span class="font-medium text-gray-800">{{ $letter->user->name }}</span> mengajukan surat</p>
-                        <p class="text-gray-500">Keperluan: {{ Str::limit($letter->purpose, 40) }}</p>
+
+                     <div class="flex items-center text-sm text-gray-600 mb-3">
+                        <div class="w-8 h-8 rounded-full bg-purple-100 text-purple-600 flex items-center justify-center font-bold text-xs mr-3">
+                            {{ substr($letter->user->name, 0, 1) }}
+                        </div>
+                        <div class="flex-1">
+                            <p class="text-gray-900 font-medium">{{ $letter->user->name }}</p>
+                            <p class="text-xs text-gray-500 truncate max-w-[200px]" title="{{ $letter->purpose }}">Keperluan: {{ $letter->purpose }}</p>
+                        </div>
                     </div>
-                    <div class="mt-4 pl-12 flex space-x-2">
-                        <button class="px-3 py-1.5 bg-blue-600 text-white text-xs font-bold rounded hover:bg-blue-700 transition">Proses Surat</button>
+
+                    <div class="mt-4 flex justify-end">
+                        <a href="{{ route('operator.letters.index') }}" class="inline-flex items-center px-4 py-2 bg-blue-600 border border-transparent rounded-lg font-semibold text-xs text-white uppercase tracking-widest hover:bg-blue-700 active:bg-blue-900 focus:outline-none focus:border-blue-900 focus:ring ring-blue-300 disabled:opacity-25 transition ease-in-out duration-150 shadow-sm">
+                            Proses Surat
+                        </a>
                     </div>
                 </div>
             @empty
-                <div class="p-8 text-center">
-                    <div class="inline-flex items-center justify-center w-12 h-12 bg-gray-100 rounded-full mb-4 text-gray-400">
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
+               <div class="p-12 text-center flex flex-col items-center justify-center h-64">
+                    <div class="w-16 h-16 bg-gray-50 rounded-full flex items-center justify-center mb-4 text-gray-300">
+                        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
                     </div>
-                    <p class="text-gray-500">Tidak ada permintaan surat baru.</p>
+                    <h3 class="text-lg font-medium text-gray-900">Tidak ada surat</h3>
+                    <p class="text-gray-500 mt-1">Belum ada pengajuan surat baru.</p>
                 </div>
             @endforelse
         </div>
