@@ -45,4 +45,18 @@ class HomeController extends Controller
 
         return view('public.stats', compact('stats'));
     }
+    public function sejarah()
+    {
+        return view('public.profile.sejarah');
+    }
+
+    public function visiMisi()
+    {
+        return view('public.profile.visi-misi');
+    }
+
+    public function struktur()
+    {
+        return view('public.profile.struktur');
+    }
 }

@@ -74,7 +74,83 @@
     </div>
 </div>
 
-<!-- Recent Activity Grid -->
+<!-- Charts Grid -->
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-8">
+    <!-- Letter Trend Chart -->
+    <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6 lg:col-span-2">
+        <h3 class="font-bold text-gray-800 mb-4 flex items-center">
+            <svg class="w-5 h-5 mr-2 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 12l3-3 3 3 4-4M8 21l4-4 4 4M3 4h18M4 4h16v12a1 1 0 01-1 1H5a1 1 0 01-1-1V4z"></path></svg>
+            Tren Permohonan Surat
+        </h3>
+        <div class="h-64 relative">
+             <canvas id="letterChart"></canvas>
+        </div>
+    </div>
+
+    <!-- Asset Condition Chart -->
+    <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+        <h3 class="font-bold text-gray-800 mb-4 flex items-center">
+            <svg class="w-5 h-5 mr-2 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 3.055A9.001 9.001 0 1020.945 13H11V3.055z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.488 9H15V3.512A9.025 9.025 0 0120.488 9z"></path></svg>
+            Kondisi Aset
+        </h3>
+        <div class="h-64 relative flex items-center justify-center">
+            <canvas id="assetChart"></canvas>
+        </div>
+    </div>
+</div>
+
+@push('scripts')
+<script>
+    // Asset Chart (Doughnut)
+    const assetCtx = document.getElementById('assetChart').getContext('2d');
+    new Chart(assetCtx, {
+        type: 'doughnut',
+        data: {
+            labels: {!! json_encode($asset_chart['labels']) !!},
+            datasets: [{
+                data: {!! json_encode($asset_chart['data']) !!},
+                backgroundColor: ['#22c55e', '#eab308', '#ef4444'],
+                borderWidth: 0
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: { position: 'bottom' }
+            }
+        }
+    });
+
+    // Letter Trend Chart (Line)
+    const letterCtx = document.getElementById('letterChart').getContext('2d');
+    new Chart(letterCtx, {
+        type: 'line',
+        data: {
+            labels: {!! json_encode($letter_chart['labels']) !!},
+            datasets: [{
+                label: 'Jumlah Surat',
+                data: {!! json_encode($letter_chart['data']) !!},
+                borderColor: '#4f46e5',
+                backgroundColor: 'rgba(79, 70, 229, 0.1)',
+                tension: 0.4,
+                fill: true
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: { display: false }
+            },
+            scales: {
+                y: { beginAtZero: true, ticks: { stepSize: 1 } }
+            }
+        }
+    });
+</script>
+@endpush
+
 <!-- Recent Activity Grid -->
 <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
     <!-- Pending Loans -->

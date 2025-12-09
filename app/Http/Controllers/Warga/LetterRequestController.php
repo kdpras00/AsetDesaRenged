@@ -5,7 +5,10 @@ namespace App\Http\Controllers\Warga;
 use App\Http\Controllers\Controller;
 use App\Models\Letter;
 use App\Models\LetterType;
+use App\Models\User;
+use App\Notifications\NewLetterRequest;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Notification;
 
 class LetterRequestController extends Controller
 {
@@ -60,7 +63,11 @@ class LetterRequestController extends Controller
             $data['attachment'] = $request->file('attachment')->store('attachments', 'public');
         }
 
-        Letter::create($data);
+        $letter = Letter::create($data);
+
+        // Notify Operators
+        $operators = User::where('role', 'operator')->get();
+        Notification::send($operators, new NewLetterRequest($letter));
 
         return redirect()->route('warga.letters.index', ['view' => 'history'])->with('success', 'Permohonan surat berhasil diajukan. Menunggu verifikasi.');
     }
@@ -79,7 +86,11 @@ class LetterRequestController extends Controller
             return back()->with('error', 'Surat belum terverifikasi.');
         }
 
-        $pdf = \Barryvdh\DomPDF\Facade\Pdf::loadView('pdf.letter', compact('letter'));
+        $view = \Illuminate\Support\Str::contains(strtolower($letter->letterType->name), 'skck') 
+            ? 'pdf.skck' 
+            : 'pdf.letter';
+
+        $pdf = \Barryvdh\DomPDF\Facade\Pdf::loadView($view, compact('letter'));
         $pdf->setPaper('A4', 'portrait');
         
         return $pdf->download('Surat-' . str_replace('/', '-', $letter->letter_number) . '.pdf');

@@ -54,12 +54,28 @@
     </div>
 </div>
 
-<!-- Recent Letters -->
-<div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
-    <div class="p-6 border-b border-gray-100 flex justify-between items-center bg-gray-50">
-        <h2 class="font-bold text-gray-900 text-lg">Persetujuan Pending (Verifikasi Surat)</h2>
-        <a href="{{ route('kepala-desa.letters.index') }}" class="text-sm text-blue-600 font-medium hover:underline">Lihat Semua</a>
+
+
+<!-- Charts & Activity Grid -->
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-8">
+    <!-- Chart Section -->
+    <div class="lg:col-span-1 bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+        <h3 class="font-bold text-gray-900 mb-4 flex items-center">
+            <svg class="w-5 h-5 mr-2 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 3.055A9.001 9.001 0 1020.945 13H11V3.055z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.488 9H15V3.512A9.025 9.025 0 0120.488 9z"></path></svg>
+            Statistik Verifikasi Surat
+        </h3>
+        <div class="h-64 relative flex items-center justify-center">
+            <canvas id="verificationChart"></canvas>
+        </div>
     </div>
+
+    <!-- Recent Letters (Moved inside grid) -->
+    <div class="lg:col-span-2 bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+        <div class="p-6 border-b border-gray-100 flex justify-between items-center bg-gray-50">
+            <h2 class="font-bold text-gray-900 text-lg">Persetujuan Pending</h2>
+            <a href="{{ route('kepala-desa.letters.index') }}" class="text-sm text-blue-600 font-medium hover:underline">Lihat Semua</a>
+        </div>
+
     <div class="divide-y divide-gray-100">
         @forelse($recent_letters as $letter)
             <div class="p-6 hover:bg-gray-50 transition-colors">
@@ -85,5 +101,30 @@
             </div>
         @endforelse
     </div>
+    </div>
 </div>
+
+@push('scripts')
+<script>
+    const ctx = document.getElementById('verificationChart').getContext('2d');
+    new Chart(ctx, {
+        type: 'pie',
+        data: {
+            labels: ['Disetujui', 'Ditolak'],
+            datasets: [{
+                data: {!! json_encode($verification_chart['data']) !!},
+                backgroundColor: ['#22c55e', '#ef4444'],
+                borderWidth: 0
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: { position: 'bottom' }
+            }
+        }
+    });
+</script>
+@endpush
 @endsection

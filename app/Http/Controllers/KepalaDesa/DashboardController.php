@@ -20,12 +20,26 @@ class DashboardController extends Controller
             'active_loans' => Loan::approved()->count(),
         ];
 
+        // Chart: Verification Status (Verified vs Rejected)
+        $letter_status = Letter::select('status', \DB::raw('count(*) as total'))
+            ->whereIn('status', ['verified', 'rejected'])
+            ->groupBy('status')
+            ->pluck('total', 'status')
+            ->toArray();
+
+        $verification_chart = [
+            'data' => [
+                $letter_status['verified'] ?? 0,
+                $letter_status['rejected'] ?? 0,
+            ]
+        ];
+
         $recent_letters = Letter::with(['user', 'letterType', 'operator'])
             ->processed()
             ->latest()
             ->take(5)
             ->get();
 
-        return view('kepala-desa.dashboard', compact('stats', 'recent_letters'));
+        return view('kepala-desa.dashboard', compact('stats', 'recent_letters', 'verification_chart'));
     }
 }

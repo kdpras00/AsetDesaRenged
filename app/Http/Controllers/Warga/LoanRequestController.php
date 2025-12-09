@@ -5,7 +5,10 @@ namespace App\Http\Controllers\Warga;
 use App\Http\Controllers\Controller;
 use App\Models\Asset;
 use App\Models\Loan;
+use App\Models\User;
+use App\Notifications\NewLoanRequest;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Notification;
 
 class LoanRequestController extends Controller
 {
@@ -74,6 +77,10 @@ class LoanRequestController extends Controller
             'purpose' => $request->purpose,
             'status' => 'pending',
         ]);
+
+        // Notify Operators
+        $operators = User::where('role', 'operator')->get();
+        Notification::send($operators, new NewLoanRequest($loan));
 
         return redirect()->route('warga.loans.index', ['view' => 'history'])->with('success', 'Permintaan peminjaman berhasil diajukan. Menunggu persetujuan.');
     }

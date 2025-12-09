@@ -98,7 +98,7 @@
                     </div>
                     <h3 class="text-xl font-bold text-gray-900 mb-2">Peminjaman Aset</h3>
                     <p class="text-gray-500 text-sm mb-4 line-clamp-2">Layanan peminjaman inventaris desa untuk keperluan warga dengan prosedur yang mudah.</p>
-                    <a href="#" class="text-blue-600 font-medium text-sm hover:underline flex items-center">
+                    <a href="{{ route('warga.loans.index') }}" class="text-blue-600 font-medium text-sm hover:underline flex items-center">
                         Ajukan Peminjaman <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
                     </a>
                 </div>
@@ -116,7 +116,7 @@
                     </div>
                     <h3 class="text-xl font-bold text-gray-900 mb-2">Surat Menyurat</h3>
                     <p class="text-gray-500 text-sm mb-4 line-clamp-2">Pembuatan surat keterangan domisili, usaha, dan administrasi kependudukan lainnya.</p>
-                    <a href="#" class="text-blue-600 font-medium text-sm hover:underline flex items-center">
+                    <a href="{{ route('warga.letters.index') }}" class="text-blue-600 font-medium text-sm hover:underline flex items-center">
                         Buat Surat <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
                     </a>
                 </div>

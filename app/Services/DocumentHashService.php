@@ -53,7 +53,7 @@ class DocumentHashService
      */
     public function generateVerificationUrl(string $hash): string
     {
-        return route('verify.hash', ['hash' => $hash]);
+        return route('verification.verify.hash', ['hash' => $hash]);
     }
 
     /**

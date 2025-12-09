@@ -23,11 +23,11 @@
                 <div class="bg-gray-50 border border-gray-200 rounded-lg p-6 sticky top-24">
                     <h3 class="font-bold text-lg mb-4 text-gray-900 border-b pb-2">Kategori Layanan</h3>
                     <ul class="space-y-2 text-sm">
-                        <li><a href="#" class="block px-3 py-2 bg-blue-50 text-blue-700 font-medium rounded">Semua Layanan</a></li>
-                        <li><a href="#" class="block px-3 py-2 text-gray-600 hover:bg-gray-100 rounded">Administrasi Kependudukan</a></li>
-                        <li><a href="#" class="block px-3 py-2 text-gray-600 hover:bg-gray-100 rounded">Peminjaman Aset</a></li>
-                        <li><a href="#" class="block px-3 py-2 text-gray-600 hover:bg-gray-100 rounded">Perizinan Usaha</a></li>
-                        <li><a href="#" class="block px-3 py-2 text-gray-600 hover:bg-gray-100 rounded">Bantuan Sosial</a></li>
+                        <li><a href="{{ route('public.layanan') }}" class="block px-3 py-2 bg-blue-50 text-blue-700 font-medium rounded hover:bg-blue-100 transition-colors">Semua Layanan</a></li>
+                        <li><a href="?category=kependudukan" class="block px-3 py-2 text-gray-600 hover:bg-gray-100 rounded transition-colors">Administrasi Kependudukan</a></li>
+                        <li><a href="?category=inventaris" class="block px-3 py-2 text-gray-600 hover:bg-gray-100 rounded transition-colors">Peminjaman Aset</a></li>
+                        <li><a href="?category=usaha" class="block px-3 py-2 text-gray-600 hover:bg-gray-100 rounded transition-colors">Perizinan Usaha</a></li>
+                        <li><a href="#" class="block px-3 py-2 text-gray-400 hover:bg-gray-50 rounded cursor-not-allowed">Bantuan Sosial (Segera)</a></li>
                     </ul>
 
                     <div class="mt-8 bg-blue-600 rounded-lg p-6 text-white text-center">
@@ -39,10 +39,10 @@
             </div>
 
             <!-- Service List -->
-            <div class="lg:col-span-2 space-y-6">
+            <div class="lg:col-span-2 space-y-6" id="service-list">
                 
                 <!-- Service Item 1 -->
-                <div class="flex flex-col sm:flex-row bg-white border border-gray-200 rounded-lg overflow-hidden hover:shadow-md transition-shadow">
+                <div class="service-item flex flex-col sm:flex-row bg-white border border-gray-200 rounded-lg overflow-hidden hover:shadow-md transition-shadow" data-category="inventaris">
                     <div class="sm:w-48 h-48 sm:h-auto shrink-0">
                         <img src="{{ asset('storage/images/background-renged2.jpeg') }}" class="w-full h-full object-cover" alt="Service">
                     </div>
@@ -54,13 +54,13 @@
                         </div>
                         <div class="flex items-center justify-between border-t pt-4 mt-2">
                              <span class="text-xs text-gray-500">Estimasi: 1 Hari Kerja</span>
-                             <a href="#" class="text-blue-600 font-medium text-sm hover:underline">Ajukan Sekarang &rarr;</a>
+                             <a href="{{ route('warga.loans.index') }}" class="text-blue-600 font-medium text-sm hover:underline">Ajukan Sekarang &rarr;</a>
                         </div>
                     </div>
                 </div>
 
                 <!-- Service Item 2 -->
-                 <div class="flex flex-col sm:flex-row bg-white border border-gray-200 rounded-lg overflow-hidden hover:shadow-md transition-shadow">
+                 <div class="service-item flex flex-col sm:flex-row bg-white border border-gray-200 rounded-lg overflow-hidden hover:shadow-md transition-shadow" data-category="kependudukan">
                     <div class="sm:w-48 h-48 sm:h-auto shrink-0">
                         <img src="{{ asset('storage/images/background-renged3.jpeg') }}" class="w-full h-full object-cover" alt="Service">
                     </div>
@@ -72,13 +72,13 @@
                         </div>
                         <div class="flex items-center justify-between border-t pt-4 mt-2">
                              <span class="text-xs text-gray-500">Estimasi: Langsung Jadi</span>
-                             <a href="#" class="text-blue-600 font-medium text-sm hover:underline">Buat Surat &rarr;</a>
+                             <a href="{{ route('warga.letters.index') }}" class="text-blue-600 font-medium text-sm hover:underline">Buat Surat &rarr;</a>
                         </div>
                     </div>
                 </div>
 
                 <!-- Service Item 3 -->
-                 <div class="flex flex-col sm:flex-row bg-white border border-gray-200 rounded-lg overflow-hidden hover:shadow-md transition-shadow">
+                 <div class="service-item flex flex-col sm:flex-row bg-white border border-gray-200 rounded-lg overflow-hidden hover:shadow-md transition-shadow" data-category="usaha">
                     <div class="sm:w-48 h-48 sm:h-auto shrink-0">
                         <img src="{{ asset('storage/images/background-renged5.jpeg') }}" class="w-full h-full object-cover" alt="Service">
                     </div>
@@ -90,13 +90,55 @@
                         </div>
                         <div class="flex items-center justify-between border-t pt-4 mt-2">
                              <span class="text-xs text-gray-500">Estimasi: 1 Hari Kerja</span>
-                             <a href="#" class="text-blue-600 font-medium text-sm hover:underline">Buat Surat &rarr;</a>
+                             <a href="{{ route('warga.letters.index') }}" class="text-blue-600 font-medium text-sm hover:underline">Buat Surat &rarr;</a>
                         </div>
                     </div>
+                </div>
+
+                <!-- Empty State -->
+                <div id="empty-state" class="hidden text-center py-12 bg-gray-50 rounded-lg border border-dashed border-gray-300">
+                    <p class="text-gray-500">Tidak ada layanan ditemukan untuk kategori ini.</p>
+                    <a href="{{ route('public.layanan') }}" class="text-blue-600 text-sm font-medium mt-2 hover:underline">Lihat Semua Layanan</a>
                 </div>
 
             </div>
         </div>
     </div>
 </div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const params = new URLSearchParams(window.location.search);
+        const category = params.get('category');
+        const items = document.querySelectorAll('.service-item');
+        const emptyState = document.getElementById('empty-state');
+        let visibleCount = 0;
+
+        if (category) {
+            items.forEach(item => {
+                if (item.dataset.category === category) {
+                    item.classList.remove('hidden');
+                    visibleCount++;
+                } else {
+                    item.classList.add('hidden');
+                }
+            });
+
+            if (visibleCount === 0) {
+                emptyState.classList.remove('hidden');
+            } else {
+                emptyState.classList.add('hidden');
+            }
+
+            // Highlight Active Sidebar Link
+            const links = document.querySelectorAll('a[href^="?category="]');
+            links.forEach(link => {
+                if (link.getAttribute('href') === '?category=' + category) {
+                    link.classList.remove('text-gray-600', 'hover:bg-gray-100');
+                    link.classList.add('bg-blue-50', 'text-blue-700', 'font-medium');
+                }
+            });
+        }
+    });
+</script>
 @endsection

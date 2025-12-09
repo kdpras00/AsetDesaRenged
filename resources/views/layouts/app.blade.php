@@ -7,6 +7,7 @@
     <title>@yield('title', 'Sistem Manajemen Aset Desa Renged')</title>
     
     @vite(['resources/css/app.css', 'resources/js/app.js'])
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         body { font-family: 'Inter', sans-serif; }
@@ -31,6 +32,9 @@
                     </a>
                 </div>
                 <div class="flex items-center">
+                    <!-- Notification Bell -->
+                    @include('components.notification-bell')
+
                     <div class="flex items-center ms-3">
                         <div>
                             <button type="button" class="flex text-sm bg-gray-800 rounded-full focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600" aria-expanded="false" data-dropdown-toggle="dropdown-user">
@@ -50,6 +54,11 @@
                                 </p>
                             </div>
                             <ul class="py-1" role="none">
+                                <li>
+                                    <a href="{{ route('profile.edit') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white" role="menuitem">
+                                        Pengaturan Profil
+                                    </a>
+                                </li>
                                 <li>
                                     <form method="POST" action="{{ route('logout') }}">
                                         @csrf
@@ -74,8 +83,8 @@
     </aside>
 
     <!-- Main Content -->
-    <div class="p-4 sm:ml-64">
-        <div class="p-4 mt-14">
+    <div class="p-4 sm:ml-64 relative">
+        <div class="p-4 mt-14 max-w-full overflow-x-hidden">
             @yield('content')
         </div>
     </div>
@@ -85,30 +94,28 @@
     <script>
         // Handle Session Flash Messages (using Swal from app.js)
         @if(session('success'))
-            Toast.fire({
+            Swal.fire({
                 icon: 'success',
-                title: "{{ session('success') }}"
+                title: 'Berhasil',
+                text: "{{ session('success') }}",
+                timer: 3000,
+                showConfirmButton: false
             });
         @endif
 
         @if(session('error'))
-            Toast.fire({
+            Swal.fire({
                 icon: 'error',
-                title: "{{ session('error') }}"
+                title: 'Gagal',
+                text: "{{ session('error') }}",
             });
         @endif
 
         @if(session('warning'))
-            Toast.fire({
+            Swal.fire({
                 icon: 'warning',
-                title: "{{ session('warning') }}"
-            });
-        @endif
-
-        @if(session('info'))
-            Toast.fire({
-                icon: 'info',
-                title: "{{ session('info') }}"
+                title: 'Peringatan',
+                text: "{{ session('warning') }}",
             });
         @endif
 
@@ -129,6 +136,18 @@
                 }
             })
         }
+
+        // Mobile Sidebar Toggle
+        document.addEventListener('DOMContentLoaded', () => {
+            const toggleBtn = document.querySelector('[data-drawer-toggle="logo-sidebar"]');
+            const sidebar = document.getElementById('logo-sidebar');
+            
+            if(toggleBtn && sidebar) {
+                toggleBtn.addEventListener('click', () => {
+                    sidebar.classList.toggle('-translate-x-full');
+                });
+            }
+        });
     </script>
 </body>
 </html>

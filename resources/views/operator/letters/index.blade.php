@@ -122,8 +122,9 @@
             </button>
             <div class="p-6">
                 <h3 class="mb-4 text-xl font-bold text-gray-900">Verifikasi & Terbitkan Nomor</h3>
-                <form id="processForm" method="POST">
+                <form id="processForm" action="#" method="POST">
                     @csrf
+                    @method('POST')
                     <div class="mb-4">
                         <label class="block mb-2 text-sm font-medium text-gray-900">Nomor Surat Resmi</label>
                         <input type="text" name="letter_number" required class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 font-mono" placeholder="470/001/DS/RM/2025">
@@ -152,8 +153,9 @@
             <div class="p-6 text-center">
                 <svg class="mx-auto mb-4 w-12 h-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
                 <h3 class="mb-5 text-lg font-normal text-gray-500">Tolak Permohonan Surat?</h3>
-                <form id="rejectForm" method="POST">
+                <form id="rejectForm" action="#" method="POST">
                     @csrf
+                    @method('POST')
                     <textarea name="reason" rows="3" required class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 mb-4" placeholder="Tulis alasan penolakan..."></textarea>
                     <button type="submit" class="text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm inline-flex items-center px-5 py-2.5 text-center mr-2">
                         Tolak

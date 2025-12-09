@@ -67,9 +67,9 @@
                         </button>
                         <!-- Dropdown (Simple Hover) -->
                          <div class="absolute left-0 mt-0 w-48 bg-white rounded-md shadow-lg py-1 hidden group-hover:block border border-gray-100">
-                            <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-blue-700">Sejarah Desa</a>
-                            <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-blue-700">Visi & Misi</a>
-                            <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-blue-700">Struktur Organisasi</a>
+                            <a href="{{ route('profile.sejarah') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-blue-700">Sejarah Desa</a>
+                            <a href="{{ route('profile.visi-misi') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-blue-700">Visi & Misi</a>
+                            <a href="{{ route('profile.struktur') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-blue-700">Struktur Organisasi</a>
                         </div>
                     </div>
                     <a href="{{ route('public.layanan') }}" class="px-4 py-2 rounded-md text-sm font-medium {{ Request::routeIs('public.layanan') ? 'text-blue-700 bg-blue-50' : 'text-gray-700 hover:text-blue-700 hover:bg-gray-50' }} transition-colors">

@@ -18,9 +18,10 @@ class VerificationController extends Controller
             'code' => 'required|string',
         ]);
 
-        // Support both old verification_code and new sha256_hash
+        // Support verification_code, sha256_hash, or letter_number
         $letter = Letter::where('verification_code', strtoupper($request->code))
             ->orWhere('sha256_hash', strtolower($request->code))
+            ->orWhere('letter_number', $request->code)
             ->with(['user', 'kepalaDesa', 'letterType', 'documentVerification'])
             ->first();
 
@@ -28,11 +29,22 @@ class VerificationController extends Controller
             return back()->with('error', 'Kode verifikasi tidak ditemukan. Pastikan kode yang Anda masukkan benar.');
         }
 
+        // Redirect to the hash-based verification to enforce CAPTCHA and centralized logic
+        // Ensure the letter has a hash, if not (legacy), we might need to handle it, but primarily we use the hash route.
+        if ($letter->sha256_hash) {
+             return redirect()->route('verification.verify.hash', ['hash' => $letter->sha256_hash]);
+        }
+        
+        // Fallback for legacy letters without hash (if any), though typically they should have one.
+        // In this case we might show result directly or generate hash. 
+        // For consistency with specific request, we won't force captcha on legacy non-hash docs unless requested,
+        // but the goal is to use the existing captcha page.
+        
         if ($letter->status !== 'verified') {
             return back()->with('error', 'Surat ini belum diverifikasi atau ditolak.');
         }
 
-        // Update verification count if using SHA-256 hash
+        // Update verification count if using SHA-256 hash (redundant if redirected, but kept for fallback)
         if ($letter->documentVerification) {
             $letter->documentVerification->incrementVerifiedCount();
         }
@@ -95,6 +107,6 @@ class VerificationController extends Controller
 
         session()->put('captcha_verified_' . $request->hash, true);
 
-        return redirect()->route('verify.hash', ['hash' => $request->hash]);
+        return redirect()->route('verification.verify.hash', ['hash' => $request->hash]);
     }
 }

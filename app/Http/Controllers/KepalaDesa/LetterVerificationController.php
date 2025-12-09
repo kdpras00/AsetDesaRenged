@@ -4,7 +4,11 @@ namespace App\Http\Controllers\KepalaDesa;
 
 use App\Http\Controllers\Controller;
 use App\Models\Letter;
+use App\Models\User;
+use App\Notifications\LetterVerified;
+use App\Notifications\RequestRejected;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Notification;
 
 class LetterVerificationController extends Controller
 {
@@ -52,6 +56,13 @@ class LetterVerificationController extends Controller
             return back()->with('warning', 'Surat berhasil diverifikasi, namun gagal generate QR code. Silakan hubungi admin.');
         }
 
+        // Notify Warga
+        $letter->user->notify(new LetterVerified($letter));
+
+        // Notify Operator (Optional, but good for tracking)
+        $operators = User::where('role', 'operator')->get();
+        Notification::send($operators, new LetterVerified($letter));
+
         return redirect()->back()->with('success', 'Surat berhasil diverifikasi dan QR code telah di-generate.');
     }
 
@@ -71,6 +82,12 @@ class LetterVerificationController extends Controller
             'kepala_desa_id' => auth()->id(),
             'rejection_reason' => $request->reason,
         ]);
+
+        // Notify Warga
+        $letter->user->notify(new RequestRejected(
+            'Permohonan surat ' . $letter->letterType->name . ' ditolak oleh Kepala Desa: ' . $request->reason,
+            route('warga.letters.index', ['view' => 'history'])
+        ));
 
         return redirect()->back()->with('success', 'Pengajuan surat ditolak.');
     }

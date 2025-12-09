@@ -13,11 +13,18 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/layanan', [HomeController::class, 'layanan'])->name('public.layanan');
 Route::get('/statistik', [HomeController::class, 'statistik'])->name('public.stats');
+
+// Profile Routes
+Route::prefix('profil')->name('profile.')->group(function () {
+    Route::get('/sejarah', [HomeController::class, 'sejarah'])->name('sejarah');
+    Route::get('/visi-misi', [HomeController::class, 'visiMisi'])->name('visi-misi');
+    Route::get('/struktur', [HomeController::class, 'struktur'])->name('struktur');
+});
 Route::get('/verify', [VerificationController::class, 'index'])->name('verification.index');
 Route::post('/verify', [VerificationController::class, 'verify'])->name('verification.verify');
 Route::get('/verify/{hash}', [VerificationController::class, 'verifyByHash'])
     ->middleware('throttle:10,1')
-    ->name('verify.hash');
+    ->name('verification.verify.hash');
 Route::get('/captcha/refresh', [VerificationController::class, 'refreshCaptcha'])->name('captcha.refresh');
 Route::post('/verify/captcha', [VerificationController::class, 'submitCaptcha'])->name('verification.captcha.submit');
 
@@ -27,6 +34,21 @@ Route::middleware('guest')->group(function () {
     Route::post('/login', [LoginController::class, 'login']);
     Route::get('/register', [RegisterController::class, 'showRegistrationForm'])->name('register');
     Route::post('/register', [RegisterController::class, 'register']);
+    Route::get('/notifications', [\App\Http\Controllers\NotificationController::class, 'index'])->name('notifications.index');
+    Route::post('/notifications/{id}/read', [\App\Http\Controllers\NotificationController::class, 'markAsRead'])->name('notifications.read');
+    Route::post('/notifications/read-all', [\App\Http\Controllers\NotificationController::class, 'markAllRead'])->name('notifications.readAll');
+
+    // Profile Management
+    Route::get('/profile', [App\Http\Controllers\ProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('/profile', [App\Http\Controllers\ProfileController::class, 'update'])->name('profile.update');
+    Route::put('/profile/password', [App\Http\Controllers\ProfileController::class, 'password'])->name('profile.password');
+});
+
+Route::middleware('auth')->group(function () {
+    Route::get('/notifications/count', [\App\Http\Controllers\NotificationController::class, 'unreadCount'])->name('notifications.count');
+    Route::get('/notifications', [\App\Http\Controllers\NotificationController::class, 'index'])->name('notifications.index');
+    Route::post('/notifications/{id}/read', [\App\Http\Controllers\NotificationController::class, 'markAsRead'])->name('notifications.read');
+    Route::post('/notifications/read-all', [\App\Http\Controllers\NotificationController::class, 'markAllRead'])->name('notifications.readAll');
 });
 
 Route::post('/logout', [LoginController::class, 'logout'])->name('logout')->middleware('auth');
@@ -44,6 +66,9 @@ Route::middleware(['auth', 'role:operator'])->prefix('operator')->name('operator
     Route::post('/loans/{loan}/return', [\App\Http\Controllers\Operator\LoanController::class, 'markreturned'])->name('loans.return');
     // Letter processing
     Route::get('/letters', [\App\Http\Controllers\Operator\LetterController::class, 'index'])->name('letters.index');
+    Route::get('/letters/{letter}/process', function () {
+        return redirect()->route('operator.letters.index');
+    });
     Route::post('/letters/{letter}/process', [\App\Http\Controllers\Operator\LetterController::class, 'process'])->name('letters.process');
     Route::post('/letters/{letter}/reject', [\App\Http\Controllers\Operator\LetterController::class, 'reject'])->name('letters.reject');
     Route::get('/letters/{letter}/download', [\App\Http\Controllers\Operator\LetterController::class, 'download'])->name('letters.download');

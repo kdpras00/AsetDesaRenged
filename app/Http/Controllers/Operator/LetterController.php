@@ -4,7 +4,11 @@ namespace App\Http\Controllers\Operator;
 
 use App\Http\Controllers\Controller;
 use App\Models\Letter;
+use App\Models\User;
+use App\Notifications\LetterProcessed;
+use App\Notifications\RequestRejected;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Notification;
 
 class LetterController extends Controller
 {
@@ -50,6 +54,10 @@ class LetterController extends Controller
             'operator_notes' => $request->operator_notes,
         ]);
 
+        // Notify Kepala Desa
+        $kades = User::where('role', 'kepala_desa')->get();
+        Notification::send($kades, new LetterProcessed($letter));
+
         return redirect()->back()->with('success', 'Surat berhasil diproses dan diteruskan ke Kepala Desa.');
     }
 
@@ -70,6 +78,12 @@ class LetterController extends Controller
             'rejection_reason' => $request->reason,
         ]);
 
+        // Notify Warga
+        $letter->user->notify(new RequestRejected(
+            'Permohonan surat ' . $letter->letterType->name . ' ditolak: ' . $request->reason,
+            route('warga.letters.index', ['view' => 'history'])
+        ));
+
         return redirect()->back()->with('success', 'Pengajuan surat ditolak.');
     }
     /**
@@ -80,7 +94,11 @@ class LetterController extends Controller
         // Operator can download any letter, but maybe usually Processed or Verified?
         // Let's allow downloading at any stage for previewing content.
         
-        $pdf = \Barryvdh\DomPDF\Facade\Pdf::loadView('pdf.letter', compact('letter'));
+        $view = \Illuminate\Support\Str::contains(strtolower($letter->letterType->name), 'skck') 
+            ? 'pdf.skck' 
+            : 'pdf.letter';
+
+        $pdf = \Barryvdh\DomPDF\Facade\Pdf::loadView($view, compact('letter'));
         $pdf->setPaper('A4', 'portrait');
         
         return $pdf->download('Surat-' . str_replace('/', '-', $letter->letter_number ?? 'DRAFT') . '.pdf');
