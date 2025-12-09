@@ -23,15 +23,15 @@ class ProfileController extends Controller
         $request->validate([
             'name' => 'required|string|max:255',
             'email' => ['required', 'email', Rule::unique('users')->ignore($user->id)],
-            'nik' => ['nullable', 'string', 'size:16', Rule::unique('users')->ignore($user->id)],
-            'phone_number' => 'nullable|string|max:15',
+            'nik' => ['nullable', 'numeric', 'digits:16', Rule::unique('users')->ignore($user->id)],
+            'phone' => 'nullable|numeric|digits_between:10,13',
             'avatar' => 'nullable|image|max:1024', // 1MB Max
         ]);
 
         $user->name = $request->name;
         $user->email = $request->email;
         $user->nik = $request->nik;
-        $user->phone_number = $request->phone_number;
+        $user->phone = $request->phone;
 
         if ($request->hasFile('avatar')) {
             // Delete old avatar if exists

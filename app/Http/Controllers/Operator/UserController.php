@@ -39,12 +39,12 @@ class UserController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'name' => 'required|string|max:255',
+            'name' => ['required', 'string', 'max:255', 'regex:/^[a-zA-Z\s\.]+$/'],
             'email' => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|min:8|confirmed',
             'role' => 'required|in:admin,operator,kepala_desa,warga',
-            'nik' => 'nullable|string|max:20|unique:users',
-            'phone' => 'nullable|string|max:15',
+            'nik' => 'nullable|numeric|digits:16|unique:users',
+            'phone' => 'nullable|numeric|digits_between:10,13',
             'address' => 'nullable|string',
         ]);
 
@@ -75,12 +75,12 @@ class UserController extends Controller
     public function update(Request $request, User $user)
     {
         $request->validate([
-            'name' => 'required|string|max:255',
+            'name' => ['required', 'string', 'max:255', 'regex:/^[a-zA-Z\s\.]+$/'],
             'email' => 'required|string|email|max:255|unique:users,email,' . $user->id,
             'password' => 'nullable|string|min:8|confirmed',
             'role' => 'required|in:admin,operator,kepala_desa,warga',
-            'nik' => 'nullable|string|max:20|unique:users,nik,' . $user->id,
-            'phone' => 'nullable|string|max:15',
+            'nik' => 'nullable|numeric|digits:16|unique:users,nik,' . $user->id,
+            'phone' => 'nullable|numeric|digits_between:10,13',
             'address' => 'nullable|string',
         ]);
 

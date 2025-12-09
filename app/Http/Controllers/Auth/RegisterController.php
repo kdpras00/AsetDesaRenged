@@ -18,11 +18,11 @@ class RegisterController extends Controller
     public function register(Request $request)
     {
         $validated = $request->validate([
-            'name' => 'required|string|max:255',
+            'name' => ['required', 'string', 'max:255', 'regex:/^[a-zA-Z\s\.]+$/'],
             'email' => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|min:8|confirmed',
-            'nik' => 'required|string|size:16|unique:users',
-            'phone' => 'required|string|max:15',
+            'nik' => 'required|numeric|digits:16|unique:users',
+            'phone' => 'required|numeric|digits_between:10,13',
             'address' => 'required|string',
             'rt_rw' => 'required|string|max:10',
         ]);

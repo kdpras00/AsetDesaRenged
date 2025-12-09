@@ -92,8 +92,8 @@
                         <!-- NIK Jenazah -->
                         <div>
                             <label class="block mb-2 text-sm font-semibold text-gray-700">NIK Jenazah <span class="text-red-500">*</span></label>
-                            <input type="text" name="deceased_nik" required value="{{ old('deceased_nik') }}"
-                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-3" placeholder="16 digit NIK">
+                            <input type="text" name="deceased_nik" required value="{{ old('deceased_nik') }}" maxlength="16" inputmode="numeric" oninput="this.value = this.value.replace(/[^0-9]/g, '')"
+                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-3 font-mono" placeholder="16 digit NIK">
                         </div>
 
                         <!-- No KK Jenazah -->
@@ -275,8 +275,8 @@
                         </div>
                         <div>
                              <label class="block mb-2 text-sm font-semibold text-gray-700">NIK Anak <span class="text-red-500">*</span></label>
-                            <input type="text" name="child_nik" required value="{{ old('child_nik') }}" maxlength="16"
-                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-3">
+                            <input type="text" name="child_nik" required value="{{ old('child_nik') }}" maxlength="16" inputmode="numeric" oninput="this.value = this.value.replace(/[^0-9]/g, '')"
+                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-3 font-mono">
                         </div>
                          <div>
                             <label class="block mb-2 text-sm font-semibold text-gray-700">Jenis Kelamin <span class="text-red-500">*</span></label>
@@ -404,8 +404,8 @@
                             </div>
                             <div>
                                 <label class="block mb-2 text-sm font-semibold text-gray-700">NIK Ayah <span class="text-red-500">*</span></label>
-                                <input type="text" name="father_nik" required value="{{ old('father_nik') }}" maxlength="16"
-                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-3">
+                                <input type="text" name="father_nik" required value="{{ old('father_nik') }}" maxlength="16" inputmode="numeric" oninput="this.value = this.value.replace(/[^0-9]/g, '')"
+                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-3 font-mono">
                             </div>
                             <div>
                                 <label class="block mb-2 text-sm font-semibold text-gray-700">Pekerjaan Ayah <span class="text-red-500">*</span></label>
@@ -430,8 +430,8 @@
                             </div>
                             <div>
                                 <label class="block mb-2 text-sm font-semibold text-gray-700">NIK Ibu <span class="text-red-500">*</span></label>
-                                <input type="text" name="mother_nik" required value="{{ old('mother_nik') }}" maxlength="16"
-                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-3">
+                                <input type="text" name="mother_nik" required value="{{ old('mother_nik') }}" maxlength="16" inputmode="numeric" oninput="this.value = this.value.replace(/[^0-9]/g, '')"
+                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-3 font-mono">
                             </div>
                             <div>
                                 <label class="block mb-2 text-sm font-semibold text-gray-700">Pekerjaan Ibu <span class="text-red-500">*</span></label>

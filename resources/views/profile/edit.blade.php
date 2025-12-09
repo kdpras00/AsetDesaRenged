@@ -67,14 +67,18 @@
 
                         <div>
                             <label for="nik" class="block text-sm font-medium text-gray-700 mb-1">NIK (Nomor Induk Kependudukan)</label>
-                            <input type="text" name="nik" id="nik" value="{{ old('nik', $user->nik) }}" class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                            <input type="text" name="nik" id="nik" value="{{ old('nik', $user->nik) }}" 
+                                maxlength="16" inputmode="numeric" oninput="this.value = this.value.replace(/[^0-9]/g, '')"
+                                class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
                             @error('nik') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
                         </div>
 
                         <div>
-                            <label for="phone_number" class="block text-sm font-medium text-gray-700 mb-1">Nomor Telepon / WA</label>
-                            <input type="text" name="phone_number" id="phone_number" value="{{ old('phone_number', $user->phone_number) }}" class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
-                            @error('phone_number') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
+                            <label for="phone" class="block text-sm font-medium text-gray-700 mb-1">Nomor Telepon / WA</label>
+                            <input type="text" name="phone" id="phone" value="{{ old('phone', $user->phone) }}" 
+                                maxlength="13" inputmode="numeric" oninput="this.value = this.value.replace(/[^0-9]/g, '')"
+                                class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                            @error('phone') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
                         </div>
                     </div>
 

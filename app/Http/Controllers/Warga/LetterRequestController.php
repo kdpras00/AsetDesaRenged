@@ -58,7 +58,7 @@ class LetterRequestController extends Controller
         if (\Illuminate\Support\Str::contains(strtolower($letterType->name), 'kematian')) {
             $rules = array_merge($rules, [
                 'deceased_name' => 'required|string|max:255',
-                'deceased_nik' => 'required|string|size:16',
+                'deceased_nik' => 'required|numeric|digits:16',
                 'deceased_kk' => 'nullable|string|max:20',
                 'deceased_birth_place' => 'required|string|max:100',
                 'deceased_birth_date' => 'required|date',
@@ -104,7 +104,7 @@ class LetterRequestController extends Controller
             $rules = array_merge($rules, [
                 // Child
                 'child_name' => 'required|string|max:255',
-                'child_nik' => 'required|string|size:16',
+                'child_nik' => 'required|numeric|digits:16',
                 'child_gender' => 'required|in:L,P',
                 'child_birth_place' => 'required|string|max:255',
                 'child_birth_date' => 'required|date',
@@ -147,12 +147,12 @@ class LetterRequestController extends Controller
             $rules = array_merge($rules, [
                 // Father
                 'father_name' => 'required|string|max:255',
-                'father_nik' => 'required|string|size:16',
+                'father_nik' => 'required|numeric|digits:16',
                 'father_job' => 'required|string|max:255',
                 'father_address' => 'required|string|max:500',
                 // Mother
                 'mother_name' => 'required|string|max:255',
-                'mother_nik' => 'required|string|size:16',
+                'mother_nik' => 'required|numeric|digits:16',
                 'mother_job' => 'required|string|max:255',
                 'mother_address' => 'required|string|max:500',
             ]);
@@ -251,7 +251,9 @@ class LetterRequestController extends Controller
         $letter = Letter::create($data);
 
         // Notify Operators
-        $operators = User::where('role', 'operator')->get();
+        $operators = User::where('role', 'operator')
+                        ->where('id', '!=', auth()->id())
+                        ->get();
         Notification::send($operators, new NewLetterRequest($letter));
 
         return redirect()->route('warga.letters.index', ['view' => 'history'])->with('success', 'Permohonan surat berhasil diajukan. Menunggu verifikasi.');

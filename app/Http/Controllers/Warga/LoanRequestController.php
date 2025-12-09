@@ -68,7 +68,7 @@ class LoanRequestController extends Controller
              return back()->withInput()->with('error', 'Jumlah permintaan melebihi stok tersedia. Sisa stok saat ini: ' . $asset->rentable_stock . ' unit.');
         }
 
-        Loan::create([
+        $loan = Loan::create([
             'user_id' => auth()->id(),
             'asset_id' => $request->asset_id,
             'loan_date' => $request->loan_date,
@@ -79,7 +79,9 @@ class LoanRequestController extends Controller
         ]);
 
         // Notify Operators
-        $operators = User::where('role', 'operator')->get();
+        $operators = User::where('role', 'operator')
+                        ->where('id', '!=', auth()->id())
+                        ->get();
         Notification::send($operators, new NewLoanRequest($loan));
 
         return redirect()->route('warga.loans.index', ['view' => 'history'])->with('success', 'Permintaan peminjaman berhasil diajukan. Menunggu persetujuan.');
