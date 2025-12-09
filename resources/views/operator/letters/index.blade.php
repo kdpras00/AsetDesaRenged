@@ -127,8 +127,12 @@
                     @method('POST')
                     <div class="mb-4">
                         <label class="block mb-2 text-sm font-medium text-gray-900">Nomor Surat Resmi</label>
-                        <input type="text" name="letter_number" required class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 font-mono" placeholder="470/001/DS/RM/2025">
-                        <p class="mt-1 text-xs text-gray-500">Nomor ini akan tertera pada surat final.</p>
+                        <input type="text" name="letter_number" required class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 font-mono @error('letter_number') border-red-500 @enderror" placeholder="470/001/DS/RM/2025" value="{{ old('letter_number') }}">
+                        @error('letter_number')
+                            <p class="mt-1 text-xs text-red-600 font-bold">{{ $message }}</p>
+                        @else
+                            <p class="mt-1 text-xs text-gray-500">Nomor ini akan tertera pada surat final.</p>
+                        @enderror
                     </div>
                     <div class="mb-4">
                         <label class="block mb-2 text-sm font-medium text-gray-900">Catatan (Opsional)</label>

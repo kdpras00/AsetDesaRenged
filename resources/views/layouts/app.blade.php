@@ -137,15 +137,85 @@
             })
         }
 
-        // Mobile Sidebar Toggle
-        document.addEventListener('DOMContentLoaded', () => {
-            const toggleBtn = document.querySelector('[data-drawer-toggle="logo-sidebar"]');
-            const sidebar = document.getElementById('logo-sidebar');
+    </script>
+
+    <!-- Global Loading Overlay -->
+    <div id="global-loading-overlay" class="fixed inset-0 z-[100] bg-gray-50 dark:bg-gray-900 hidden flex-col items-center justify-center transition-opacity duration-300">
+        <div class="relative flex flex-col items-center animate-pulse">
+            <div class="bg-white dark:bg-gray-800 p-4 rounded-full shadow-lg mb-4">
+                <img src="{{ asset('storage/images/logo-renged.png') }}" alt="Loading..." class="w-16 h-16 object-contain">
+            </div>
+            <h3 class="text-xl font-bold text-gray-900 dark:text-white tracking-widest uppercase">Memproses...</h3>
+            <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">Mohon tunggu sebentar</p>
+        </div>
+    </div>
+
+    <script>
+        // Global Loader Functions
+        window.showLoading = function() {
+            var loader = document.getElementById('global-loading-overlay');
+            if(loader) {
+                loader.classList.remove('hidden');
+                loader.classList.add('flex');
+            }
+        };
+
+        window.hideLoading = function() {
+            var loader = document.getElementById('global-loading-overlay');
+            if(loader) {
+                loader.classList.add('hidden');
+                loader.classList.remove('flex');
+            }
+        };
+
+        // Handle Page Navigation Loading
+        document.addEventListener('DOMContentLoaded', function() {
+            // Attach to all links
+            var links = document.querySelectorAll('a');
+            links.forEach(function(link) {
+                link.addEventListener('click', function(e) {
+                    var href = this.getAttribute('href');
+                    var target = this.getAttribute('target');
+                    
+                    if (href && 
+                        href !== '#' && 
+                        href.indexOf('javascript:') !== 0 && 
+                        href.indexOf('tel:') !== 0 && 
+                        href.indexOf('mailto:') !== 0 && 
+                        target !== '_blank' && 
+                        !this.hasAttribute('download') &&
+                        !this.classList.contains('no-loader')) {
+                        
+                        window.showLoading();
+                    }
+                });
+            });
+
+            // Attach to forms
+            var forms = document.querySelectorAll('form');
+            forms.forEach(function(form) {
+                form.addEventListener('submit', function() {
+                   if(!this.classList.contains('no-loader')) {
+                       window.showLoading();
+                   }
+                });
+            });
+
+            // Mobile Sidebar Toggle
+            var toggleBtn = document.querySelector('[data-drawer-toggle="logo-sidebar"]');
+            var sidebar = document.getElementById('logo-sidebar');
             
             if(toggleBtn && sidebar) {
-                toggleBtn.addEventListener('click', () => {
+                toggleBtn.addEventListener('click', function() {
                     sidebar.classList.toggle('-translate-x-full');
                 });
+            }
+        });
+        
+        // Hide loader when page is fully loaded
+        window.addEventListener('pageshow', function(event) {
+            if (event.persisted) {
+                window.hideLoading();
             }
         });
     </script>

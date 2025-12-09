@@ -73,6 +73,415 @@
                     </div>
                 </div>
 
+                @if(\Illuminate\Support\Str::contains(strtolower($type->name), 'kematian'))
+                <!-- Section: Data Jenazah (Khusus Surat Kematian) -->
+                <div class="bg-white p-6 rounded-xl border border-gray-100 shadow-sm relative mt-8">
+                     <div class="absolute -top-3 left-4 bg-white px-2 text-sm font-bold text-blue-600 flex items-center">
+                        <span class="w-6 h-6 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center mr-2 text-xs">2</span>
+                        Data Jenazah & Kematian
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-2">
+                        <!-- Nama Jenazah -->
+                        <div class="md:col-span-2">
+                            <label class="block mb-2 text-sm font-semibold text-gray-700">Nama Lengkap Jenazah <span class="text-red-500">*</span></label>
+                            <input type="text" name="deceased_name" required value="{{ old('deceased_name') }}"
+                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-3" placeholder="Nama Almarhum/Almarhumah">
+                        </div>
+
+                        <!-- NIK Jenazah -->
+                        <div>
+                            <label class="block mb-2 text-sm font-semibold text-gray-700">NIK Jenazah <span class="text-red-500">*</span></label>
+                            <input type="text" name="deceased_nik" required value="{{ old('deceased_nik') }}"
+                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-3" placeholder="16 digit NIK">
+                        </div>
+
+                        <!-- No KK Jenazah -->
+                        <div>
+                            <label class="block mb-2 text-sm font-semibold text-gray-700">Nomor KK Jenazah</label>
+                            <input type="text" name="deceased_kk" value="{{ old('deceased_kk', '-') }}"
+                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-3" placeholder="Nomor KK (Opsional)">
+                        </div>
+
+                        <!-- Tempat Lahir -->
+                        <div>
+                            <label class="block mb-2 text-sm font-semibold text-gray-700">Tempat Lahir <span class="text-red-500">*</span></label>
+                            <input type="text" name="deceased_birth_place" required value="{{ old('deceased_birth_place') }}"
+                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-3">
+                        </div>
+
+                        <!-- Tanggal Lahir -->
+                        <div>
+                            <label class="block mb-2 text-sm font-semibold text-gray-700">Tanggal Lahir <span class="text-red-500">*</span></label>
+                            <input type="date" name="deceased_birth_date" required value="{{ old('deceased_birth_date') }}"
+                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-3">
+                        </div>
+
+                        <!-- Umur -->
+                        <div>
+                            <label class="block mb-2 text-sm font-semibold text-gray-700">Umur (Tahun) <span class="text-red-500">*</span></label>
+                            <input type="number" name="deceased_age" required value="{{ old('deceased_age') }}"
+                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-3">
+                        </div>
+
+                        <!-- Alamat Jenazah -->
+                        <div class="md:col-span-2">
+                            <label class="block mb-2 text-sm font-semibold text-gray-700">Alamat Terakhir <span class="text-red-500">*</span></label>
+                            <textarea name="deceased_address" rows="2" required class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-3">{{ old('deceased_address') }}</textarea>
+                        </div>
+                        
+                        <div class="md:col-span-2 border-t border-gray-100 my-2"></div>
+
+                        <!-- Hari Meninggal -->
+                        <div>
+                            <label class="block mb-2 text-sm font-semibold text-gray-700">Hari Meninggal <span class="text-red-500">*</span></label>
+                            <select name="death_day" required class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-3">
+                                <option value="">Pilih Hari</option>
+                                @foreach(['Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu', 'Minggu'] as $day)
+                                    <option value="{{ $day }}" {{ old('death_day') == $day ? 'selected' : '' }}>{{ $day }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+
+                        <!-- Tanggal Meninggal -->
+                        <div>
+                            <label class="block mb-2 text-sm font-semibold text-gray-700">Tanggal Meninggal <span class="text-red-500">*</span></label>
+                            <input type="date" name="death_date" required value="{{ old('death_date') }}"
+                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-3">
+                        </div>
+
+                        <!-- Meninggal di -->
+                        <div>
+                            <label class="block mb-2 text-sm font-semibold text-gray-700">Meninggal di <span class="text-red-500">*</span></label>
+                            <input type="text" name="death_place" required value="{{ old('death_place', 'Rumah') }}"
+                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-3" placeholder="Contoh: Rumah / RSUD Tangerang">
+                        </div>
+
+                        <!-- Penyebab -->
+                        <div>
+                            <label class="block mb-2 text-sm font-semibold text-gray-700">Penyebab Kematian <span class="text-red-500">*</span></label>
+                            <input type="text" name="death_cause" required value="{{ old('death_cause', 'Sakit') }}"
+                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-3" placeholder="Contoh: Sakit / Kecelakaan">
+                        </div>
+                        
+                        <!-- Hubungan Pelapor -->
+                        <div class="md:col-span-2">
+                             <label class="block mb-2 text-sm font-semibold text-gray-700">Hubungan Pelapor dengan Jenazah <span class="text-red-500">*</span></label>
+                            <input type="text" name="reporter_relationship" required value="{{ old('reporter_relationship') }}"
+                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-3" placeholder="Contoh: Suami / Istri / Anak / Ketua RT">
+                        </div>
+                    </div>
+                </div>
+                @endif
+
+                @if(\Illuminate\Support\Str::contains(strtolower($type->name), 'usaha'))
+                <!-- Section: Data Usaha (Khusus Surat Keterangan Usaha) -->
+                <div class="bg-white p-6 rounded-xl border border-gray-100 shadow-sm relative mt-8">
+                     <div class="absolute -top-3 left-4 bg-white px-2 text-sm font-bold text-blue-600 flex items-center">
+                        <span class="w-6 h-6 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center mr-2 text-xs">2</span>
+                        Data Usaha
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-2">
+                        <!-- Nama Usaha -->
+                        <div>
+                            <label class="block mb-2 text-sm font-semibold text-gray-700">Nama Usaha <span class="text-red-500">*</span></label>
+                            <input type="text" name="business_name" required value="{{ old('business_name') }}"
+                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-3" placeholder="Contoh: PRAKTEK PAK BINDHI">
+                        </div>
+
+                        <!-- Jenis Usaha -->
+                        <div>
+                            <label class="block mb-2 text-sm font-semibold text-gray-700">Jenis Usaha <span class="text-red-500">*</span></label>
+                            <input type="text" name="business_type" required value="{{ old('business_type') }}"
+                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-3" placeholder="Contoh: Pengobatan Tradisional">
+                        </div>
+
+                        <!-- Alamat Usaha -->
+                        <div class="md:col-span-2">
+                            <label class="block mb-2 text-sm font-semibold text-gray-700">Alamat Usaha <span class="text-red-500">*</span></label>
+                            <textarea name="business_address" rows="2" required class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-3" placeholder="Alamat lengkap tempat usaha">{{ old('business_address') }}</textarea>
+                        </div>
+                    </div>
+                </div>
+                @endif
+
+                @if(\Illuminate\Support\Str::contains(strtolower($type->name), 'cuti') || \Illuminate\Support\Str::contains(strtolower($type->name), 'ijin'))
+                <!-- Section: Data Ijin Cuti (Khusus Surat Keterangan Ijin Cuti) -->
+                <div class="bg-white p-6 rounded-xl border border-gray-100 shadow-sm relative mt-8">
+                     <div class="absolute -top-3 left-4 bg-white px-2 text-sm font-bold text-blue-600 flex items-center">
+                        <span class="w-6 h-6 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center mr-2 text-xs">2</span>
+                        Data Cuti / Ijin
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-2">
+                        <!-- Nama Perusahaan -->
+                        <div class="md:col-span-2">
+                            <label class="block mb-2 text-sm font-semibold text-gray-700">Nama Perusahaan / Instansi <span class="text-red-500">*</span></label>
+                            <input type="text" name="company_name" required value="{{ old('company_name') }}"
+                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-3" placeholder="Contoh: PT. PWI 2">
+                        </div>
+
+                        <!-- Hari Cuti -->
+                         <div>
+                            <label class="block mb-2 text-sm font-semibold text-gray-700">Hari Cuti <span class="text-red-500">*</span></label>
+                            <select name="leave_day" required class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-3">
+                                <option value="">Pilih Hari</option>
+                                @foreach(['Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu', 'Minggu'] as $day)
+                                    <option value="{{ $day }}" {{ old('leave_day') == $day ? 'selected' : '' }}>{{ $day }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+
+                        <!-- Tanggal Cuti -->
+                        <div>
+                            <label class="block mb-2 text-sm font-semibold text-gray-700">Tanggal Cuti <span class="text-red-500">*</span></label>
+                            <input type="date" name="leave_date" required value="{{ old('leave_date') }}"
+                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-3">
+                        </div>
+
+                        <!-- Maksud Tujuan -->
+                        <div class="md:col-span-2">
+                            <label class="block mb-2 text-sm font-semibold text-gray-700">Maksud / Tujuan Cuti <span class="text-red-500">*</span></label>
+                            <input type="text" name="leave_purpose" required value="{{ old('leave_purpose') }}"
+                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-3" placeholder="Contoh: Melangsungkan Khitanan / Pernikahan">
+                        </div>
+                        
+                         <!-- Nama Anak (Optional if relevant) -->
+                        <div>
+                            <label class="block mb-2 text-sm font-semibold text-gray-700">Nama Anak / Keterangan Tambahan <span class="text-gray-400 font-normal">(Opsional)</span></label>
+                            <input type="text" name="child_name" value="{{ old('child_name') }}"
+                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-3" placeholder="Contoh: MOH. NAUFAL ARRASYID">
+                        </div>
+                    </div>
+                </div>
+                @endif
+                
+                @if(\Illuminate\Support\Str::contains(strtolower($type->name), 'kelahiran'))
+                <!-- Section: Data Kelahiran (Khusus Surat Keterangan Kelahiran) -->
+                <div class="bg-white p-6 rounded-xl border border-gray-100 shadow-sm relative mt-8">
+                     <div class="absolute -top-3 left-4 bg-white px-2 text-sm font-bold text-blue-600 flex items-center">
+                        <span class="w-6 h-6 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center mr-2 text-xs">2</span>
+                        Data Kelahiran
+                    </div>
+
+                    <!-- Sub-section: Data Anak -->
+                    <h5 class="text-md font-bold text-gray-800 border-b pb-2 mb-4 mt-2">A. Data Anak</h5>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                         <div>
+                            <label class="block mb-2 text-sm font-semibold text-gray-700">Nama Anak <span class="text-red-500">*</span></label>
+                            <input type="text" name="child_name" required value="{{ old('child_name') }}"
+                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-3 uppercase">
+                        </div>
+                        <div>
+                             <label class="block mb-2 text-sm font-semibold text-gray-700">NIK Anak <span class="text-red-500">*</span></label>
+                            <input type="text" name="child_nik" required value="{{ old('child_nik') }}" maxlength="16"
+                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-3">
+                        </div>
+                         <div>
+                            <label class="block mb-2 text-sm font-semibold text-gray-700">Jenis Kelamin <span class="text-red-500">*</span></label>
+                             <select name="child_gender" required class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-3">
+                                <option value="L" {{ old('child_gender') == 'L' ? 'selected' : '' }}>Laki-laki</option>
+                                <option value="P" {{ old('child_gender') == 'P' ? 'selected' : '' }}>Perempuan</option>
+                            </select>
+                        </div>
+                         <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <label class="block mb-2 text-sm font-semibold text-gray-700">Tempat Lahir <span class="text-red-500">*</span></label>
+                                <input type="text" name="child_birth_place" required value="{{ old('child_birth_place') }}"
+                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-3">
+                            </div>
+                            <div>
+                                <label class="block mb-2 text-sm font-semibold text-gray-700">Tanggal Lahir <span class="text-red-500">*</span></label>
+                                <input type="date" name="child_birth_date" required value="{{ old('child_birth_date') }}"
+                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-3">
+                            </div>
+                        </div>
+                        <div class="md:col-span-2">
+                             <label class="block mb-2 text-sm font-semibold text-gray-700">Alamat Anak <span class="text-red-500">*</span></label>
+                            <textarea name="child_address" rows="1" required class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-3">{{ old('child_address') }}</textarea>
+                        </div>
+                    </div>
+
+                    <!-- Sub-section: Data Suami -->
+                    <h5 class="text-md font-bold text-gray-800 border-b pb-2 mb-4">B. Data Suami (Ayah)</h5>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                         <div>
+                            <label class="block mb-2 text-sm font-semibold text-gray-700">Nama Lengkap <span class="text-red-500">*</span></label>
+                            <input type="text" name="father_name" required value="{{ old('father_name') }}"
+                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-3 uppercase">
+                        </div>
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <label class="block mb-2 text-sm font-semibold text-gray-700">Tempat Lahir <span class="text-red-500">*</span></label>
+                                <input type="text" name="father_birth_place" required value="{{ old('father_birth_place') }}"
+                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-3">
+                            </div>
+                            <div>
+                                <label class="block mb-2 text-sm font-semibold text-gray-700">Tanggal Lahir <span class="text-red-500">*</span></label>
+                                <input type="date" name="father_birth_date" required value="{{ old('father_birth_date') }}"
+                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-3">
+                            </div>
+                        </div>
+                        <div class="md:col-span-2">
+                             <label class="block mb-2 text-sm font-semibold text-gray-700">Alamat <span class="text-red-500">*</span></label>
+                            <textarea name="father_address" rows="1" required class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-3">{{ old('father_address') }}</textarea>
+                        </div>
+                    </div>
+
+                    <!-- Sub-section: Data Istri -->
+                    <h5 class="text-md font-bold text-gray-800 border-b pb-2 mb-4">C. Data Istri (Ibu)</h5>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                         <div>
+                            <label class="block mb-2 text-sm font-semibold text-gray-700">Nama Lengkap <span class="text-red-500">*</span></label>
+                            <input type="text" name="mother_name" required value="{{ old('mother_name') }}"
+                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-3 uppercase">
+                        </div>
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <label class="block mb-2 text-sm font-semibold text-gray-700">Tempat Lahir <span class="text-red-500">*</span></label>
+                                <input type="text" name="mother_birth_place" required value="{{ old('mother_birth_place') }}"
+                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-3">
+                            </div>
+                            <div>
+                                <label class="block mb-2 text-sm font-semibold text-gray-700">Tanggal Lahir <span class="text-red-500">*</span></label>
+                                <input type="date" name="mother_birth_date" required value="{{ old('mother_birth_date') }}"
+                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-3">
+                            </div>
+                        </div>
+                        <div class="md:col-span-2">
+                             <label class="block mb-2 text-sm font-semibold text-gray-700">Alamat <span class="text-red-500">*</span></label>
+                            <textarea name="mother_address" rows="1" required class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-3">{{ old('mother_address') }}</textarea>
+                        </div>
+                    </div>
+
+                </div>
+                @endif
+
+
+                
+                @if(\Illuminate\Support\Str::contains(strtolower($type->name), 'domisili'))
+                <!-- Section: Data Domisili (Khusus Surat Keterangan Domisili) -->
+                <div class="bg-white p-6 rounded-xl border border-gray-100 shadow-sm relative mt-8">
+                     <div class="absolute -top-3 left-4 bg-white px-2 text-sm font-bold text-blue-600 flex items-center">
+                        <span class="w-6 h-6 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center mr-2 text-xs">2</span>
+                        Data Domisili
+                    </div>
+
+                    <div class="grid grid-cols-1 gap-6 mt-2">
+                        <!-- Alamat Sebelumnya -->
+                        <div>
+                             <label class="block mb-2 text-sm font-semibold text-gray-700">Alamat Sebelumnya <span class="text-red-500">*</span></label>
+                            <textarea name="previous_address" rows="2" required class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-3" placeholder="Alamat lengkap sebelum pindah domisili">{{ old('previous_address') }}</textarea>
+                        </div>
+                        <!-- Alamat Domisili Sekarang -->
+                        <div>
+                             <label class="block mb-2 text-sm font-semibold text-gray-700">Alamat Domisili Sekarang <span class="text-red-500">*</span></label>
+                            <textarea name="domicile_address" rows="2" required class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-3" placeholder="Alamat lengkap domisili saat ini">{{ old('domicile_address') }}</textarea>
+                        </div>
+                    </div>
+                </div>
+                @endif
+
+
+                
+                @if(\Illuminate\Support\Str::contains(strtolower($type->name), 'tidak mampu'))
+                <!-- Section: Data Orang Tua (Khusus Surat Keterangan Tidak Mampu) -->
+                <div class="bg-white p-6 rounded-xl border border-gray-100 shadow-sm relative mt-8">
+                     <div class="absolute -top-3 left-4 bg-white px-2 text-sm font-bold text-blue-600 flex items-center">
+                        <span class="w-6 h-6 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center mr-2 text-xs">2</span>
+                        Data Orang Tua
+                    </div>
+
+                    <!-- Ayah -->
+                    <div class="mt-4">
+                        <h4 class="font-bold text-gray-700 border-b pb-2 mb-4">Data Ayah</h4>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div>
+                                <label class="block mb-2 text-sm font-semibold text-gray-700">Nama Ayah <span class="text-red-500">*</span></label>
+                                <input type="text" name="father_name" required value="{{ old('father_name') }}"
+                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-3">
+                            </div>
+                            <div>
+                                <label class="block mb-2 text-sm font-semibold text-gray-700">NIK Ayah <span class="text-red-500">*</span></label>
+                                <input type="text" name="father_nik" required value="{{ old('father_nik') }}" maxlength="16"
+                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-3">
+                            </div>
+                            <div>
+                                <label class="block mb-2 text-sm font-semibold text-gray-700">Pekerjaan Ayah <span class="text-red-500">*</span></label>
+                                <input type="text" name="father_job" required value="{{ old('father_job') }}"
+                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-3">
+                            </div>
+                            <div class="md:col-span-2">
+                                 <label class="block mb-2 text-sm font-semibold text-gray-700">Alamat Ayah <span class="text-red-500">*</span></label>
+                                <textarea name="father_address" rows="1" required class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-3">{{ old('father_address') }}</textarea>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Ibu -->
+                    <div class="mt-6">
+                        <h4 class="font-bold text-gray-700 border-b pb-2 mb-4">Data Ibu</h4>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div>
+                                <label class="block mb-2 text-sm font-semibold text-gray-700">Nama Ibu <span class="text-red-500">*</span></label>
+                                <input type="text" name="mother_name" required value="{{ old('mother_name') }}"
+                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-3">
+                            </div>
+                            <div>
+                                <label class="block mb-2 text-sm font-semibold text-gray-700">NIK Ibu <span class="text-red-500">*</span></label>
+                                <input type="text" name="mother_nik" required value="{{ old('mother_nik') }}" maxlength="16"
+                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-3">
+                            </div>
+                            <div>
+                                <label class="block mb-2 text-sm font-semibold text-gray-700">Pekerjaan Ibu <span class="text-red-500">*</span></label>
+                                <input type="text" name="mother_job" required value="{{ old('mother_job') }}"
+                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-3">
+                            </div>
+                            <div class="md:col-span-2">
+                                 <label class="block mb-2 text-sm font-semibold text-gray-700">Alamat Ibu <span class="text-red-500">*</span></label>
+                                <textarea name="mother_address" rows="1" required class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-3">{{ old('mother_address') }}</textarea>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                @endif
+
+
+                
+                @if(\Illuminate\Support\Str::contains(strtolower($type->name), 'ktp'))
+                <!-- Section: Data Permohonan KTP (Khusus Formulir KTP) -->
+                <div class="bg-white p-6 rounded-xl border border-gray-100 shadow-sm relative mt-8">
+                     <div class="absolute -top-3 left-4 bg-white px-2 text-sm font-bold text-blue-600 flex items-center">
+                        <span class="w-6 h-6 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center mr-2 text-xs">2</span>
+                        Data Permohonan KTP
+                    </div>
+
+                    <div class="grid grid-cols-1 gap-6 mt-2">
+                        <!-- Jenis Permohonan -->
+                        <div>
+                             <label class="block mb-2 text-sm font-semibold text-gray-700">Jenis Permohonan <span class="text-red-500">*</span></label>
+                            <div class="flex gap-4">
+                                <label class="flex items-center space-x-2 border p-3 rounded-lg w-full hover:bg-gray-50 cursor-pointer">
+                                    <input type="radio" name="ktp_type" value="Baru" class="text-blue-600 focus:ring-blue-500" {{ old('ktp_type') == 'Baru' ? 'checked' : '' }} required>
+                                    <span class="text-gray-700 text-sm">A. Baru</span>
+                                </label>
+                                <label class="flex items-center space-x-2 border p-3 rounded-lg w-full hover:bg-gray-50 cursor-pointer">
+                                    <input type="radio" name="ktp_type" value="Perpanjangan" class="text-blue-600 focus:ring-blue-500" {{ old('ktp_type') == 'Perpanjangan' ? 'checked' : '' }}>
+                                    <span class="text-gray-700 text-sm">B. Perpanjangan</span>
+                                </label>
+                                 <label class="flex items-center space-x-2 border p-3 rounded-lg w-full hover:bg-gray-50 cursor-pointer">
+                                    <input type="radio" name="ktp_type" value="Penggantian" class="text-blue-600 focus:ring-blue-500" {{ old('ktp_type') == 'Penggantian' ? 'checked' : '' }}>
+                                    <span class="text-gray-700 text-sm">C. Penggantian</span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                @endif
+
+
                 <!-- Section 2: Detail Permohonan -->
                 <div class="bg-white p-6 rounded-xl border border-gray-100 shadow-sm relative mt-8">
                      <div class="absolute -top-3 left-4 bg-white px-2 text-sm font-bold text-blue-600 flex items-center">

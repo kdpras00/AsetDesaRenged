@@ -143,18 +143,53 @@
         }
 
         // Mark all as read
-        markAllBtn.addEventListener('click', function() {
-            fetch("{{ route('notifications.readAll') }}", {
-                 method: 'POST',
-                 headers: {
-                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
-                    'Content-Type': 'application/json'
+        // Mark all as read
+        if(markAllBtn) {
+            markAllBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                // Show Global Loading
+                if(window.showLoading) {
+                    window.showLoading();
+                } else {
+                    markAllBtn.textContent = 'Memproses...';
+                    markAllBtn.disabled = true;
                 }
-            }).then(() => {
-                checkUnread();
-                fetchNotifications(); // Reload list to show read state
+
+                fetch("{{ route('notifications.readAll') }}", {
+                     method: 'POST',
+                     headers: {
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+                        'Content-Type': 'application/json'
+                    }
+                }).then(res => {
+                    if (!res.ok) throw new Error('Network response was not ok');
+                    return res.json();
+                }).then(() => {
+                    // Force refresh data
+                    return Promise.all([
+                        checkUnread(),
+                        fetchNotifications()
+                    ]);
+                }).then(() => {
+                    // Slight delay to ensure UX feels deliberate
+                    setTimeout(() => {
+                         if(window.hideLoading) {
+                            window.hideLoading();
+                        } else {
+                            markAllBtn.textContent = 'Tandai semua dibaca';
+                            markAllBtn.disabled = false;
+                        }
+                    }, 500);
+                }).catch(err => {
+                    console.error('Error marking all as read:', err);
+                    if(window.hideLoading) window.hideLoading();
+                    alert('Gagal memproses permintaan. Silakan coba lagi.');
+                    markAllBtn.textContent = 'Tandai semua dibaca';
+                    markAllBtn.disabled = false;
+                });
             });
-        });
+        }
 
         // Time helper
         function timeSince(date) {

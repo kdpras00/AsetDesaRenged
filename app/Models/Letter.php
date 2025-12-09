@@ -28,12 +28,14 @@ class Letter extends Model
         'operator_notes',
         'rejection_reason',
         'attachment',
+        'data',
     ];
 
     protected $casts = [
         'request_date' => 'date',
         'process_date' => 'date',
         'approved_date' => 'date',
+        'data' => 'array',
     ];
 
     // Relationships
