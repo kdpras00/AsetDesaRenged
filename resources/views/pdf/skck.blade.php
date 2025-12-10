@@ -101,9 +101,13 @@
         <p>Email: pemdesrenged@gmail.com</p>
     </div>
 
+        @php
+            $date = $letter->approved_date ?? $letter->process_date ?? $letter->request_date ?? now();
+        @endphp
+
     <div class="title">
         <h4>SURAT PENGANTAR KETERANGAN CATATAN KEPOLISIAN (SKCK)</h4>
-        <p>Nomor : 470 / {{ $letter->letter_number ?? '.......' }} / Ds.Rgd / {{ date('Y') }}</p>
+        <p>Nomor : 470 / {{ $letter->letter_number ?? '.......' }} / Ds.Rgd / {{ $date->format('Y') }}</p>
     </div>
 
     <div class="content">
@@ -178,7 +182,7 @@
 
         <div class="signature">
             <div class="signature-box">
-                <p>Renged, {{ now()->translatedFormat('d F Y') }}<br>
+                <p>Renged, {{ $date->translatedFormat('d F Y') }}<br>
                 Kepala Desa Renged</p>
                 
                 <div style="margin: 10px auto;">

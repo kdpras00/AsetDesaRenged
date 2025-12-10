@@ -265,13 +265,14 @@ class LetterRequestController extends Controller
     {
         // Authorization: Warga can only download their own letters
         if ($letter->user_id !== auth()->id()) {
-            abort(403);
+            abort(403, 'Anda tidak memiliki akses untuk mengunduh surat ini.');
         }
 
         // Ideally only verified letters
         if ($letter->status !== 'verified') {
-            return back()->with('error', 'Surat belum terverifikasi.');
+            return back()->with('error', 'Surat belum terverifikasi. Status saat ini: ' . ucfirst($letter->status) . '.');
         }
+
 
         $view = 'pdf.letter';
         
@@ -475,7 +476,8 @@ class LetterRequestController extends Controller
         // Date and Signatures below
         $row = $endRow + 1;
         $sheet->mergeCells('L' . $row . ':R' . $row);
-        $sheet->setCellValue('L' . $row, '..........................., ' . now()->translatedFormat('d F Y'));
+        $date = $letter->approved_date ?? $letter->process_date ?? $letter->request_date ?? now();
+        $sheet->setCellValue('L' . $row, '..........................., ' . $date->translatedFormat('d F Y'));
         $sheet->getStyle('L' . $row)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
         
         $row++;

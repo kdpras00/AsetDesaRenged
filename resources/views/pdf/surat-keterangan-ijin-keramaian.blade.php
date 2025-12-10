@@ -141,9 +141,13 @@
         <p>Email:<a href="mailto:Desarenged9@gmail.com">Desarenged9@gmail.com</a> Blog:<a href="https://Infodesarenged.blogspot.com">https://Infodesarenged.blogspot.com</a></p>
     </div>
 
+        @php
+            $date = $letter->approved_date ?? $letter->process_date ?? $letter->request_date ?? now();
+        @endphp
+
     <div class="title">
         <h4>SURAT KETERANGAN IJIN KERAMAIAN</h4>
-        <p>Nomor : 331.5 / {{ $letter->letter_number ?? '.......' }} - Ds.Rgd / {{ \App\Helpers\Romawi::get(date('n')) }} / {{ date('Y') }}</p>
+        <p>Nomor : 331.5 / {{ $letter->letter_number ?? '.......' }} - Ds.Rgd / {{ \App\Helpers\Romawi::get($date->format('n')) }} / {{ $date->format('Y') }}</p>
     </div>
 
     <div class="content">
@@ -236,7 +240,7 @@
         <div class="signature-container">
             <!-- Kepala Desa (Top Right) -->
             <div class="signature-right">
-                <p>Renged, {{ now()->translatedFormat('d F Y') }}<br>
+                <p>Renged, {{ $date->translatedFormat('d F Y') }}<br>
                 KEPALA DESA RENGED</p>
                 
                  <div class="qr-code-container">

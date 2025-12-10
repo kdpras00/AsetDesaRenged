@@ -267,7 +267,8 @@ class LetterController extends Controller
         
         $row = $endRow + 1;
         $sheet->mergeCells('L' . $row . ':R' . $row);
-        $sheet->setCellValue('L' . $row, '..........................., ' . now()->translatedFormat('d F Y'));
+        $date = $letter->approved_date ?? $letter->process_date ?? $letter->request_date ?? now();
+        $sheet->setCellValue('L' . $row, '..........................., ' . $date->translatedFormat('d F Y'));
         $sheet->getStyle('L' . $row)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
         
         $row++;

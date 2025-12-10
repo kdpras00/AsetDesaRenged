@@ -124,7 +124,7 @@
 
     <div class="footer">
         <div class="signature">
-            <p>Renged, {{ $letter->approved_date ? \Carbon\Carbon::parse($letter->approved_date)->translatedFormat('d F Y') : date('d F Y') }}</p>
+            <p>Renged, {{ $letter->approved_date ? \Carbon\Carbon::parse($letter->approved_date)->translatedFormat('d F Y') : ($letter->process_date ? \Carbon\Carbon::parse($letter->process_date)->translatedFormat('d F Y') : now()->translatedFormat('d F Y')) }}</p>
             <p>Kepala Desa Renged</p>
             
             <div class="qr-code">

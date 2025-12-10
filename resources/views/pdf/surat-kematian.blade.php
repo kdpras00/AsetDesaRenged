@@ -114,7 +114,10 @@
 
     <div class="title">
         <h4>SURAT KETERANGAN KEMATIAN</h4>
-        <p>Nomor : 472.12 / {{ $letter->letter_number ?? '.......' }} - Ds.Rgd / {{ \App\Helpers\Romawi::get(date('n')) }} / {{ date('Y') }}</p>
+        @php
+            $date = $letter->approved_date ?? $letter->process_date ?? $letter->request_date ?? now();
+        @endphp
+        <p>Nomor : 472.12 / {{ $letter->letter_number ?? '.......' }} - Ds.Rgd / {{ \App\Helpers\Romawi::get($date->format('n')) }} / {{ $date->format('Y') }}</p>
     </div>
 
     <div class="content">
@@ -207,7 +210,7 @@
 
         <div class="signature">
             <div class="signature-box">
-                <p>Renged, {{ now()->translatedFormat('d F Y') }}<br>
+                <p>Renged, {{ $date->translatedFormat('d F Y') }}<br>
                 Kepala Desa Renged</p>
                 
                 <div style="margin: 10px auto;">
