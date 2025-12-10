@@ -7,7 +7,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
-class LetterVerified extends Notification
+class LetterVerifiedForOperator extends Notification
 {
     use Queueable;
 
@@ -29,8 +29,8 @@ class LetterVerified extends Notification
     public function toArray(object $notifiable): array
     {
         return [
-            'message' => 'Surat ' . $this->letter->letterType->name . ' Anda telah diterbitkan. Silakan unduh.',
-            'url' => route('warga.letters.index', ['view' => 'history']),
+            'message' => 'Surat ' . $this->letter->letterType->name . ' an. ' . $this->letter->user->name . ' telah diverifikasi oleh Kepala Desa.',
+            'url' => route('operator.letters.index'),
             'type' => 'success'
         ];
     }

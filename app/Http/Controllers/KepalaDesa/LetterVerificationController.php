@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Letter;
 use App\Models\User;
 use App\Notifications\LetterVerified;
+use App\Notifications\LetterVerifiedForOperator;
 use App\Notifications\RequestRejected;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Notification;
@@ -61,7 +62,7 @@ class LetterVerificationController extends Controller
 
         // Notify Operator (Optional, but good for tracking)
         $operators = User::where('role', 'operator')->get();
-        Notification::send($operators, new LetterVerified($letter));
+        Notification::send($operators, new LetterVerifiedForOperator($letter));
 
         return redirect()->back()->with('success', 'Surat berhasil diverifikasi dan QR code telah di-generate.');
     }
