@@ -20,6 +20,9 @@ class LetterRequestController extends Controller
         $view = $request->get('view', 'catalog');
 
         if ($view === 'history') {
+            // Mark all unread notifications as read when viewing history
+            auth()->user()->unreadNotifications->markAsRead();
+
             $letters = auth()->user()->letters()
                 ->with('letterType')
                 ->latest()
@@ -37,6 +40,12 @@ class LetterRequestController extends Controller
      */
     public function create(LetterType $type)
     {
+        // Enforce Profile Completion
+        $user = auth()->user();
+        if (empty($user->gender) || empty($user->birth_place) || empty($user->birth_date) || empty($user->religion) || empty($user->job)) {
+            return redirect()->route('profile.edit')->with('warning', 'Mohon lengkapi biodata Anda (Jenis Kelamin, TTL, Agama, Pekerjaan) terlebih dahulu sebelum mengajukan surat.');
+        }
+
         return view('warga.letters.create', compact('type'));
     }
 
@@ -264,7 +273,7 @@ class LetterRequestController extends Controller
     public function download(Letter $letter)
     {
         // Authorization: Warga can only download their own letters
-        if ($letter->user_id !== auth()->id()) {
+        if ($letter->user_id != auth()->id()) {
             abort(403, 'Anda tidak memiliki akses untuk mengunduh surat ini.');
         }
 
@@ -273,9 +282,6 @@ class LetterRequestController extends Controller
             return back()->with('error', 'Surat belum terverifikasi. Status saat ini: ' . ucfirst($letter->status) . '.');
         }
 
-
-        $view = 'pdf.letter';
-        
         if (\Illuminate\Support\Str::contains(strtolower($letter->letterType->name), 'skck')) {
             $view = 'pdf.skck';
         } elseif (\Illuminate\Support\Str::contains(strtolower($letter->letterType->name), 'kematian')) {
@@ -294,10 +300,10 @@ class LetterRequestController extends Controller
             $view = 'pdf.surat-keterangan-ijin-keramaian';
         } elseif (\Illuminate\Support\Str::contains(strtolower($letter->letterType->name), 'domisili')) {
             $view = 'pdf.surat-keterangan-domisili';
-        } elseif (\Illuminate\Support\Str::contains(strtolower($letter->letterType->name), 'tidak mampu')) {
-            $view = 'pdf.surat-keterangan-tidak-mampu';
         } elseif (\Illuminate\Support\Str::contains(strtolower($letter->letterType->name), 'ktp')) {
             return $this->generateKtpExcel($letter);
+        } else {
+             return back()->with('error', 'Format surat tidak ditemukan.');
         }
 
         $pdf = \Barryvdh\DomPDF\Facade\Pdf::loadView($view, compact('letter'));

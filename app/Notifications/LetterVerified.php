@@ -31,6 +31,7 @@ class LetterVerified extends Notification
         return [
             'message' => 'Surat ' . $this->letter->letterType->name . ' Anda telah diterbitkan. Silakan unduh.',
             'url' => route('warga.letters.index', ['view' => 'history']),
+            'letter_id' => $this->letter->id,
             'type' => 'success'
         ];
     }

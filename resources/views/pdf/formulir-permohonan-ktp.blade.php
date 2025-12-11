@@ -300,7 +300,7 @@
              <td class="no-border" style="vertical-align: middle;">
                   <div style="margin: 0 auto; width: 90px;">
                     @if($letter->status == 'verified' && $letter->sha256_hash)
-                         <img src="data:image/png;base64, {{ base64_encode(QrCode::format('png')->size(80)->generate(route('verification.verify.hash', $letter->sha256_hash))) }}" alt="QR Code">
+                         <img src="data:image/svg+xml;base64, {{ base64_encode(\SimpleSoftwareIO\QrCode\Facades\QrCode::size(80)->generate(route('verification.verify.hash', $letter->sha256_hash))) }}" alt="QR Code">
                     @endif
                 </div>
              </td>

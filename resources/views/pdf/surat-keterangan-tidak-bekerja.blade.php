@@ -109,7 +109,40 @@
 </head>
 <body>
     <div class="header">
-        <img src="{{ public_path('storage/images/logo-renged.png') }}" alt="Logo">
+         @php
+            // AUTOMATIC LOGO FINDER - Mencari di berbagai lokasi
+            $logoPath = null;
+            $logoPaths = [
+                public_path('storage/images/logo-renged.png'),
+                storage_path('app/public/images/logo-renged.png'),
+                base_path('storage/images/logo-renged.png'),
+                base_path('public/storage/images/logo-renged.png'),
+                '/home/kure8737/public_html/storage/images/logo-renged.png',
+                '/home/kure8737/asetdesarenged.my.id/storage/images/logo-renged.png',
+            ];
+            
+            foreach ($logoPaths as $path) {
+                if (file_exists($path)) {
+                    $logoPath = $path;
+                    break;
+                }
+            }
+            
+            $logoBase64 = '';
+            if ($logoPath) {
+                try {
+                    $imageData = base64_encode(file_get_contents($logoPath));
+                    $mimeType = mime_content_type($logoPath);
+                    $logoBase64 = "data:{$mimeType};base64,{$imageData}";
+                } catch (\Exception $e) {
+                    // Jika gagal, logo tidak akan ditampilkan
+                }
+            }
+        @endphp
+        
+        @if($logoBase64)
+            <img src="{{ $logoBase64 }}" alt="Logo Desa Renged">
+        @endif
         <h2>PEMERINTAH KABUPATEN TANGERANG</h2>
         <h3>KECAMATAN KRESEK</h3>
         <h1>DESA RENGED</h1>
@@ -201,7 +234,7 @@
                 
                 <div style="margin: 10px auto;">
                     @if($letter->status == 'verified' && $letter->sha256_hash)
-                         <img src="data:image/png;base64, {{ base64_encode(QrCode::format('png')->size(90)->generate(route('verification.verify.hash', $letter->sha256_hash))) }}" alt="QR Code">
+                         <img src="data:image/svg+xml;base64, {{ base64_encode(\SimpleSoftwareIO\QrCode\Facades\QrCode::size(90)->generate(route('verification.verify.hash', $letter->sha256_hash))) }}" alt="QR Code">
                         <br>
                     @else
                         <br><br><br><br>

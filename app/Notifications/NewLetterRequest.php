@@ -31,6 +31,7 @@ class NewLetterRequest extends Notification
         return [
             'message' => 'Permohonan surat baru: ' . $this->letter->letterType->name . ' dari ' . $this->letter->user->name,
             'url' => route('operator.letters.index'), // Link to index page
+            'letter_id' => $this->letter->id,
             'type' => 'info'
         ];
     }

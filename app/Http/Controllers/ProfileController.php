@@ -26,12 +26,22 @@ class ProfileController extends Controller
             'nik' => ['nullable', 'numeric', 'digits:16', Rule::unique('users')->ignore($user->id)],
             'phone' => 'nullable|numeric|digits_between:10,13',
             'avatar' => 'nullable|image|max:1024', // 1MB Max
+            'gender' => 'required|in:L,P',
+            'birth_place' => 'required|string|max:255',
+            'birth_date' => 'required|date',
+            'religion' => 'required|string|max:255',
+            'job' => 'required|string|max:255',
         ]);
 
         $user->name = $request->name;
         $user->email = $request->email;
         $user->nik = $request->nik;
         $user->phone = $request->phone;
+        $user->gender = $request->gender;
+        $user->birth_place = $request->birth_place;
+        $user->birth_date = $request->birth_date;
+        $user->religion = $request->religion;
+        $user->job = $request->job;
 
         if ($request->hasFile('avatar')) {
             // Delete old avatar if exists

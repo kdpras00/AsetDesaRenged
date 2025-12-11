@@ -54,6 +54,16 @@ class LetterController extends Controller
             'operator_notes' => $request->operator_notes,
         ]);
 
+        // Mark related notification as read for this operator
+        $notification = auth()->user()->unreadNotifications
+            ->where('data.letter_id', $letter->id)
+            ->where('type', 'App\Notifications\NewLetterRequest')
+            ->first();
+        
+        if ($notification) {
+            $notification->markAsRead();
+        }
+
         // Notify Kepala Desa
         $kades = User::where('role', 'kepala_desa')->get();
         Notification::send($kades, new LetterProcessed($letter));
@@ -78,6 +88,16 @@ class LetterController extends Controller
             'rejection_reason' => $request->reason,
         ]);
 
+        // Mark related notification as read for this operator
+        $notification = auth()->user()->unreadNotifications
+            ->where('data.letter_id', $letter->id)
+            ->where('type', 'App\Notifications\NewLetterRequest')
+            ->first();
+        
+        if ($notification) {
+            $notification->markAsRead();
+        }
+
         // Notify Warga
         $letter->user->notify(new RequestRejected(
             'Permohonan surat ' . $letter->letterType->name . ' ditolak: ' . $request->reason,
@@ -93,8 +113,6 @@ class LetterController extends Controller
     {
         // Operator can download any letter, but maybe usually Processed or Verified?
         // Let's allow downloading at any stage for previewing content.
-        
-        $view = 'pdf.letter';
         
         if (\Illuminate\Support\Str::contains(strtolower($letter->letterType->name), 'skck')) {
             $view = 'pdf.skck';
@@ -118,6 +136,8 @@ class LetterController extends Controller
             $view = 'pdf.surat-keterangan-tidak-mampu';
         } elseif (\Illuminate\Support\Str::contains(strtolower($letter->letterType->name), 'ktp')) {
             return $this->generateKtpExcel($letter);
+        } else {
+             return back()->with('error', 'Format surat tidak ditemukan.');
         }
 
         $pdf = \Barryvdh\DomPDF\Facade\Pdf::loadView($view, compact('letter'));

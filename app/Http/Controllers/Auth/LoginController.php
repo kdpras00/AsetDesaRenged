@@ -28,6 +28,13 @@ class LoginController extends Controller
             $user = Auth::user();
 
             // Redirect based on role
+            $intendedUrl = session()->get('url.intended');
+            
+            // Prevent redirecting to background/API routes (like notifications)
+            if ($intendedUrl && (str_contains($intendedUrl, 'notifications') || str_contains($intendedUrl, 'json'))) {
+                session()->forget('url.intended');
+            }
+
             if ($user->isOperator()) {
                 return redirect()->intended('/operator/dashboard');
             } elseif ($user->isKepalaDesa()) {

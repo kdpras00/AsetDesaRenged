@@ -93,7 +93,9 @@
     
     <script>
         // Handle Session Flash Messages (using Swal from app.js)
+        // Handle Session Flash Messages (using Swal from app.js)
         @if(session('success'))
+            window.hideLoading(); // Ensure loader is hidden
             Swal.fire({
                 icon: 'success',
                 title: 'Berhasil',
@@ -104,6 +106,7 @@
         @endif
 
         @if(session('error'))
+            window.hideLoading(); // Ensure loader is hidden
             Swal.fire({
                 icon: 'error',
                 title: 'Gagal',
@@ -112,6 +115,7 @@
         @endif
 
         @if(session('warning'))
+            window.hideLoading(); // Ensure loader is hidden
             Swal.fire({
                 icon: 'warning',
                 title: 'Peringatan',

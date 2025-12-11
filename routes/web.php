@@ -42,10 +42,6 @@ Route::middleware('guest')->group(function () {
     Route::get('/reset-password/{token}', [App\Http\Controllers\Auth\ResetPasswordController::class, 'showResetForm'])->name('password.reset');
     Route::post('/reset-password', [App\Http\Controllers\Auth\ResetPasswordController::class, 'reset'])->name('password.update');
 
-    // Profile Management
-    Route::get('/profile', [App\Http\Controllers\ProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('/profile', [App\Http\Controllers\ProfileController::class, 'update'])->name('profile.update');
-    Route::put('/profile/password', [App\Http\Controllers\ProfileController::class, 'password'])->name('profile.password');
 });
 
 Route::middleware('auth')->group(function () {
@@ -53,9 +49,15 @@ Route::middleware('auth')->group(function () {
     Route::get('/notifications', [\App\Http\Controllers\NotificationController::class, 'index'])->name('notifications.index');
     Route::post('/notifications/{id}/read', [\App\Http\Controllers\NotificationController::class, 'markAsRead'])->name('notifications.read');
     Route::post('/notifications/read-all', [\App\Http\Controllers\NotificationController::class, 'markAllRead'])->name('notifications.readAll');
-});
 
-Route::post('/logout', [LoginController::class, 'logout'])->name('logout')->middleware('auth');
+
+    // Profile Management
+    Route::get('/profile', [App\Http\Controllers\ProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('/profile', [App\Http\Controllers\ProfileController::class, 'update'])->name('profile.update');
+    Route::put('/profile/password', [App\Http\Controllers\ProfileController::class, 'password'])->name('profile.password');
+
+    Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
+});
 
 // Operator routes
 Route::middleware(['auth', 'role:operator'])->prefix('operator')->name('operator.')->group(function () {

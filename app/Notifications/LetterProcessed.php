@@ -31,6 +31,7 @@ class LetterProcessed extends Notification
         return [
             'message' => 'Surat ' . $this->letter->letterType->name . ' an. ' . $this->letter->user->name . ' perlu verifikasi & TTD.',
             'url' => route('kepala-desa.letters.index'),
+            'letter_id' => $this->letter->id,
             'type' => 'warning'
         ];
     }

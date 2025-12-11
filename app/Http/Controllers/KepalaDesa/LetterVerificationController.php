@@ -57,6 +57,16 @@ class LetterVerificationController extends Controller
             return back()->with('warning', 'Surat berhasil diverifikasi, namun gagal generate QR code. Silakan hubungi admin.');
         }
 
+        // Mark related notification as read for Kades
+        $notification = auth()->user()->unreadNotifications
+            ->where('data.letter_id', $letter->id)
+            ->where('type', 'App\Notifications\LetterProcessed')
+            ->first();
+        
+        if ($notification) {
+            $notification->markAsRead();
+        }
+
         // Notify Warga
         $letter->user->notify(new LetterVerified($letter));
 
@@ -83,6 +93,16 @@ class LetterVerificationController extends Controller
             'kepala_desa_id' => auth()->id(),
             'rejection_reason' => $request->reason,
         ]);
+
+        // Mark related notification as read for Kades
+        $notification = auth()->user()->unreadNotifications
+            ->where('data.letter_id', $letter->id)
+            ->where('type', 'App\Notifications\LetterProcessed')
+            ->first();
+        
+        if ($notification) {
+            $notification->markAsRead();
+        }
 
         // Notify Warga
         $letter->user->notify(new RequestRejected(

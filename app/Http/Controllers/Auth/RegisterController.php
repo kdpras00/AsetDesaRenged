@@ -23,8 +23,6 @@ class RegisterController extends Controller
             'password' => 'required|string|min:8|confirmed',
             'nik' => 'required|numeric|digits:16|unique:users',
             'phone' => 'required|numeric|digits_between:10,13',
-            'address' => 'required|string',
-            'rt_rw' => 'required|string|max:10',
         ]);
 
         $user = User::create([
@@ -34,12 +32,10 @@ class RegisterController extends Controller
             'role' => 'warga', // Default role untuk registrasi public
             'nik' => $validated['nik'],
             'phone' => $validated['phone'],
-            'address' => $validated['address'],
-            'rt_rw' => $validated['rt_rw'],
         ]);
 
         Auth::login($user);
 
-        return redirect('/warga/dashboard')->with('success', 'Registrasi berhasil! Selamat datang di Sistem Manajemen Aset Desa Renged.');
+        return redirect('/profile')->with('warning', 'Registrasi berhasil! Mohon lengkapi biodata Anda sebelum mengajukan surat.');
     }
 }

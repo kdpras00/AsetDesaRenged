@@ -46,6 +46,8 @@
             </div>
         </div>
 
+
+
         <!-- No. HP -->
         <div>
             <label for="phone" class="block mb-2 text-sm font-semibold text-gray-700">Nomor WhatsApp</label>
@@ -58,19 +60,7 @@
             </div>
         </div>
 
-        <!-- Alamat -->
-        <div class="md:col-span-2">
-            <label for="address" class="block mb-2 text-sm font-semibold text-gray-700">Alamat (Sesuai KTP)</label>
-            <textarea name="address" id="address" rows="2" required
-                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 outline-none" placeholder="Nama Jalan, Blok, Nomor Rumah">{{ old('address') }}</textarea>
-        </div>
 
-        <!-- RT/RW -->
-        <div>
-            <label for="rt_rw" class="block mb-2 text-sm font-semibold text-gray-700">RT / RW</label>
-            <input type="text" name="rt_rw" id="rt_rw" value="{{ old('rt_rw') }}" placeholder="001/002" required
-                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 outline-none">
-        </div>
 
         <!-- Email -->
         <div>
