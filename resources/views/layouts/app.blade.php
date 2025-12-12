@@ -35,16 +35,16 @@
                     <!-- Notification Bell -->
                     @include('components.notification-bell')
 
-                    <div class="flex items-center ms-3">
+                    <div class="flex items-center ms-3 relative">
                         <div>
-                            <button type="button" class="flex text-sm bg-gray-800 rounded-full focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600" aria-expanded="false" data-dropdown-toggle="dropdown-user">
+                            <button type="button" onclick="const d = document.getElementById('dropdown-user'); d.classList.toggle('hidden');" class="flex text-sm bg-gray-800 rounded-full focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600" aria-expanded="false">
                                 <span class="sr-only">Open user menu</span>
                                 <div class="w-8 h-8 rounded-full bg-blue-600 flex items-center justify-center text-white font-semibold">
                                     {{ substr(auth()->user()->name, 0, 1) }}
                                 </div>
                             </button>
                         </div>
-                        <div class="z-50 hidden my-4 text-base list-none bg-white divide-y divide-gray-100 rounded shadow dark:bg-gray-700 dark:divide-gray-600" id="dropdown-user">
+                        <div class="z-50 hidden absolute right-0 top-8 my-4 text-base list-none bg-white divide-y divide-gray-100 rounded shadow dark:bg-gray-700 dark:divide-gray-600" id="dropdown-user">
                             <div class="px-4 py-3" role="none">
                                 <p class="text-sm text-gray-900 dark:text-white" role="none">
                                     {{ auth()->user()->name }}
@@ -92,6 +92,17 @@
     @stack('scripts')
     
     <script>
+        // Dropdown Close on Click Outside
+        document.addEventListener('click', function(event) {
+            const dropdown = document.getElementById('dropdown-user');
+            const button = event.target.closest('button');
+            const isDropdownButton = button && button.getAttribute('onclick') && button.getAttribute('onclick').includes('dropdown-user');
+            
+            if (!isDropdownButton && !dropdown.contains(event.target)) {
+                dropdown.classList.add('hidden');
+            }
+        });
+
         // Handle Session Flash Messages (using Swal from app.js)
         // Handle Session Flash Messages (using Swal from app.js)
         @if(session('success'))
