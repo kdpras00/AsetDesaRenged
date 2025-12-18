@@ -33,7 +33,7 @@
                     <div class="mt-8 bg-blue-600 rounded-lg p-6 text-white text-center">
                         <h4 class="font-bold mb-2">Butuh Bantuan?</h4>
                         <p class="text-sm text-blue-100 mb-4">Hubungi operator desa kami untuk panduan layanan.</p>
-                        <a href="#" class="inline-block bg-white text-blue-600 px-4 py-2 rounded text-sm font-bold">Chat WhatsApp</a>
+                        <a href="https://wa.me/6283876961269" class="inline-block bg-white text-blue-600 px-4 py-2 rounded text-sm font-bold" target="_blank">Chat WhatsApp</a>
                     </div>
                 </div>
             </div>

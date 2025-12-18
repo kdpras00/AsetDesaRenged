@@ -67,17 +67,11 @@
                         </td>
                         <td class="px-6 py-4 text-center">
                             @if($letter->status == 'processed')
-                                <div class="flex justify-center space-x-2">
-                                    <form id="verify-form-{{ $letter->id }}" action="{{ route('kepala-desa.letters.verify', $letter) }}" method="POST">
-                                        @csrf
-                                        <button type="button" onclick="confirmVerify({{ $letter->id }})" class="text-white bg-green-600 hover:bg-green-700 focus:ring-4 focus:ring-green-300 font-medium rounded text-xs px-3 py-1.5 focus:outline-none transition flex items-center">
-                                            <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                                            ACC / Tanda Tangan
-                                        </button>
-                                    </form>
-                                    <button type="button" onclick="openRejectModal('{{ route('kepala-desa.letters.reject', $letter) }}')" class="text-white bg-red-600 hover:bg-red-700 focus:ring-4 focus:ring-red-300 font-medium rounded text-xs px-3 py-1.5 focus:outline-none transition">
-                                        Tolak
-                                    </button>
+                                <div class="flex justify-center">
+                                    <a href="{{ route('kepala-desa.letters.show', $letter) }}" class="inline-flex items-center text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-xs px-4 py-2 focus:outline-none transition shadow-sm">
+                                        <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
+                                        Lihat Detail
+                                    </a>
                                 </div>
                             @elseif($letter->status == 'verified')
                                 <span class="bg-green-100 text-green-800 text-xs font-bold px-2.5 py-0.5 rounded border border-green-200">Disetujui</span>

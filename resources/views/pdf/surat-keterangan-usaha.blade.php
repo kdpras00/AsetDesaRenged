@@ -122,7 +122,7 @@
 </head>
 <body>
     <div class="header">
-         @php
+        @php
             // AUTOMATIC LOGO FINDER - Mencari di berbagai lokasi
             $logoPath = null;
             $logoPaths = [
@@ -163,13 +163,13 @@
         <p>Email:<a href="mailto:Desarenged9@gmail.com">Desarenged9@gmail.com</a> Blog:<a href="https://Infodesarenged.blogspot.com">https://Infodesarenged.blogspot.com</a></p>
     </div>
 
-        @php
-            $date = $letter->approved_date ?? $letter->process_date ?? $letter->request_date ?? now();
-        @endphp
+    @php
+        $date = $letter->approved_date ?? $letter->process_date ?? $letter->request_date ?? now();
+    @endphp
 
     <div class="title">
         <h4>SURAT KETERANGAN USAHA</h4>
-        <p>Nomor : 511.3 / {{ $letter->letter_number ?? '.......' }} - Ds.Rgd / {{ \App\Helpers\Romawi::get($date->format('n')) }} / {{ $date->format('Y') }}</p>
+        <p>Nomor : {{ $letter->letter_number ?? '.......' }}</p>
     </div>
 
     <div class="content">
@@ -216,7 +216,7 @@
             <tr>
                 <td class="label-col">Alamat</td>
                 <td class="separator-col">:</td>
-                <td>{{ $letter->user->address }}</td>
+                <td>Kp. {{ $letter->user->address }} RT {{ $letter->user->rt }} / RW {{ $letter->user->rw }} Desa Renged Kec. Kresek Kab. Tangerang</td>
             </tr>
         </table>
         
@@ -261,8 +261,7 @@
         <div class="signature">
              <div class="signature-box">
                 <p>Renged, {{ $date->translatedFormat('d F Y') }}<br>
-                A.n Kepala Desa Renged<br>
-                Sekretaris Desa</p>
+                Kepala Desa Renged</p>
                 
                 <div style="margin: 10px auto;">
                     @if($letter->status == 'verified' && $letter->sha256_hash)
@@ -274,7 +273,7 @@
                 </div>
                 
                 <p style="text-decoration: underline; font-weight: bold;">
-                    DEVI FITRIA, S.Pd
+                    {{ $letter->kepalaDesa ? $letter->kepalaDesa->name : 'WAWAN' }}
                 </p>
             </div>
 
@@ -296,6 +295,9 @@
             <p>Catatan :<br>
             *Dilarang menjual obat-obatan terlarang / tidak ada ijin dari BPOM*<br>
             Jika diketahui dikemudian hari menjual dan mengedarkan barang tersebut, kami akan mencabut ijin usaha anda dan akan diproses sesuai undang-undang yang berlaku.</p>
+        </div>
+        <div style="font-size: 10px; color: #555; margin-top: 20px; font-style: italic;">
+            Dokumen ini dicetak pada sistem digital pada tanggal {{ now()->translatedFormat('d F Y') }} sehingga tidak diperlukan tanda tangan basah.
         </div>
     </div>
 </body>

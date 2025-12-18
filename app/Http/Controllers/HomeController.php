@@ -59,4 +59,9 @@ class HomeController extends Controller
     {
         return view('public.profile.struktur');
     }
+
+    public function peta()
+    {
+        return view('public.profile.peta');
+    }
 }

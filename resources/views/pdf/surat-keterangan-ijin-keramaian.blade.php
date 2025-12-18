@@ -133,7 +133,7 @@
 </head>
 <body>
     <div class="header">
-         @php
+            @php
             // AUTOMATIC LOGO FINDER - Mencari di berbagai lokasi
             $logoPath = null;
             $logoPaths = [
@@ -167,11 +167,12 @@
         @if($logoBase64)
             <img src="{{ $logoBase64 }}" alt="Logo Desa Renged">
         @endif
+
         <h2>PEMERINTAH KABUPATEN TANGERANG</h2>
         <h3>KECAMATAN KRESEK</h3>
         <h1>DESA RENGED</h1>
-        <p>Jl.Kp.Solokan Rt.12/04 Kresek – Tangerang Kode Pos 15620</p>
-        <p>Email:<a href="mailto:Desarenged9@gmail.com">Desarenged9@gmail.com</a> Blog:<a href="https://Infodesarenged.blogspot.com">https://Infodesarenged.blogspot.com</a></p>
+        <p>Jln. Kp. Solokan Rt. 12/004 Desa Renged Kec. Kresek kab. Tangerang – Banten kode pos 15620</p>
+        <p>Email:<a href="mailto:desa9@websitedesa.info">desa9@websitedesa.info</a> Telp: 083877674662 - 083877674662</p>
     </div>
 
         @php
@@ -180,7 +181,7 @@
 
     <div class="title">
         <h4>SURAT KETERANGAN IJIN KERAMAIAN</h4>
-        <p>Nomor : 331.5 / {{ $letter->letter_number ?? '.......' }} - Ds.Rgd / {{ \App\Helpers\Romawi::get($date->format('n')) }} / {{ $date->format('Y') }}</p>
+        <p>Nomor : {{ $letter->letter_number ?? '.......' }}</p>
     </div>
 
     <div class="content">
@@ -306,6 +307,9 @@
                     <div class="signature-nrp">NRP. 31071518250886</div>
                 </div>
             </div>
+        </div>
+        <div style="font-size: 10px; color: #555; margin-top: 20px; font-style: italic;">
+            Dokumen ini dicetak pada sistem digital pada tanggal {{ now()->translatedFormat('d F Y') }} sehingga tidak diperlukan tanda tangan basah.
         </div>
     </div>
 </body>

@@ -42,7 +42,6 @@
                 <!-- Section 1: Data Pemohon -->
                 <div class="bg-white p-6 rounded-xl border border-gray-100 shadow-sm relative">
                      <div class="absolute -top-3 left-4 bg-white px-2 text-sm font-bold text-blue-600 flex items-center">
-                        <span class="w-6 h-6 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center mr-2 text-xs">1</span>
                         Data Pemohon (Otomatis)
                     </div>
 
@@ -73,11 +72,10 @@
                     </div>
                 </div>
 
-                @if(\Illuminate\Support\Str::contains(strtolower($type->name), 'kematian'))
+                @if($type->slug === 'SKM')
                 <!-- Section: Data Jenazah (Khusus Surat Kematian) -->
                 <div class="bg-white p-6 rounded-xl border border-gray-100 shadow-sm relative mt-8">
                      <div class="absolute -top-3 left-4 bg-white px-2 text-sm font-bold text-blue-600 flex items-center">
-                        <span class="w-6 h-6 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center mr-2 text-xs">2</span>
                         Data Jenazah & Kematian
                     </div>
 
@@ -174,11 +172,10 @@
                 </div>
                 @endif
 
-                @if(\Illuminate\Support\Str::contains(strtolower($type->name), 'usaha'))
+                @if($type->slug === 'SKU')
                 <!-- Section: Data Usaha (Khusus Surat Keterangan Usaha) -->
                 <div class="bg-white p-6 rounded-xl border border-gray-100 shadow-sm relative mt-8">
                      <div class="absolute -top-3 left-4 bg-white px-2 text-sm font-bold text-blue-600 flex items-center">
-                        <span class="w-6 h-6 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center mr-2 text-xs">2</span>
                         Data Usaha
                     </div>
 
@@ -206,11 +203,10 @@
                 </div>
                 @endif
 
-                @if(\Illuminate\Support\Str::contains(strtolower($type->name), 'cuti') || \Illuminate\Support\Str::contains(strtolower($type->name), 'ijin'))
+                @if($type->slug === 'SIC')
                 <!-- Section: Data Ijin Cuti (Khusus Surat Keterangan Ijin Cuti) -->
                 <div class="bg-white p-6 rounded-xl border border-gray-100 shadow-sm relative mt-8">
                      <div class="absolute -top-3 left-4 bg-white px-2 text-sm font-bold text-blue-600 flex items-center">
-                        <span class="w-6 h-6 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center mr-2 text-xs">2</span>
                         Data Cuti / Ijin
                     </div>
 
@@ -257,11 +253,10 @@
                 </div>
                 @endif
                 
-                @if(\Illuminate\Support\Str::contains(strtolower($type->name), 'kelahiran'))
+                @if($type->slug === 'SKL')
                 <!-- Section: Data Kelahiran (Khusus Surat Keterangan Kelahiran) -->
                 <div class="bg-white p-6 rounded-xl border border-gray-100 shadow-sm relative mt-8">
                      <div class="absolute -top-3 left-4 bg-white px-2 text-sm font-bold text-blue-600 flex items-center">
-                        <span class="w-6 h-6 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center mr-2 text-xs">2</span>
                         Data Kelahiran
                     </div>
 
@@ -360,24 +355,20 @@
 
 
                 
-                @if(\Illuminate\Support\Str::contains(strtolower($type->name), 'domisili'))
+                @if($type->slug === 'SKD')
                 <!-- Section: Data Domisili (Khusus Surat Keterangan Domisili) -->
                 <div class="bg-white p-6 rounded-xl border border-gray-100 shadow-sm relative mt-8">
                      <div class="absolute -top-3 left-4 bg-white px-2 text-sm font-bold text-blue-600 flex items-center">
-                        <span class="w-6 h-6 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center mr-2 text-xs">2</span>
                         Data Domisili
                     </div>
 
                     <div class="grid grid-cols-1 gap-6 mt-2">
                         <!-- Alamat Sebelumnya -->
-                        <div>
-                             <label class="block mb-2 text-sm font-semibold text-gray-700">Alamat Sebelumnya <span class="text-red-500">*</span></label>
-                            <textarea name="previous_address" rows="2" required class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-3" placeholder="Alamat lengkap sebelum pindah domisili">{{ old('previous_address') }}</textarea>
-                        </div>
+                        <!-- Alamat Sebelumnya Removed as per logic update -->
                         <!-- Alamat Domisili Sekarang -->
                         <div>
                              <label class="block mb-2 text-sm font-semibold text-gray-700">Alamat Domisili Sekarang <span class="text-red-500">*</span></label>
-                            <textarea name="domicile_address" rows="2" required class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-3" placeholder="Alamat lengkap domisili saat ini">{{ old('domicile_address') }}</textarea>
+                            <textarea name="alamat_domisili" rows="2" required class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-3" placeholder="Alamat lengkap domisili saat ini">{{ old('alamat_domisili') }}</textarea>
                         </div>
                     </div>
                 </div>
@@ -385,11 +376,10 @@
 
 
                 
-                @if(\Illuminate\Support\Str::contains(strtolower($type->name), 'tidak mampu'))
+                @if($type->slug === 'SKTM')
                 <!-- Section: Data Orang Tua (Khusus Surat Keterangan Tidak Mampu) -->
                 <div class="bg-white p-6 rounded-xl border border-gray-100 shadow-sm relative mt-8">
                      <div class="absolute -top-3 left-4 bg-white px-2 text-sm font-bold text-blue-600 flex items-center">
-                        <span class="w-6 h-6 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center mr-2 text-xs">2</span>
                         Data Orang Tua
                     </div>
 
@@ -450,11 +440,10 @@
 
 
                 
-                @if(\Illuminate\Support\Str::contains(strtolower($type->name), 'ktp'))
+                @if($type->slug === 'KTP')
                 <!-- Section: Data Permohonan KTP (Khusus Formulir KTP) -->
                 <div class="bg-white p-6 rounded-xl border border-gray-100 shadow-sm relative mt-8">
                      <div class="absolute -top-3 left-4 bg-white px-2 text-sm font-bold text-blue-600 flex items-center">
-                        <span class="w-6 h-6 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center mr-2 text-xs">2</span>
                         Data Permohonan KTP
                     </div>
 
@@ -485,7 +474,7 @@
                 <!-- Section 2: Detail Permohonan -->
                 <div class="bg-white p-6 rounded-xl border border-gray-100 shadow-sm relative mt-8">
                      <div class="absolute -top-3 left-4 bg-white px-2 text-sm font-bold text-blue-600 flex items-center">
-                        <span class="w-6 h-6 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center mr-2 text-xs">2</span>
+                                                <span class="w-6 h-6 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center mr-2 text-xs hidden">2</span>
                         Detail Permohonan
                     </div>
 

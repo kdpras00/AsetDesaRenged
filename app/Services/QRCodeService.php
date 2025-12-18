@@ -23,14 +23,14 @@ class QRCodeService
         }
 
         // Generate QR code
-        $qrCodeImage = QrCode::format('png')
+        $qrCodeImage = QrCode::format('svg')
             ->size(300)
             ->margin(1)
             ->errorCorrection('H') // High error correction untuk scan yang lebih reliable
             ->generate($url);
 
         // Save ke storage
-        $path = $directory . '/' . $filename . '.png';
+        $path = $directory . '/' . $filename . '.svg';
         Storage::disk('public')->put($path, $qrCodeImage);
 
         return $path;
@@ -40,11 +40,11 @@ class QRCodeService
      * Generate QR code dan return sebagai base64 string (untuk embed langsung ke PDF)
      * 
      * @param string $url
-     * @return string Base64 encoded PNG image
+     * @return string Base64 encoded SVG image
      */
     public function generateBase64(string $url): string
     {
-        $qrCodeImage = QrCode::format('png')
+        $qrCodeImage = QrCode::format('svg')
             ->size(300)
             ->margin(1)
             ->errorCorrection('H')

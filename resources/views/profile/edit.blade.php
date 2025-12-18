@@ -8,7 +8,7 @@
     @elseif(auth()->user()->role == 'operator')
         @include('operator.sidebar')
     @elseif(auth()->user()->role == 'kepala_desa')
-        @include('kepala_desa.sidebar')
+        @include('kepala-desa.sidebar')
     @endif
 @endsection
 
@@ -93,6 +93,15 @@
                             @error('email') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
                         </div>
 
+                        <!-- KK -->
+                        <div>
+                            <label for="kk" class="block text-sm font-semibold text-gray-700 mb-1">No. KK <span class="text-red-500">*</span></label>
+                            <input type="text" name="kk" id="kk" value="{{ old('kk', $user->kk) }}" required
+                                maxlength="16" inputmode="numeric" oninput="this.value = this.value.replace(/[^0-9]/g, '')"
+                                class="w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 transition-colors text-sm py-2.5 px-4 bg-white">
+                            @error('kk') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
+                        </div>
+
                         <!-- NIK -->
                         <div>
                             <label for="nik" class="block text-sm font-semibold text-gray-700 mb-1">NIK <span class="text-red-500">*</span></label>
@@ -130,6 +139,7 @@
                              <div>
                                 <label for="birth_place" class="block text-sm font-semibold text-gray-700 mb-1">Tempat Lahir <span class="text-red-500">*</span></label>
                                 <input type="text" name="birth_place" id="birth_place" value="{{ old('birth_place', $user->birth_place) }}" required
+                                    oninput="this.value = this.value.replace(/[0-9]/g, '')"
                                     class="w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 transition-colors text-sm py-2.5 px-4 bg-white">
                                 @error('birth_place') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
                             </div>
@@ -151,6 +161,7 @@
                         <div>
                             <label for="job" class="block text-sm font-semibold text-gray-700 mb-1">Pekerjaan <span class="text-red-500">*</span></label>
                             <input type="text" name="job" id="job" value="{{ old('job', $user->job) }}" required
+                                oninput="this.value = this.value.replace(/[0-9]/g, '')"
                                 class="w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 transition-colors text-sm py-2.5 px-4 bg-white">
                             @error('job') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
                         </div>
@@ -162,6 +173,14 @@
                                 maxlength="13" inputmode="numeric" oninput="this.value = this.value.replace(/[^0-9]/g, '')"
                                 class="w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 transition-colors text-sm py-2.5 px-4 bg-white">
                             @error('phone') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
+                        </div>
+
+                        <!-- Address -->
+                        <div class="md:col-span-2">
+                            <label for="address" class="block text-sm font-semibold text-gray-700 mb-1">Alamat Lengkap <span class="text-red-500">*</span></label>
+                            <textarea name="address" id="address" rows="3" required
+                                class="w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 transition-colors text-sm py-2.5 px-4 bg-white">{{ old('address', $user->address) }}</textarea>
+                            @error('address') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
                         </div>
 
                     </div>

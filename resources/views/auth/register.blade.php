@@ -46,6 +46,18 @@
             </div>
         </div>
 
+        <!-- No. KK -->
+        <div>
+            <label for="kk" class="block mb-2 text-sm font-semibold text-gray-700">No. Kartu Keluarga (KK)</label>
+            <div class="relative">
+                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                    <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"></path></svg>
+                </div>
+                <input type="text" name="kk" id="kk" value="{{ old('kk') }}" maxlength="16" inputmode="numeric" oninput="this.value = this.value.replace(/[^0-9]/g, '')" required
+                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2.5 outline-none" placeholder="360...">
+            </div>
+        </div>
+
 
 
         <!-- No. HP -->
@@ -115,7 +127,7 @@
     </div>
 
     <div class="pt-4">
-        <button type="submit" class="w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-bold rounded-lg text-sm px-5 py-3 text-center transition-all shadow-md hover:shadow-lg">
+        <button type="submit" class="w-full text-blue-900 bg-yellow-400 hover:bg-yellow-300 focus:ring-4 focus:ring-yellow-200 font-bold rounded-lg text-sm px-5 py-3 text-center transition-all shadow-md hover:shadow-lg hover:-translate-y-0.5">
             DAFTAR AKUN
         </button>
     </div>

@@ -19,6 +19,7 @@ Route::prefix('profil')->name('profile.')->group(function () {
     Route::get('/sejarah', [HomeController::class, 'sejarah'])->name('sejarah');
     Route::get('/visi-misi', [HomeController::class, 'visiMisi'])->name('visi-misi');
     Route::get('/struktur', [HomeController::class, 'struktur'])->name('struktur');
+    Route::get('/peta', [HomeController::class, 'peta'])->name('peta');
 });
 Route::get('/verify', [VerificationController::class, 'index'])->name('verification.index');
 Route::post('/verify', [VerificationController::class, 'verify'])->name('verification.verify');
@@ -72,9 +73,10 @@ Route::middleware(['auth', 'role:operator'])->prefix('operator')->name('operator
     Route::post('/loans/{loan}/return', [\App\Http\Controllers\Operator\LoanController::class, 'markreturned'])->name('loans.return');
     // Letter processing
     Route::get('/letters', [\App\Http\Controllers\Operator\LetterController::class, 'index'])->name('letters.index');
-    Route::get('/letters/{letter}/process', function () {
-        return redirect()->route('operator.letters.index');
-    });
+    Route::get('/letters/{letter}/process', [\App\Http\Controllers\Operator\LetterController::class, 'show'])->name('letters.show');
+    // Route::get('/letters/{letter}/process', function () {
+    //    return redirect()->route('operator.letters.index');
+    // });
     Route::post('/letters/{letter}/process', [\App\Http\Controllers\Operator\LetterController::class, 'process'])->name('letters.process');
     Route::post('/letters/{letter}/reject', [\App\Http\Controllers\Operator\LetterController::class, 'reject'])->name('letters.reject');
     Route::get('/letters/{letter}/download', [\App\Http\Controllers\Operator\LetterController::class, 'download'])->name('letters.download');
@@ -95,6 +97,7 @@ Route::middleware(['auth', 'role:warga'])->prefix('warga')->name('warga.')->grou
     Route::get('/letters', [\App\Http\Controllers\Warga\LetterRequestController::class, 'index'])->name('letters.index');
     Route::get('/letters/create/{type}', [\App\Http\Controllers\Warga\LetterRequestController::class, 'create'])->name('letters.create');
     Route::post('/letters', [\App\Http\Controllers\Warga\LetterRequestController::class, 'store'])->name('letters.store');
+    Route::post('/loans/{loan}/return', [\App\Http\Controllers\Warga\LoanRequestController::class, 'return'])->name('loans.return');
     Route::get('/letters/{letter}/download', [\App\Http\Controllers\Warga\LetterRequestController::class, 'download'])->name('letters.download');
 });
 
@@ -104,6 +107,7 @@ Route::middleware(['auth', 'role:kepala_desa'])->prefix('kepala-desa')->name('ke
     
     // Letter verification
     Route::get('/letters', [\App\Http\Controllers\KepalaDesa\LetterVerificationController::class, 'index'])->name('letters.index');
+    Route::get('/letters/{letter}', [\App\Http\Controllers\KepalaDesa\LetterVerificationController::class, 'show'])->name('letters.show');
     Route::post('/letters/{letter}/verify', [\App\Http\Controllers\KepalaDesa\LetterVerificationController::class, 'verify'])->name('letters.verify');
     Route::post('/letters/{letter}/reject', [\App\Http\Controllers\KepalaDesa\LetterVerificationController::class, 'reject'])->name('letters.reject');
     // Report routes

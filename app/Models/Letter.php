@@ -137,7 +137,7 @@ class Letter extends Model
             'sha256_hash' => $hash,
             'verification_url' => $verificationUrl,
             'issued_at' => now(),
-            'expires_at' => null, // No expiry by default
+            'expires_at' => $this->calculateExpiration(),
         ]);
         
         return $hash;
@@ -156,5 +156,19 @@ class Letter extends Model
     public function isVerified()
     {
         return $this->status === 'verified';
+    }
+
+    public function calculateExpiration()
+    {
+        $type = $this->letterType;
+        if (!$type) return now()->addMonth(); 
+
+        // SKU (Usaha) is valid for 1 Year. Others for 1 Month.
+        // Using stable Slug 'SKU'
+        if ($type->slug === 'SKU') {
+            return $this->approved_date->addYear(); // Use Approved Date if possible, or request date
+        }
+        
+        return $this->approved_date ? $this->approved_date->addMonth() : now()->addMonth();
     }
 }

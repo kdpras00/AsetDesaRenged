@@ -46,6 +46,12 @@ class LetterRequestController extends Controller
             return redirect()->route('profile.edit')->with('warning', 'Mohon lengkapi biodata Anda (Jenis Kelamin, TTL, Agama, Pekerjaan) terlebih dahulu sebelum mengajukan surat.');
         }
 
+        // Check Age (Must be 17+)
+        $age = \Carbon\Carbon::parse($user->birth_date)->age;
+        if ($age < 17) {
+            return redirect()->route('warga.letters.index')->with('error', 'Maaf, Anda belum cukup umur untuk mengajukan surat. Usia minimal adalah 17 tahun.');
+        }
+
         return view('warga.letters.create', compact('type'));
     }
 
@@ -55,124 +61,25 @@ class LetterRequestController extends Controller
     public function store(Request $request)
     {
         $letterType = LetterType::findOrFail($request->letter_type_id);
+        $user = auth()->user();
 
-        // Validation Rules
+        // Check Age (Must be 17+)
+        $age = \Carbon\Carbon::parse($user->birth_date)->age;
+        if ($age < 17) {
+            return redirect()->route('warga.letters.index')->with('error', 'Maaf, Anda belum cukup umur untuk mengajukan surat. Usia minimal adalah 17 tahun.');
+        }
+
+        // Core Validation Rules (Always required)
         $rules = [
             'letter_type_id' => 'required|exists:letter_types,id',
             'purpose' => 'required|string|max:1000',
             'attachment' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:5120', // 5MB
         ];
 
-        // Additional validation for Surat Kematian
-        if (\Illuminate\Support\Str::contains(strtolower($letterType->name), 'kematian')) {
-            $rules = array_merge($rules, [
-                'deceased_name' => 'required|string|max:255',
-                'deceased_nik' => 'required|numeric|digits:16',
-                'deceased_kk' => 'nullable|string|max:20',
-                'deceased_birth_place' => 'required|string|max:100',
-                'deceased_birth_date' => 'required|date',
-                'deceased_age' => 'required|integer',
-                'deceased_address' => 'required|string',
-                'death_day' => 'required|string',
-                'death_date' => 'required|date',
-                'death_place' => 'required|string',
-                'death_cause' => 'required|string',
-                'reporter_relationship' => 'required|string',
-            ]);
-        }
-
-        // Additional validation for Surat Keterangan Usaha
-        if (\Illuminate\Support\Str::contains(strtolower($letterType->name), 'usaha')) {
-            $rules = array_merge($rules, [
-                'business_name' => 'required|string|max:255',
-                'business_type' => 'required|string|max:255',
-                'business_address' => 'required|string|max:500',
-            ]);
-        }
-
-        // Additional validation for Surat Ijin Cuti
-        if (\Illuminate\Support\Str::contains(strtolower($letterType->name), 'cuti') || \Illuminate\Support\Str::contains(strtolower($letterType->name), 'ijin')) {
-            $rules = array_merge($rules, [
-                'company_name' => 'required|string|max:255',
-                'leave_day' => 'required|string|max:20',
-                'leave_date' => 'required|date',
-                'leave_purpose' => 'required|string|max:500',
-                'child_name' => 'nullable|string|max:255', // Opsional, context specific
-            ]);
-        }
-
-        // Additional validation for Surat Keterangan Tidak Bekerja
-        if (\Illuminate\Support\Str::contains(strtolower($letterType->name), 'tidak bekerja') || \Illuminate\Support\Str::contains(strtolower($letterType->name), 'tidak memiliki ijazah')) {
-            $rules = array_merge($rules, [
-                'marital_status' => 'required|string|max:50',
-            ]);
-        }
-        
-        // Additional validation for Surat Keterangan Kelahiran
-        if (\Illuminate\Support\Str::contains(strtolower($letterType->name), 'kelahiran')) {
-            $rules = array_merge($rules, [
-                // Child
-                'child_name' => 'required|string|max:255',
-                'child_nik' => 'required|numeric|digits:16',
-                'child_gender' => 'required|in:L,P',
-                'child_birth_place' => 'required|string|max:255',
-                'child_birth_date' => 'required|date',
-                'child_address' => 'required|string|max:500',
-                // Father
-                'father_name' => 'required|string|max:255',
-                'father_birth_place' => 'required|string|max:255',
-                'father_birth_date' => 'required|date',
-                'father_address' => 'required|string|max:500',
-                // Mother
-                'mother_name' => 'required|string|max:255',
-                'mother_birth_place' => 'required|string|max:255',
-                'mother_birth_date' => 'required|date',
-                'mother_address' => 'required|string|max:500',
-            ]);
-        }
-
-        // Additional validation for Surat Keterangan Ijin Keramaian
-        if (\Illuminate\Support\Str::contains(strtolower($letterType->name), 'keramaian')) {
-            $rules = array_merge($rules, [
-                'event_day' => 'required|string|max:20',
-                'event_date' => 'required|date',
-                'event_time' => 'required|string|max:50',
-                'event_place' => 'required|string|max:255',
-                'event_name' => 'required|string|max:255',
-                'event_entertainment' => 'nullable|string|max:255',
-            ]);
-        }
-
-        // Additional validation for Surat Keterangan Domisili
-        if (\Illuminate\Support\Str::contains(strtolower($letterType->name), 'domisili')) {
-            $rules = array_merge($rules, [
-                'previous_address' => 'required|string|max:500',
-                'domicile_address' => 'required|string|max:500',
-            ]);
-        }
-
-        // Additional validation for Surat Keterangan Tidak Mampu
-        if (\Illuminate\Support\Str::contains(strtolower($letterType->name), 'tidak mampu')) {
-            $rules = array_merge($rules, [
-                // Father
-                'father_name' => 'required|string|max:255',
-                'father_nik' => 'required|numeric|digits:16',
-                'father_job' => 'required|string|max:255',
-                'father_address' => 'required|string|max:500',
-                // Mother
-                'mother_name' => 'required|string|max:255',
-                'mother_nik' => 'required|numeric|digits:16',
-                'mother_job' => 'required|string|max:255',
-                'mother_address' => 'required|string|max:500',
-            ]);
-        }
-
-        // Additional validation for Formulir Permohonan KTP
-        if (\Illuminate\Support\Str::contains(strtolower($letterType->name), 'ktp')) {
-            $rules = array_merge($rules, [
-                'ktp_type' => 'required|in:Baru,Perpanjangan,Penggantian',
-            ]);
-        }
+        // Load Dynamic Rules from Config
+        // Fallback to empty array if config is null
+        $dynamicRules = $letterType->form_config['validation_rules'] ?? [];
+        $rules = array_merge($rules, $dynamicRules);
 
         $request->validate($rules);
 
@@ -184,73 +91,12 @@ class LetterRequestController extends Controller
             'status' => 'pending',
         ];
 
-        // Store specific data for Surat Kematian
-        if (\Illuminate\Support\Str::contains(strtolower($letterType->name), 'kematian')) {
-            $data['data'] = $request->only([
-                'deceased_name', 'deceased_nik', 'deceased_kk', 
-                'deceased_birth_place', 'deceased_birth_date', 'deceased_age', 
-                'deceased_address', 'death_day', 'death_date', 
-                'death_place', 'death_cause', 'reporter_relationship'
-            ]);
-        }
-
-        // Store specific data for Surat Keterangan Usaha
-        if (\Illuminate\Support\Str::contains(strtolower($letterType->name), 'usaha')) {
-            $data['data'] = $request->only([
-                'business_name', 'business_type', 'business_address'
-            ]);
-        }
-
-        // Store specific data for Surat Ijin Cuti
-        if (\Illuminate\Support\Str::contains(strtolower($letterType->name), 'cuti') || \Illuminate\Support\Str::contains(strtolower($letterType->name), 'ijin')) {
-            $data['data'] = $request->only([
-                'company_name', 'leave_day', 'leave_date', 'leave_purpose', 'child_name'
-            ]);
-        }
+        // Store Dynamic Data Fields
+        // Only store fields defined in config to avoid polluting the JSON
+        $fieldsToStore = $letterType->form_config['fields'] ?? [];
         
-         // Store specific data for Surat Keterangan Nicht Bekerja / Tidak Memiliki Ijazah
-        if (\Illuminate\Support\Str::contains(strtolower($letterType->name), 'tidak bekerja') || \Illuminate\Support\Str::contains(strtolower($letterType->name), 'tidak memiliki ijazah')) {
-            $data['data'] = $request->only([
-                'marital_status'
-            ]);
-        }
-
-        // Store specific data for Surat Keterangan Kelahiran
-        if (\Illuminate\Support\Str::contains(strtolower($letterType->name), 'kelahiran')) {
-            $data['data'] = $request->only([
-                'child_name', 'child_nik', 'child_gender', 'child_birth_place', 'child_birth_date', 'child_address',
-                'father_name', 'father_birth_place', 'father_birth_date', 'father_address',
-                'mother_name', 'mother_birth_place', 'mother_birth_date', 'mother_address',
-            ]);
-        }
-
-        // Store specific data for Surat Keterangan Ijin Keramaian
-        if (\Illuminate\Support\Str::contains(strtolower($letterType->name), 'keramaian')) {
-            $data['data'] = $request->only([
-                'event_day', 'event_date', 'event_time', 'event_place', 'event_name', 'event_entertainment'
-            ]);
-        }
-
-        // Store specific data for Surat Keterangan Domisili
-        if (\Illuminate\Support\Str::contains(strtolower($letterType->name), 'domisili')) {
-            $data['data'] = $request->only([
-                'previous_address', 'domicile_address'
-            ]);
-        }
-
-        // Store specific data for Surat Keterangan Tidak Mampu
-        if (\Illuminate\Support\Str::contains(strtolower($letterType->name), 'tidak mampu')) {
-            $data['data'] = $request->only([
-                'father_name', 'father_nik', 'father_job', 'father_address',
-                'mother_name', 'mother_nik', 'mother_job', 'mother_address',
-            ]);
-        }
-
-        // Store specific data for Formulir Permohonan KTP
-        if (\Illuminate\Support\Str::contains(strtolower($letterType->name), 'ktp')) {
-            $data['data'] = $request->only([
-                'ktp_type'
-            ]);
+        if (!empty($fieldsToStore)) {
+             $data['data'] = $request->only($fieldsToStore);
         }
 
         if ($request->hasFile('attachment')) {
@@ -282,34 +128,31 @@ class LetterRequestController extends Controller
             return back()->with('error', 'Surat belum terverifikasi. Status saat ini: ' . ucfirst($letter->status) . '.');
         }
 
-        if (\Illuminate\Support\Str::contains(strtolower($letter->letterType->name), 'skck')) {
-            $view = 'pdf.skck';
-        } elseif (\Illuminate\Support\Str::contains(strtolower($letter->letterType->name), 'kematian')) {
-            $view = 'pdf.surat-kematian';
-        } elseif (\Illuminate\Support\Str::contains(strtolower($letter->letterType->name), 'usaha')) {
-            $view = 'pdf.surat-keterangan-usaha';
-        } elseif (\Illuminate\Support\Str::contains(strtolower($letter->letterType->name), 'cuti') || \Illuminate\Support\Str::contains(strtolower($letter->letterType->name), 'ijin')) {
-            $view = 'pdf.surat-keterangan-ijin-cuti';
-        } elseif (\Illuminate\Support\Str::contains(strtolower($letter->letterType->name), 'tidak bekerja')) {
-            $view = 'pdf.surat-keterangan-tidak-bekerja';
-        } elseif (\Illuminate\Support\Str::contains(strtolower($letter->letterType->name), 'tidak memiliki ijazah')) {
-            $view = 'pdf.surat-keterangan-tidak-memiliki-ijazah';
-        } elseif (\Illuminate\Support\Str::contains(strtolower($letter->letterType->name), 'kelahiran')) {
-            $view = 'pdf.surat-keterangan-kelahiran';
-        } elseif (\Illuminate\Support\Str::contains(strtolower($letter->letterType->name), 'keramaian')) {
-            $view = 'pdf.surat-keterangan-ijin-keramaian';
-        } elseif (\Illuminate\Support\Str::contains(strtolower($letter->letterType->name), 'domisili')) {
-            $view = 'pdf.surat-keterangan-domisili';
-        } elseif (\Illuminate\Support\Str::contains(strtolower($letter->letterType->name), 'ktp')) {
-            return $this->generateKtpExcel($letter);
-        } else {
-             return back()->with('error', 'Format surat tidak ditemukan.');
+        $view = $letter->letterType->form_config['pdf_view'] ?? null;
+        
+        // Specific fix for KTP to ensure PDF generation
+        if ($letter->letterType->slug === 'KTP') {
+             $view = 'pdf.formulir-permohonan-ktp';
         }
 
+        if ($view === 'excel') {
+             // Fallback if other excel configurations exist, but for now we redirect KTP to PDF above.
+             return back()->with('error', 'Format Excel tidak lagi didukung. Hubungi admin.');
+        }
+
+        if (!$view) {
+             return back()->with('error', 'Format surat tidak ditemukan dalam konfigurasi.');
+        }
+
+        if (!view()->exists($view)) {
+             return back()->with('error', "File template ($view) tidak ditemukan di sistem.");
+        }
+
+        $letter->load(['user', 'letterType', 'kepalaDesa']);
         $pdf = \Barryvdh\DomPDF\Facade\Pdf::loadView($view, compact('letter'));
         $pdf->setPaper('A4', 'portrait');
         
-        return $pdf->download('Surat-' . str_replace('/', '-', $letter->letter_number) . '.pdf');
+        return $pdf->download('Surat-' . str_replace('/', '-', $letter->letter_number ?? 'DRAFT') . '.pdf');
     }
 
     private function generateKtpExcel($letter)

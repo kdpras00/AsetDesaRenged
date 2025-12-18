@@ -17,6 +17,10 @@
                 <span class="block text-xl font-bold text-gray-900">{{ $loans->total() }}</span>
                 <span class="text-xs text-gray-500 uppercase tracking-wide">Total</span>
             </div>
+            <a href="javascript:history.back()" class="inline-flex items-center justify-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-lg text-gray-700 bg-white hover:bg-gray-50 transition-colors">
+                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+                Kembali
+            </a>
             <a href="{{ route('warga.loans.index', ['view' => 'catalog']) }}" class="inline-flex items-center justify-center px-4 py-2 border border-blue-600 text-sm font-medium rounded-lg text-blue-600 bg-white hover:bg-blue-50 transition-colors">
                 <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
                 Pinjam Baru
@@ -40,7 +44,7 @@
                 @endif
                 
                 <!-- Status Badge Overlay -->
-                <div class="absolute top-4 right-4">
+                <div class="absolute top-4 right-4 flex flex-col gap-2 items-end">
                     @if($loan->status == 'pending')
                         <span class="inline-flex items-center px-2.5 py-1 rounded-md text-xs font-bold bg-yellow-400 text-yellow-900 shadow-sm">
                             <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
@@ -50,6 +54,19 @@
                         <span class="inline-flex items-center px-2.5 py-1 rounded-md text-xs font-bold bg-blue-600 text-white shadow-sm">
                             <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
                             Dipinjam
+                        </span>
+                        <!-- Return Button -->
+                        <form action="{{ route('warga.loans.return', $loan) }}" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin mengembalikan aset ini?')">
+                            @csrf
+                            <button type="submit" class="inline-flex items-center px-2.5 py-1 rounded-md text-xs font-bold bg-indigo-600 text-white shadow-sm hover:bg-indigo-700 transition">
+                                <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
+                                Kembalikan
+                            </button>
+                        </form>
+                    @elseif($loan->status == 'returning')
+                        <span class="inline-flex items-center px-2.5 py-1 rounded-md text-xs font-bold bg-purple-500 text-white shadow-sm">
+                            <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                            Proses Kembali
                         </span>
                     @elseif($loan->status == 'returned')
                         <span class="inline-flex items-center px-2.5 py-1 rounded-md text-xs font-bold bg-green-500 text-white shadow-sm">

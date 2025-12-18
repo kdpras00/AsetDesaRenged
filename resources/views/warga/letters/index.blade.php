@@ -35,9 +35,25 @@
                 <h3 class="font-bold text-gray-900 text-lg mb-2">{{ $type->name }}</h3>
                 <p class="text-sm text-gray-500 mb-4 flex-1">{{ $type->description ?? 'Surat keterangan resmi dari pemerintah desa.' }}</p>
                 
-                <a href="{{ route('warga.letters.create', $type) }}" class="w-full inline-flex justify-center items-center text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center transition shadow hover:shadow-md">
-                    Ajukan Sekarang
-                </a>
+                @php
+                    $userAge = \Carbon\Carbon::parse(auth()->user()->birth_date)->age;
+                @endphp
+
+                @if($userAge < 17)
+                    <button onclick="Swal.fire({
+                        icon: 'error',
+                        title: 'Usia Belum Mencukupi',
+                        text: 'Maaf, Anda harus berusia minimal 17 tahun untuk mengajukan surat ini. Usia Anda saat ini: {{ $userAge }} tahun.',
+                        confirmButtonColor: '#d33'
+                    })" class="w-full inline-flex justify-center items-center text-white bg-gray-400 cursor-not-allowed font-medium rounded-lg text-sm px-5 py-2.5 text-center shadow-sm">
+                        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
+                        Terkunci (17+)
+                    </button>
+                @else
+                    <a href="{{ route('warga.letters.create', $type) }}" class="w-full inline-flex justify-center items-center text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center transition shadow hover:shadow-md">
+                        Ajukan Sekarang
+                    </a>
+                @endif
             </div>
             @empty
             <div class="col-span-full py-12 text-center">

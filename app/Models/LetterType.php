@@ -11,13 +11,17 @@ class LetterType extends Model
 
     protected $fillable = [
         'name',
+        'slug',
+        'code',
         'description',
         'requirements',
         'template',
+        'form_config',
     ];
 
     protected $casts = [
         'requirements' => 'array',
+        'form_config' => 'array',
     ];
 
     // Relationships

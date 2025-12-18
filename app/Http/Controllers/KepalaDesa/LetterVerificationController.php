@@ -34,6 +34,15 @@ class LetterVerificationController extends Controller
     }
 
     /**
+     * Display the specified letter for verification.
+     */
+    public function show(Letter $letter)
+    {
+        $letter->load(['user', 'letterType', 'operator']);
+        return view('kepala-desa.letters.show', compact('letter'));
+    }
+
+    /**
      * Verify and sign the letter.
      */
     public function verify(Request $request, Letter $letter)

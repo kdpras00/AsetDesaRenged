@@ -35,27 +35,30 @@
         let isOpen = false;
 
         // Toggle Dropdown
-        btn.addEventListener('click', function(e) {
-            e.stopPropagation();
-            isOpen = !isOpen;
-            if (isOpen) {
-                dropdown.classList.remove('hidden');
-                setTimeout(() => {
-                    dropdown.classList.remove('scale-95', 'opacity-0');
-                    dropdown.classList.add('scale-100', 'opacity-100');
-                }, 10);
-                fetchNotifications();
-            } else {
-                closeDropdown();
-            }
-        });
+        if (btn && dropdown) {
+            btn.addEventListener('click', function(e) {
+                e.stopPropagation();
+                isOpen = !isOpen;
+                if (isOpen) {
+                    dropdown.classList.remove('hidden');
+                    // Small delay to allow display:block to apply before opacity transition
+                    requestAnimationFrame(() => {
+                        dropdown.classList.remove('scale-95', 'opacity-0');
+                        dropdown.classList.add('scale-100', 'opacity-100');
+                    });
+                    fetchNotifications();
+                } else {
+                    closeDropdown();
+                }
+            });
 
-        // Close on click outside
-        document.addEventListener('click', function(e) {
-            if (!btn.contains(e.target) && !dropdown.contains(e.target)) {
-                closeDropdown();
-            }
-        });
+            // Close on click outside
+            document.addEventListener('click', function(e) {
+                if (isOpen && !btn.contains(e.target) && !dropdown.contains(e.target)) {
+                    closeDropdown();
+                }
+            });
+        }
 
         function closeDropdown() {
             isOpen = false;
@@ -68,8 +71,13 @@
 
         // Polling Count (Every 30s)
         function checkUnread() {
-            fetch("{{ route('notifications.count') }}")
-                .then(res => res.json())
+            if (!badge) return;
+            
+            fetch("{{ route('notifications.count') }}?t=" + new Date().getTime())
+                .then(res => {
+                    if (!res.ok) throw new Error('Network response was not ok');
+                    return res.json();
+                })
                 .then(data => {
                     if (data.count > 0) {
                         badge.textContent = data.count > 99 ? '99+' : data.count;
@@ -78,7 +86,9 @@
                         badge.classList.add('hidden');
                     }
                 })
-                .catch(err => console.error('Notification Error:', err));
+                .catch(err => {
+                    // Silent fail for background polling to avoid console spam
+                });
         }
 
         // Initial Check & Interval
@@ -87,12 +97,19 @@
 
         // Fetch List
         function fetchNotifications() {
-            fetch("{{ route('notifications.index') }}")
-                .then(res => res.json())
+            if (!list) return;
+
+            list.innerHTML = '<li class="px-4 py-3 text-center text-sm text-gray-500 dark:text-gray-400">Memuat...</li>';
+
+            fetch("{{ route('notifications.index') }}?t=" + new Date().getTime())
+                .then(res => {
+                    if (!res.ok) throw new Error('Failed to fetch notifications');
+                    return res.json();
+                })
                 .then(data => {
                     list.innerHTML = '';
-                    if (data.length === 0) {
-                        list.innerHTML = '<li class="px-4 py-3 text-center text-sm text-gray-500">Tidak ada notifikasi</li>';
+                    if (!Array.isArray(data) || data.length === 0) {
+                        list.innerHTML = '<li class="px-4 py-3 text-center text-sm text-gray-500 dark:text-gray-400">Tidak ada notifikasi</li>';
                         return;
                     }
 
@@ -102,92 +119,150 @@
                         const bgColor = isUnread ? 'bg-blue-50 dark:bg-blue-900/20' : 'bg-white dark:bg-gray-800';
                         
                         // Parse data
-                        const notifData = item.data;
-                        const iconColor = notifData.type === 'danger' ? 'text-red-500' : (notifData.type === 'warning' ? 'text-yellow-500' : 'text-blue-500');
+                        const notifData = item.data || {};
+                        const message = notifData.message || 'Notification';
+                        const url = notifData.url || '#';
+                        const type = notifData.type || 'info';
+                        
+                        const iconColor = type === 'danger' ? 'text-red-500' : (type === 'warning' ? 'text-yellow-500' : 'text-blue-500');
 
-                        li.className = `${bgColor} px-4 py-3 hover:bg-gray-50 dark:hover:bg-gray-700 transition cursor-pointer`;
+                        li.className = `${bgColor} px-4 py-3 hover:bg-gray-50 dark:hover:bg-gray-700 transition cursor-pointer border-b border-gray-100 dark:border-gray-700 last:border-0`;
                         li.innerHTML = `
                             <div class="flex items-start space-x-3">
-                                <span class="${iconColor} mt-1">●</span>
+                                <span class="${iconColor} mt-1.5 text-[10px]">●</span>
                                 <div class="flex-1">
-                                    <p class="text-sm font-medium text-gray-900 dark:text-white">${notifData.message}</p>
+                                    <p class="text-sm font-medium text-gray-900 dark:text-white leading-snug">${message}</p>
                                     <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">${timeSince(new Date(item.created_at))}</p>
                                 </div>
                             </div>
                         `;
                         
-                        li.addEventListener('click', () => {
+                        li.addEventListener('click', (e) => {
+                            e.preventDefault(); // Prevent default if it was a link
+                            e.stopPropagation(); // Prevent closing dropdown immediately if logic requires
+                            
+                            // Show loading indicator on the item
+                            li.classList.add('opacity-50', 'pointer-events-none');
+                            
                             // Mark as read and redirect
-                            markAsRead(item.id, notifData.url);
+                            markAsRead(item.id, url);
                         });
 
                         list.appendChild(li);
                     });
+                })
+                .catch(err => {
+                    console.error('Error fetching notifications:', err);
+                    list.innerHTML = '<li class="px-4 py-3 text-center text-sm text-red-500">Gagal memuat notifikasi</li>';
                 });
         }
 
         // Mark single as read
         function markAsRead(id, url) {
+            const csrfToken = document.querySelector('meta[name="csrf-token"]');
+            if (!csrfToken) {
+                console.error('CSRF token not found');
+                if (url && url !== '#') window.location.href = url;
+                return;
+            }
+
             fetch(`/notifications/${id}/read`, {
                 method: 'POST',
                 headers: {
-                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
-                    'Content-Type': 'application/json'
+                    'X-CSRF-TOKEN': csrfToken.content,
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
                 }
-            }).then(() => {
-                if(url && url !== '#'){
-                     window.location.href = url;
+            })
+            .then(res => {
+                if (!res.ok) console.warn('Mark as read backend error');
+                return res.json().catch(() => ({}));
+            })
+            .then(() => {
+                // Determine destination
+                if (url && url !== '#') {
+                    // Use window.location.replace to adhere to SPA/Standard navigation
+                    window.location.href = url;
+                } else {
+                    // Update UI if no redirect
+                    checkUnread();
+                    fetchNotifications();
                 }
-                checkUnread(); // Refresh badge
+            })
+            .catch(err => {
+                console.error('Error marking as read:', err);
+                // Fallback redirect even on error
+                if (url && url !== '#') window.location.href = url;
             });
         }
 
         // Mark all as read
-        // Mark all as read
-        if(markAllBtn) {
+        if (markAllBtn) {
             markAllBtn.addEventListener('click', function(e) {
                 e.preventDefault();
+                e.stopPropagation();
                 
-                // Show Global Loading
-                if(window.showLoading) {
-                    window.showLoading();
-                } else {
-                    markAllBtn.textContent = 'Memproses...';
-                    markAllBtn.disabled = true;
+                // UX Feedback
+                const originalText = markAllBtn.textContent;
+                markAllBtn.textContent = 'Memproses...';
+                markAllBtn.disabled = true;
+                markAllBtn.classList.add('opacity-75', 'cursor-not-allowed');
+
+                const csrfToken = document.querySelector('meta[name="csrf-token"]');
+                if (!csrfToken) {
+                     alert('Security token error. Please refresh the page.');
+                     resetBtn();
+                     return;
                 }
 
                 fetch("{{ route('notifications.readAll') }}", {
                      method: 'POST',
                      headers: {
-                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
-                        'Content-Type': 'application/json'
+                        'X-CSRF-TOKEN': csrfToken.content,
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json'
                     }
-                }).then(res => {
+                })
+                .then(res => {
                     if (!res.ok) throw new Error('Network response was not ok');
                     return res.json();
-                }).then(() => {
-                    // Force refresh data
-                    return Promise.all([
-                        checkUnread(),
-                        fetchNotifications()
-                    ]);
-                }).then(() => {
-                    // Slight delay to ensure UX feels deliberate
-                    setTimeout(() => {
-                         if(window.hideLoading) {
-                            window.hideLoading();
-                        } else {
-                            markAllBtn.textContent = 'Tandai semua dibaca';
-                            markAllBtn.disabled = false;
-                        }
-                    }, 500);
-                }).catch(err => {
+                })
+                .then(data => {
+                    // Optimistic UI updates
+                    if (badge) badge.classList.add('hidden');
+                    
+                    // Reload list
+                    fetchNotifications();
+                    checkUnread();
+                    
+                    // Show success toast if Swal available
+                    if (typeof Swal !== 'undefined') {
+                        const Toast = Swal.mixin({
+                            toast: true,
+                            position: 'top-end',
+                            showConfirmButton: false,
+                            timer: 3000,
+                            timerProgressBar: true
+                        });
+                        Toast.fire({
+                            icon: 'success',
+                            title: 'Semua notifikasi ditandai sudah dibaca'
+                        });
+                    }
+                })
+                .catch(err => {
                     console.error('Error marking all as read:', err);
-                    if(window.hideLoading) window.hideLoading();
                     alert('Gagal memproses permintaan. Silakan coba lagi.');
-                    markAllBtn.textContent = 'Tandai semua dibaca';
-                    markAllBtn.disabled = false;
+                })
+                .finally(() => {
+                    resetBtn();
                 });
+
+                function resetBtn() {
+                    markAllBtn.textContent = originalText;
+                    markAllBtn.disabled = false;
+                    markAllBtn.classList.remove('opacity-75', 'cursor-not-allowed');
+                }
             });
         }
 
@@ -195,16 +270,16 @@
         function timeSince(date) {
             const seconds = Math.floor((new Date() - date) / 1000);
             let interval = seconds / 31536000;
-            if (interval > 1) return Math.floor(interval) + " tahun lalu";
+            if (interval > 1) return Math.floor(interval) + " thn lalu";
             interval = seconds / 2592000;
-            if (interval > 1) return Math.floor(interval) + " bulan lalu";
+            if (interval > 1) return Math.floor(interval) + " bln lalu";
             interval = seconds / 86400;
             if (interval > 1) return Math.floor(interval) + " hari lalu";
             interval = seconds / 3600;
             if (interval > 1) return Math.floor(interval) + " jam lalu";
             interval = seconds / 60;
-            if (interval > 1) return Math.floor(interval) + " menit lalu";
-            return Math.floor(seconds) + " detik lalu";
+            if (interval > 1) return Math.floor(interval) + " mnt lalu";
+            return "Baru saja";
         }
     });
 </script>

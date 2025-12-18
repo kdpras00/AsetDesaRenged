@@ -23,6 +23,7 @@ class User extends Authenticatable
         'password',
         'role',
         'nik',
+        'kk',
         'phone',
         'address',
         'rt_rw',

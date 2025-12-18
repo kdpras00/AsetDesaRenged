@@ -42,8 +42,8 @@ class LoanRequestController extends Controller
      */
     public function create(Asset $asset)
     {
-        if ($asset->status !== 'tersedia' || $asset->rentable_stock <= 0) {
-            return back()->with('error', 'Aset tidak tersedia atau stok habis.');
+        if ($asset->status !== 'tersedia') {
+            return back()->with('error', 'Aset sedang tidak tersedia (Rusak/Hilang).');
         }
         return view('warga.loans.create', compact('asset'));
     }
@@ -63,9 +63,11 @@ class LoanRequestController extends Controller
 
         $asset = Asset::findOrFail($request->asset_id);
         
-        // Strict stock check using dynamic availability
-        if ($request->quantity > $asset->rentable_stock) {
-             return back()->withInput()->with('error', 'Jumlah permintaan melebihi stok tersedia. Sisa stok saat ini: ' . $asset->rentable_stock . ' unit.');
+        // Check availability for specific date range
+        $availableStock = $asset->getAvailableStockForDateRange($request->loan_date, $request->return_date);
+
+        if ($request->quantity > $availableStock) {
+             return back()->withInput()->with('error', "Stok tidak mencukupi untuk periode tanggal tersebut. Hanya tersedia {$availableStock} unit.");
         }
 
         $loan = Loan::create([
@@ -85,5 +87,28 @@ class LoanRequestController extends Controller
         Notification::send($operators, new NewLoanRequest($loan));
 
         return redirect()->route('warga.loans.index', ['view' => 'history'])->with('success', 'Permintaan peminjaman berhasil diajukan. Menunggu persetujuan.');
+    }
+
+    /**
+     * Mark loan as returning (Warga initiates return).
+     */
+    public function return(Loan $loan)
+    {
+        if ($loan->user_id !== auth()->id()) {
+            abort(403);
+        }
+
+        if ($loan->status !== 'approved') {
+            return back()->with('error', 'Hanya peminjaman aktif yang dapat dikembalikan.');
+        }
+
+        $loan->update(['status' => 'returning']);
+        
+        // Notify Operators (Re-use NewLoanRequest or create new one, let's genericize or just assume Operator checks dashboard)
+        // ideally we send notification.
+        $operators = User::where('role', 'operator')->get();
+        // Notification::send($operators, new LoanReturnInitiated($loan)); // Assuming we might leave this simple for now.
+
+        return back()->with('success', 'Pengajuan pengembalian berhasil. Silakan kembalikan barang ke kantor desa.');
     }
 }

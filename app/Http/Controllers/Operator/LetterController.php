@@ -35,10 +35,18 @@ class LetterController extends Controller
     /**
      * Process/Verify the letter administratively.
      */
+    public function show(Letter $letter)
+    {
+        $letter->load(['user', 'letterType']);
+        return view('operator.letters.show', compact('letter'));
+    }
+
+    /**
+     * Process/Verify the letter administratively.
+     */
     public function process(Request $request, Letter $letter)
     {
         $request->validate([
-            'letter_number' => 'required|string|unique:letters,letter_number,' . $letter->id,
             'operator_notes' => 'nullable|string',
         ]);
 
@@ -46,9 +54,37 @@ class LetterController extends Controller
             return back()->with('error', 'Hanya surat pending yang dapat diproses.');
         }
 
+        // Auto Generate Letter Number
+        // Format: [Code]/[ID]/Ds.Rgd/[MonthRomawi]/[Year]
+        // Example: 470/015/Ds.Rgd/XII/2025
+        $code = $letter->letterType->code ?? '470';
+        $month = \App\Helpers\Romawi::get(now()->month);
+        $year = now()->year;
+        $id = str_pad($letter->id, 3, '0', STR_PAD_LEFT);
+        
+        // Custom format for Domisili
+        // Format: DOMISILI/code/day/month/year
+        // Example: DOMISILI/470/14/12/2025
+        // Final Standard Format (Client Request + Best Practice)
+        // Format: [PREFIX] / [CODE] / [NO_URUT] / [ROMAWI_BLN] / [TAHUN]
+        // Example: SKD/146/025/XII/2025
+        
+        $config = $letter->letterType->form_config;
+        $prefix = $config['letter_number_prefix'] ?? $letter->letterType->slug; 
+        
+        // Use ID for Sequence to guarantee uniqueness and avoid duplicates.
+        // This is robust and prevents collision even if multiple letters are processed simultaneously.
+        $id = str_pad($letter->id, 3, '0', STR_PAD_LEFT); 
+        $romawiMonth = \App\Helpers\Romawi::get(now()->month); 
+        
+        $autoNumber = "{$prefix}/{$code}/{$id}/{$romawiMonth}/{$year}";
+
+        // Ensure uniqueness just in case (though ID makes it unique for that type/day combo usually? ID is globally unique)
+        // If ID is unique, the whole string is unique.
+        
         $letter->update([
             'status' => 'processed',
-            'letter_number' => $request->letter_number,
+            'letter_number' => $autoNumber,
             'operator_id' => auth()->id(),
             'process_date' => now(),
             'operator_notes' => $request->operator_notes,
@@ -68,7 +104,7 @@ class LetterController extends Controller
         $kades = User::where('role', 'kepala_desa')->get();
         Notification::send($kades, new LetterProcessed($letter));
 
-        return redirect()->back()->with('success', 'Surat berhasil diproses dan diteruskan ke Kepala Desa.');
+        return redirect()->route('operator.letters.index')->with('success', 'Surat berhasil diproses (No: ' . $autoNumber . ') dan diteruskan ke Kepala Desa.');
     }
 
     /**
@@ -114,32 +150,27 @@ class LetterController extends Controller
         // Operator can download any letter, but maybe usually Processed or Verified?
         // Let's allow downloading at any stage for previewing content.
         
-        if (\Illuminate\Support\Str::contains(strtolower($letter->letterType->name), 'skck')) {
-            $view = 'pdf.skck';
-        } elseif (\Illuminate\Support\Str::contains(strtolower($letter->letterType->name), 'kematian')) {
-            $view = 'pdf.surat-kematian';
-        } elseif (\Illuminate\Support\Str::contains(strtolower($letter->letterType->name), 'usaha')) {
-            $view = 'pdf.surat-keterangan-usaha';
-        } elseif (\Illuminate\Support\Str::contains(strtolower($letter->letterType->name), 'cuti') || \Illuminate\Support\Str::contains(strtolower($letter->letterType->name), 'ijin')) {
-            $view = 'pdf.surat-keterangan-ijin-cuti';
-        } elseif (\Illuminate\Support\Str::contains(strtolower($letter->letterType->name), 'tidak bekerja')) {
-            $view = 'pdf.surat-keterangan-tidak-bekerja';
-        } elseif (\Illuminate\Support\Str::contains(strtolower($letter->letterType->name), 'tidak memiliki ijazah')) {
-            $view = 'pdf.surat-keterangan-tidak-memiliki-ijazah';
-        } elseif (\Illuminate\Support\Str::contains(strtolower($letter->letterType->name), 'kelahiran')) {
-            $view = 'pdf.surat-keterangan-kelahiran';
-        } elseif (\Illuminate\Support\Str::contains(strtolower($letter->letterType->name), 'keramaian')) {
-            $view = 'pdf.surat-keterangan-ijin-keramaian';
-        } elseif (\Illuminate\Support\Str::contains(strtolower($letter->letterType->name), 'domisili')) {
-            $view = 'pdf.surat-keterangan-domisili';
-        } elseif (\Illuminate\Support\Str::contains(strtolower($letter->letterType->name), 'tidak mampu')) {
-            $view = 'pdf.surat-keterangan-tidak-mampu';
-        } elseif (\Illuminate\Support\Str::contains(strtolower($letter->letterType->name), 'ktp')) {
-            return $this->generateKtpExcel($letter);
-        } else {
-             return back()->with('error', 'Format surat tidak ditemukan.');
+        $view = $letter->letterType->form_config['pdf_view'] ?? null;
+        
+        // Specific fix for KTP to ensure PDF generation
+        if ($letter->letterType->slug === 'KTP') {
+             $view = 'pdf.formulir-permohonan-ktp';
         }
 
+        if ($view === 'excel') {
+             // Fallback if other excel configurations exist, but for now we redirect KTP to PDF above.
+             return back()->with('error', 'Format Excel tidak lagi didukung. Hubungi admin.');
+        }
+
+        if (!$view) {
+             return back()->with('error', 'Format surat tidak ditemukan dalam konfigurasi.');
+        }
+
+        if (!view()->exists($view)) {
+             return back()->with('error', "File template ($view) tidak ditemukan di sistem.");
+        }
+
+        $letter->load(['user', 'letterType', 'kepalaDesa']);
         $pdf = \Barryvdh\DomPDF\Facade\Pdf::loadView($view, compact('letter'));
         $pdf->setPaper('A4', 'portrait');
         

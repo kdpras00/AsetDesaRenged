@@ -124,7 +124,7 @@
 </head>
 <body>
     <div class="header">
-        @php
+            @php
             // AUTOMATIC LOGO FINDER - Mencari di berbagai lokasi
             $logoPath = null;
             $logoPaths = [
@@ -172,7 +172,7 @@
 
     <div class="title">
         <h4>SURAT PENGANTAR KETERANGAN CATATAN KEPOLISIAN (SKCK)</h4>
-        <p>Nomor : 470 / {{ $letter->letter_number ?? '.......' }} / Ds.Rgd / {{ $date->format('Y') }}</p>
+        <p>Nomor : {{ $letter->letter_number ?? '.......' }}</p>
     </div>
 
     <div class="content">
@@ -227,7 +227,7 @@
                 <td>8.</td>
                 <td>Alamat</td>
                 <td>:</td>
-                <td>{{ $letter->user->address }}</td>
+                <td>Kp. {{ $letter->user->address }} RT {{ $letter->user->rt }} / RW {{ $letter->user->rw }} Desa Renged Kec. Kresek Kab. Tangerang</td>
             </tr>
         </table>
 
@@ -261,9 +261,12 @@
                 </div>
                 
                 <p class="signature-name">
-                    {{ $letter->kepalaDesa ? $letter->kepalaDesa->name : 'APUD MAHFUD, S.Pd' }}
+                    {{ $letter->kepalaDesa ? $letter->kepalaDesa->name : 'WAWAN' }}
                 </p>
             </div>
+        </div>
+        <div style="font-size: 10px; color: #555; margin-top: 20px; font-style: italic;">
+            Dokumen ini dicetak pada sistem digital pada tanggal {{ now()->translatedFormat('d F Y') }} sehingga tidak diperlukan tanda tangan basah.
         </div>
     </div>
 </body>

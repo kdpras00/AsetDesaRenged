@@ -117,7 +117,7 @@
 </head>
 <body>
     <div class="header">
-         @php
+            @php
             // AUTOMATIC LOGO FINDER - Mencari di berbagai lokasi
             $logoPath = null;
             $logoPaths = [
@@ -151,6 +151,7 @@
         @if($logoBase64)
             <img src="{{ $logoBase64 }}" alt="Logo Desa Renged">
         @endif
+
         <h2>PEMERINTAH KABUPATEN TANGERANG</h2>
         <h3>KECAMATAN KRESEK</h3>
         <h1>DESA RENGED</h1>
@@ -164,7 +165,7 @@
 
     <div class="title">
         <h4>SURAT KETERANGAN DOMISILI</h4>
-        <p>Nomor : 146 / {{ $letter->letter_number ?? '.......' }} - Ds.Rgd / {{ \App\Helpers\Romawi::get($date->format('n')) }} / {{ $date->format('Y') }}</p>
+        <p>Nomor : {{ $letter->letter_number ?? '.......' }}</p>
     </div>
 
     <div class="content">
@@ -223,7 +224,7 @@
                 <td class="label-col">8.</td>
                 <td class="label-text-col">Alamat Sebelumnya</td>
                 <td class="separator-col">:</td>
-                <td>{{ $data['previous_address'] ?? '-' }}</td>
+                <td>{{ $letter->user->address ?? '-' }}</td>
             </tr>
         </table>
         
@@ -232,7 +233,7 @@
         </p>
 
         <p class="bold-address">
-            {{ $data['domicile_address'] ?? '-' }}
+            {{ $data['alamat_domisili'] ?? '-' }}
         </p>
 
         <p style="margin-top: 15px;">
@@ -242,8 +243,7 @@
         <div class="signature">
              <div class="signature-box">
                 <p>Renged, {{ $date->translatedFormat('d F Y') }}<br>
-                An.Kepala Desa Renged<br>
-                Sekretaris Desa</p>
+                Kepala Desa Renged</p>
                 
                 <div style="margin: 10px auto;">
                     @if($letter->status == 'verified' && $letter->sha256_hash)
@@ -255,9 +255,12 @@
                 </div>
                 
                 <p style="text-decoration: underline; font-weight: bold;">
-                    DEVI FITRIA, S.Pd
+                    {{ $letter->kepalaDesa ? $letter->kepalaDesa->name : 'WAWAN' }}
                 </p>
             </div>
+        </div>
+        <div style="font-size: 10px; color: #555; margin-top: 20px; font-style: italic;">
+            Dokumen ini dicetak pada sistem digital pada tanggal {{ now()->translatedFormat('d F Y') }} sehingga tidak diperlukan tanda tangan basah.
         </div>
     </div>
 </body>

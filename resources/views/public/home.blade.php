@@ -4,183 +4,194 @@
 
 @section('content')
 
-<!-- Official Hero Slider / Banner -->
-<section class="relative bg-white">
-    <!-- Main Banner Image -->
-    <div class="relative h-[500px] w-full overflow-hidden">
-        <img src="{{ asset('storage/images/background-renged.jpeg') }}" alt="Kantor Desa Renged" class="w-full h-full object-cover">
-        <div class="absolute inset-0 bg-gradient-to-r from-blue-900/90 to-transparent"></div>
-        
-        <div class="absolute inset-0 flex items-center">
-            <div class="max-w-screen-xl mx-auto px-4 w-full">
-                <div class="max-w-2xl text-white">
-                    <span class="inline-block py-1 px-3 rounded bg-blue-600 text-xs font-bold tracking-wider mb-4">WEBSITE RESMI</span>
-                    <h1 class="text-4xl md:text-5xl font-bold mb-6 leading-tight">Selamat Datang di <br>Pemerintah Desa Renged</h1>
-                    <p class="text-lg text-blue-100 mb-8 leading-relaxed">
-                        Mewujudkan tata kelola pemerintahan desa yang transparan, akuntabel, dan mengutamakan pelayanan prima bagi seluruh masyarakat Desa Renged.
-                    </p>
-                    <div class="flex flex-wrap gap-4">
-                        <a href="{{ route('public.layanan') }}" class="px-6 py-3 bg-white text-blue-900 font-bold rounded hover:bg-blue-50 transition-colors shadow-lg">
-                            Layanan Mandiri
-                        </a>
-                        <a href="#" class="px-6 py-3 border-2 border-white text-white font-bold rounded hover:bg-white/10 transition-colors">
-                            Profil Desa
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-
-<!-- Running Text / Pengumuman -->
-<div class="bg-blue-800 text-white border-b-4 border-yellow-500 relative overflow-hidden">
-    <div class="max-w-screen-xl mx-auto px-4 flex items-center h-12">
-        <div class="bg-blue-900 h-full flex items-center px-4 font-bold z-10 shrink-0 shadow-lg">
-            INFO TERKINI
+<!-- Running Text / Pengumuman (Restored) -->
+<div class="bg-blue-800 text-white border-b-2 border-yellow-400 relative overflow-hidden z-20">
+    <div class="container mx-auto px-4 flex items-center h-10">
+        <div class="bg-blue-900 h-full flex items-center px-4 font-bold text-xs md:text-sm z-10 shrink-0 shadow-lg relative after:absolute after:right-[-10px] after:top-0 after:border-t-[40px] after:border-t-blue-900 after:border-r-[10px] after:border-r-transparent">
+            <span class="text-yellow-400 mr-2">📢</span> INFO TERKINI
         </div>
         <div class="flex-grow overflow-hidden relative h-full flex items-center">
-            <div class="whitespace-nowrap animate-marquee px-4 text-sm font-medium">
-                Selamat Datang di Website Resmi Desa Renged, Kecamatan Kresek, Kabupaten Tangerang. | Layanan Administrasi Desa Buka Senin-Jumat Pukul 08.00 - 16.00 WIB. | Mari wujudkan Desa Renged yang Maju dan Sejahtera.
+            <div class="whitespace-nowrap animate-marquee px-4 text-xs md:text-sm font-medium">
+                Selamat Datang di Website Resmi Desa Renged, Kecamatan Kresek, Kabupaten Tangerang. | Layanan Administrasi Desa Buka Senin-Jumat Pukul 08.00 - 16.00 WIB. | Mari wujudkan Desa Renged yang Maju dan Sejahtera. | Segera lakukan perekaman e-KTP bagi yang belum memiliki.
             </div>
         </div>
     </div>
 </div>
 
-<!-- Sambutan Kepala Desa (Placeholder) -->
-<section class="py-16 bg-white">
-    <div class="max-w-screen-xl mx-auto px-4">
+<!-- Hero Section: Clean, Spacious, and "Safe" Layout -->
+<!-- Changed min-h to ensure it covers screens but flex-layout dictates height -->
+<div class="relative bg-blue-900 flex flex-col justify-between overflow-hidden">
+    <!-- Background -->
+    <div class="absolute inset-0 z-0">
+        <img src="{{ asset('storage/images/background-renged.jpeg') }}" alt="Desa Renged" class="w-full h-full object-cover">
+        <div class="absolute inset-0 bg-gradient-to-r from-blue-900/95 via-blue-900/80 to-blue-800/60 mix-blend-multiply"></div>
+    </div>
+
+    <!-- Content Container -->
+    <!-- Added pt-32 and pb-32 (reduced from 48) to lift the curve -->
+    <div class="relative z-10 container mx-auto px-4 pt-32 pb-32">
+        <div class="max-w-3xl">
+            <!-- Badge -->
+            <div class="inline-flex items-center bg-yellow-500/10 border border-yellow-500/30 rounded-full px-4 py-1.5 mb-8 backdrop-blur-sm">
+                <span class="w-2 h-2 bg-yellow-400 rounded-full mr-3 animate-pulse"></span>
+                <span class="text-yellow-100 text-sm font-semibold tracking-wide uppercase">Website Resmi Pemerintah</span>
+            </div>
+            
+            <!-- Headline -->
+            <h1 class="text-5xl md:text-6xl font-bold text-white mb-8 leading-tight drop-shadow-lg">
+                Selamat Datang di <br>
+                <span class="text-yellow-400">Desa Renged</span>
+            </h1>
+            
+            <!-- Description -->
+            <p class="text-xl text-blue-100 mb-10 leading-relaxed max-w-2xl font-light">
+                Pusat pelayanan dan informasi digital untuk mewujudkan tata kelola desa yang transparan, akuntabel, dan melayani.
+            </p>
+
+            <!-- Buttons: Clear, Solid, No Overlap Risk -->
+            <div class="flex flex-wrap gap-5">
+                <a href="{{ route('public.layanan') }}" class="px-8 py-4 bg-yellow-400 hover:bg-yellow-300 text-blue-900 font-bold rounded-lg shadow-lg transition-transform transform hover:-translate-y-1">
+                    Layanan Mandiri
+                </a>
+                <a href="#profil" class="px-8 py-4 bg-transparent border-2 border-white text-white font-bold rounded-lg hover:bg-white hover:text-blue-900 transition-colors">
+                    Profil Desa
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bottom Wave: Positioned absolutely at bottom but padding above protects content -->
+    <div class="absolute bottom-0 left-0 right-0 z-10 pointer-events-none">
+        <svg class="fill-gray-50 w-full h-auto" viewBox="0 0 1440 120" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
+            <path d="M0,0 C240,120 480,120 720,60 C960,0 1200,0 1440,60 L1440,120 L0,120 Z"></path>
+        </svg>
+    </div>
+</div>
+
+<!-- Quick Access Section: Standard Block (No Negative Margins) -->
+<section class="bg-gray-50 py-16 relative z-20">
+    <div class="container mx-auto px-4">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 -mt-12 md:-mt-16 relative z-30">
+            @foreach([
+                ['icon' => 'M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z', 'title' => 'Cek Surat', 'desc' => 'Validasi Dokumen', 'color' => 'bg-emerald-600', 'link' => route('verification.index')],
+                ['icon' => 'M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0z', 'title' => 'Data Desa', 'desc' => 'Statistik Penduduk', 'color' => 'bg-blue-600', 'link' => route('public.stats')],
+                ['icon' => 'M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10', 'title' => 'Peminjaman', 'desc' => 'Aset Inventaris', 'color' => 'bg-purple-600', 'link' => route('warga.loans.index')],
+                ['icon' => 'M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z', 'title' => 'Peta Desa', 'desc' => 'Wilayah Digital', 'color' => 'bg-orange-600', 'link' => route('profile.peta')]
+            ] as $card)
+            <!-- Simple, Clean Cards -->
+            <a href="{{ $card['link'] }}" class="bg-white rounded-xl p-6 shadow-xl border border-gray-200 border-b-4 hover:border-b-blue-600 hover:-translate-y-2 transition-all duration-300 flex flex-col items-start group relative overflow-hidden">
+                <div class="{{ $card['color'] }} p-3 rounded-lg text-white mb-4 group-hover:shadow-lg transition-shadow">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="{{ $card['icon'] }}"></path></svg>
+                </div>
+                <h3 class="text-xl font-bold text-gray-900">{{ $card['title'] }}</h3>
+                <p class="text-gray-500 text-sm mt-1">{{ $card['desc'] }}</p>
+                <div class="mt-4 text-blue-600 text-sm font-semibold flex items-center group-hover:translate-x-1 transition-transform">
+                    Akses <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                </div>
+            </a>
+            @endforeach
+        </div>
+    </div>
+</section>
+
+<!-- Sambutan Kades (Simple & Human) -->
+<section id="profil" class="py-20 bg-white">
+    <div class="container mx-auto px-4">
         <div class="flex flex-col md:flex-row items-center gap-12">
+            <!-- Image -->
             <div class="w-full md:w-1/3">
-                <div class="relative rounded-lg overflow-hidden shadow-2xl border-4 border-gray-100">
-                    <img src="{{ asset('storage/images/background-renged.jpeg') }}" alt="Kepala Desa" class="w-full h-auto object-cover grayscale hover:grayscale-0 transition-all duration-500">
-                    <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-6 text-white text-center">
-                        <h3 class="font-bold text-xl">Nama Kepala Desa</h3>
-                        <p class="text-sm text-gray-300">Kepala Desa Renged</p>
-                    </div>
+                <div class="rounded-2xl overflow-hidden shadow-2xl border-4 border-white">
+                    <img src="{{ asset('storage/images/background-renged.jpeg') }}" class="w-full h-auto object-cover filter brightness-90">
                 </div>
             </div>
+            
+            <!-- Text -->
             <div class="w-full md:w-2/3">
-                <h2 class="text-blue-600 font-bold uppercase tracking-wide text-sm mb-2">Sambutan Kepala Desa</h2>
-                <h3 class="text-3xl font-bold text-gray-900 mb-6">Membangun Desa Bersama Masyarakat</h3>
-                <p class="text-gray-600 mb-4 leading-relaxed">
-                    Assalamu'alaikum Warahmatullahi Wabarakatuh.<br><br>
-                    Puji syukur ke hadirat Allah SWT, atas rahmat dan karunia-Nya kita bisa meluncurkan website resmi Desa Renged ini. Website ini hadir sebagai wujud komitmen kami dalam mewujudkan transparansi dan kemudahan akses informasi bagi seluruh warga.
-                </p>
-                <p class="text-gray-600 mb-8 leading-relaxed">
-                    Kami berharap website ini dapat menjadi jembatan informasi antara pemerintah desa dan masyarakat, serta mempermudah pelayanan administrasi yang lebih efisien dan modern.
-                </p>
-                <img src="{{ asset('storage/images/signature.png') }}" alt="Tanda Tangan Kepala Desa" class="h-20 opacity-80 mt-2">
+                <h4 class="text-blue-600 font-bold uppercase text-sm tracking-wide mb-2">Sambutan Kepala Desa</h4>
+                <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-6">Bersama Membangun Desa Renged</h2>
+                <div class="space-y-4 text-gray-600 leading-relaxed">
+                    <p>
+                        Assalamu'alaikum Warahmatullahi Wabarakatuh.
+                    </p>
+                    <p>
+                        Selamat datang di website resmi Desa Renged. Website ini kami buat untuk memudahkan warga dalam mengakses informasi dan layanan desa. Kami ingin pemerintahan desa berjalan lebih transparan dan bisa melayani bapak/ibu sekalian dengan lebih cepat.
+                    </p>
+                    <p>
+                        Silakan manfaatkan layanan surat online dan update informasi kegiatan desa melalui website ini.
+                    </p>
+                </div>
+                <div class="mt-8">
+                    <div class="text-lg font-bold text-gray-900">Bapak Wawan</div>
+                    <div class="text-gray-500">Kepala Desa Renged</div>
+                </div>
             </div>
         </div>
     </div>
 </section>
 
-<!-- Layanan Unggulan Cards -->
-<section class="py-20 bg-gray-50 border-t border-gray-200">
-    <div class="max-w-screen-xl mx-auto px-4">
+<!-- Berita Terkini (Standard Grid) -->
+<section class="py-20 bg-gray-50">
+    <div class="container mx-auto px-4">
         <div class="text-center mb-12">
-            <h2 class="text-3xl font-bold text-gray-900">Layanan Publik</h2>
-            <div class="w-24 h-1 bg-blue-600 mx-auto mt-4 rounded-full"></div>
-            <p class="mt-4 text-gray-500 max-w-2xl mx-auto">Akses layanan administrasi desa dengan mudah, cepat, dan transparan secara online.</p>
+            <h2 class="text-3xl font-bold text-gray-900">Berita & Informasi Desa</h2>
+            <p class="text-gray-500 mt-2">Update kegiatan terbaru pemerintahan Desa Renged</p>
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <!-- Card 1 -->
-            <div class="bg-white rounded-lg shadow-sm border border-gray-100 hover:shadow-md transition-shadow duration-300 group overflow-hidden">
-                <div class="h-48 overflow-hidden relative">
-                    <img src="{{ asset('storage/images/background-renged2.jpeg') }}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" alt="Aset">
-                    <div class="absolute inset-0 bg-blue-900/0 group-hover:bg-blue-900/20 transition-colors"></div>
-                </div>
+            <!-- News Cards (Standard) -->
+             <article class="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden hover:shadow-md transition-shadow">
+                <img src="{{ asset('storage/images/background-renged2.jpeg') }}" class="w-full h-48 object-cover">
                 <div class="p-6">
-                    <div class="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center text-blue-600 mb-4 group-hover:bg-blue-600 group-hover:text-white transition-colors">
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path></svg>
-                    </div>
-                    <h3 class="text-xl font-bold text-gray-900 mb-2">Peminjaman Aset</h3>
-                    <p class="text-gray-500 text-sm mb-4 line-clamp-2">Layanan peminjaman inventaris desa untuk keperluan warga dengan prosedur yang mudah.</p>
-                    <a href="{{ route('warga.loans.index') }}" class="text-blue-600 font-medium text-sm hover:underline flex items-center">
-                        Ajukan Peminjaman <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
-                    </a>
+                    <div class="text-xs text-gray-400 mb-2">18 Desember 2024</div>
+                    <h3 class="text-lg font-bold text-gray-900 mb-2 hover:text-blue-600"><a href="#">Penyaluran BLT Tahap 4</a></h3>
+                    <p class="text-gray-600 text-sm line-clamp-3">Penyaluran bantuan berjalan lancar dan tertib di Balai Desa...</p>
                 </div>
-            </div>
+            </article>
 
-            <!-- Card 2 -->
-            <div class="bg-white rounded-lg shadow-sm border border-gray-100 hover:shadow-md transition-shadow duration-300 group overflow-hidden">
-                 <div class="h-48 overflow-hidden relative">
-                    <img src="{{ asset('storage/images/background-renged3.jpeg') }}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" alt="Surat">
-                    <div class="absolute inset-0 bg-blue-900/0 group-hover:bg-blue-900/20 transition-colors"></div>
-                </div>
+            <article class="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden hover:shadow-md transition-shadow">
+                <img src="{{ asset('storage/images/background-renged3.jpeg') }}" class="w-full h-48 object-cover">
                 <div class="p-6">
-                    <div class="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center text-green-600 mb-4 group-hover:bg-green-600 group-hover:text-white transition-colors">
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
-                    </div>
-                    <h3 class="text-xl font-bold text-gray-900 mb-2">Surat Menyurat</h3>
-                    <p class="text-gray-500 text-sm mb-4 line-clamp-2">Pembuatan surat keterangan domisili, usaha, dan administrasi kependudukan lainnya.</p>
-                    <a href="{{ route('warga.letters.index') }}" class="text-blue-600 font-medium text-sm hover:underline flex items-center">
-                        Buat Surat <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
-                    </a>
+                    <div class="text-xs text-gray-400 mb-2">15 Desember 2024</div>
+                    <h3 class="text-lg font-bold text-gray-900 mb-2 hover:text-blue-600"><a href="#">Posyandu Balita Sejahtera</a></h3>
+                    <p class="text-gray-600 text-sm line-clamp-3">Layanan kesehatan gratis untuk balita dan ibu hamil di setiap dusun...</p>
                 </div>
-            </div>
+            </article>
 
-            <!-- Card 3 -->
-            <div class="bg-white rounded-lg shadow-sm border border-gray-100 hover:shadow-md transition-shadow duration-300 group overflow-hidden">
-                 <div class="h-48 overflow-hidden relative">
-                    <img src="{{ asset('storage/images/background-renged4.jpeg') }}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" alt="Verifikasi">
-                    <div class="absolute inset-0 bg-blue-900/0 group-hover:bg-blue-900/20 transition-colors"></div>
-                </div>
+            <article class="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden hover:shadow-md transition-shadow">
+                <img src="{{ asset('storage/images/background-renged4.jpeg') }}" class="w-full h-48 object-cover">
                 <div class="p-6">
-                    <div class="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center text-purple-600 mb-4 group-hover:bg-purple-600 group-hover:text-white transition-colors">
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                    </div>
-                    <h3 class="text-xl font-bold text-gray-900 mb-2">Verifikasi Dokumen</h3>
-                    <p class="text-gray-500 text-sm mb-4 line-clamp-2">Cek keaslian surat yang diterbitkan desa melalui scan QR Code atau kode unik.</p>
-                    <a href="{{ route('verification.index') }}" class="text-blue-600 font-medium text-sm hover:underline flex items-center">
-                        Verifikasi Sekarang <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
-                    </a>
+                    <div class="text-xs text-gray-400 mb-2">10 Desember 2024</div>
+                    <h3 class="text-lg font-bold text-gray-900 mb-2 hover:text-blue-600"><a href="#">Kerjabakti Lingkungan</a></h3>
+                    <p class="text-gray-600 text-sm line-clamp-3">Warga bergotong royong membersihkan saluran air antisipasi banjir...</p>
                 </div>
-            </div>
-        </div>
-
-        <div class="mt-12 text-center">
-            <a href="{{ route('public.layanan') }}" class="inline-block px-8 py-3 bg-gray-900 text-white rounded font-medium hover:bg-gray-800 transition-colors">Lihat Semua Layanan</a>
+            </article>
         </div>
     </div>
 </section>
 
-<!-- Statistik Singkat (Parallax / Image BG) -->
-<section class="relative py-20 bg-fixed bg-cover bg-center" style="background-image: url('{{ asset('storage/images/background-renged7.jpeg') }}');">
-    <div class="absolute inset-0 bg-blue-900/80"></div>
-    <div class="relative max-w-screen-xl mx-auto px-4 text-center text-white">
-        <h2 class="text-3xl font-bold mb-12">Data Desa Renged</h2>
-        <div class="grid grid-cols-2 md:grid-cols-4 gap-8">
-            <div class="p-4 border border-blue-400/30 rounded backdrop-blur-sm">
-                <div class="text-4xl font-bold mb-2">3.5k</div>
-                <div class="text-blue-200 text-sm uppercase tracking-wide">Penduduk</div>
-            </div>
-            <div class="p-4 border border-blue-400/30 rounded backdrop-blur-sm">
-                <div class="text-4xl font-bold mb-2">1.2k</div>
-                <div class="text-blue-200 text-sm uppercase tracking-wide">Kepala Keluarga</div>
-            </div>
-            <div class="p-4 border border-blue-400/30 rounded backdrop-blur-sm">
-                <div class="text-4xl font-bold mb-2">450</div>
-                <div class="text-blue-200 text-sm uppercase tracking-wide">Aset Desa</div>
-            </div>
-            <div class="p-4 border border-blue-400/30 rounded backdrop-blur-sm">
-                <div class="text-4xl font-bold mb-2">98%</div>
-                <div class="text-blue-200 text-sm uppercase tracking-wide">Kepuasan</div>
-            </div>
-        </div>
+<!-- Footer Pre-Section -->
+<section class="bg-blue-900 py-16 text-center text-white">
+    <div class="container mx-auto px-4">
+        <h2 class="text-3xl font-bold mb-6">Butuh Bantuan Operator?</h2>
+        <p class="text-blue-200 mb-8 max-w-xl mx-auto">Jika mengalami kendala teknis atau pertanyaan seputar layanan, tim kami siap membantu Anda.</p>
+         <a href="https://wa.me/6283876961269" target="_blank" class="inline-flex items-center px-6 py-3 bg-green-500 hover:bg-green-600 rounded-lg font-bold transition-colors">
+            <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 24 24"><path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.711 2.598 2.664-.698c.997.585 1.957.893 3.068.893 3.179 0 5.767-2.587 5.767-5.766.001-3.187-2.575-5.77-5.769-5.77zm0 13.891c-2.31 0-4.223-1.077-5.462-2.83l-4.52 1.185 1.206-4.399c-1.397-2.083-1.066-5.067.876-6.91 1.996-1.896 5.148-1.896 7.144 0 1.995 1.895 1.995 4.966 0 6.86-1.996 1.895-5.148 1.895-7.144 0"/></svg>
+            Hubungi via WhatsApp
+        </a>
     </div>
 </section>
 
+<!-- Custom Animations CSS -->
 <style>
-@keyframes marquee {
-    0% { transform: translateX(100%); }
-    100% { transform: translateX(-100%); }
-}
-.animate-marquee {
-    display: inline-block;
-    animation: marquee 20s linear infinite;
-}
+    @keyframes fadeInUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes fadeInDown { from { opacity: 0; transform: translateY(-30px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes marquee { 0% { transform: translateX(100%); } 100% { transform: translateX(-100%); } }
+    
+    .animate-fade-in-up { animation: fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards; opacity: 0; }
+    .animate-fade-in-down { animation: fadeInDown 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards; opacity: 0; }
+    .animate-marquee { display: inline-block; animation: marquee 25s linear infinite; }
+    .delay-100 { animation-delay: 0.1s; }
+    .delay-200 { animation-delay: 0.2s; }
 </style>
+
 @endsection

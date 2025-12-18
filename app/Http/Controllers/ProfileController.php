@@ -24,24 +24,31 @@ class ProfileController extends Controller
             'name' => 'required|string|max:255',
             'email' => ['required', 'email', Rule::unique('users')->ignore($user->id)],
             'nik' => ['nullable', 'numeric', 'digits:16', Rule::unique('users')->ignore($user->id)],
-            'phone' => 'nullable|numeric|digits_between:10,13',
+            'kk' => ['nullable', 'numeric', 'digits:16', Rule::unique('users')->ignore($user->id)],
+            'phone' => ['nullable', 'numeric', 'digits_between:10,13', Rule::unique('users')->ignore($user->id)],
             'avatar' => 'nullable|image|max:1024', // 1MB Max
             'gender' => 'required|in:L,P',
-            'birth_place' => 'required|string|max:255',
+            'birth_place' => ['required', 'string', 'max:255', 'regex:/^[^0-9]*$/'], // Prevent numbers
             'birth_date' => 'required|date',
             'religion' => 'required|string|max:255',
-            'job' => 'required|string|max:255',
+            'job' => ['required', 'string', 'max:255', 'regex:/^[^0-9]*$/'], // Prevent numbers
+            'address' => 'required|string|max:500',
+        ], [
+            'birth_place.regex' => 'Tempat lahir tidak boleh mengandung angka.',
+            'job.regex' => 'Pekerjaan tidak boleh mengandung angka.',
         ]);
 
         $user->name = $request->name;
         $user->email = $request->email;
         $user->nik = $request->nik;
+        $user->kk = $request->kk;
         $user->phone = $request->phone;
         $user->gender = $request->gender;
         $user->birth_place = $request->birth_place;
         $user->birth_date = $request->birth_date;
         $user->religion = $request->religion;
         $user->job = $request->job;
+        $user->address = $request->address;
 
         if ($request->hasFile('avatar')) {
             // Delete old avatar if exists

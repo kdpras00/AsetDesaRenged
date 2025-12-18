@@ -104,7 +104,7 @@
 </head>
 <body>
     <div class="header">
-         @php
+            @php
             // AUTOMATIC LOGO FINDER - Mencari di berbagai lokasi
             $logoPath = null;
             $logoPaths = [
@@ -138,6 +138,7 @@
         @if($logoBase64)
             <img src="{{ $logoBase64 }}" alt="Logo Desa Renged">
         @endif
+
         <h2>PEMERINTAH KABUPATEN TANGERANG</h2>
         <h3>KECAMATAN KRESEK</h3>
         <h1>DESA RENGED</h1>
@@ -150,7 +151,7 @@
         @php
             $date = $letter->approved_date ?? $letter->process_date ?? $letter->request_date ?? now();
         @endphp
-        <p>Nomor : 472.12 / {{ $letter->letter_number ?? '.......' }} - Ds.Rgd / {{ \App\Helpers\Romawi::get($date->format('n')) }} / {{ $date->format('Y') }}</p>
+        <p>Nomor : {{ $letter->letter_number ?? '.......' }}</p>
     </div>
 
     <div class="content">
@@ -176,7 +177,7 @@
             <tr>
                 <td class="label-col">No KK</td>
                 <td class="separator-col">:</td>
-                <td>{{ $data['deceased_kk'] ?? '-' }}</td>
+                <td>{{ $data['deceased_kk'] ?? $letter->user->kk ?? '-' }}</td>
             </tr>
             <tr>
                 <td class="label-col">Tempat/Tgal Lahir</td>
@@ -260,6 +261,9 @@
                     {{ $letter->kepalaDesa ? $letter->kepalaDesa->name : 'WAWAN' }}
                 </p>
             </div>
+        </div>
+        <div style="font-size: 10px; color: #555; margin-top: 20px; font-style: italic;">
+            Dokumen ini dicetak pada sistem digital pada tanggal {{ now()->translatedFormat('d F Y') }} sehingga tidak diperlukan tanda tangan basah.
         </div>
     </div>
 </body>

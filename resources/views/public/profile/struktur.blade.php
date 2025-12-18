@@ -3,91 +3,138 @@
 @section('title', 'Struktur Organisasi - Website Resmi Desa Renged')
 
 @section('content')
-<!-- Page Header -->
-<div class="relative bg-gray-900 py-16">
+<div class="relative bg-blue-900 py-16">
     <div class="absolute inset-0 overflow-hidden">
-        <img src="{{ asset('storage/images/background-renged5.jpeg') }}" alt="Background" class="h-full w-full object-cover opacity-20">
+        <img src="{{ asset('storage/images/background-renged.jpeg') }}" class="w-full h-full object-cover opacity-10" alt="Background">
     </div>
-    <div class="relative max-w-screen-xl mx-auto px-4 text-center">
-        <h1 class="text-3xl md:text-4xl font-bold text-white mb-2">Struktur Organisasi</h1>
-        <p class="text-blue-200">Susunan Pemerintah Desa Renged Tahun 2025</p>
+    <div class="relative max-w-screen-xl mx-auto px-4 text-center text-white">
+        <h1 class="text-4xl font-bold mb-4">Struktur Organisasi</h1>
+        <p class="text-blue-100 text-lg max-w-2xl mx-auto">Susunan Organisasi dan Tata Kerja Pemerintah Desa Renged Kecamatan Kresek Kabupaten Tangerang.</p>
     </div>
 </div>
 
-<div class="py-16 bg-white">
+<div class="bg-white py-12">
     <div class="max-w-screen-xl mx-auto px-4">
         
-        <!-- Bagan Struktur (Image Placeholder) -->
-        <div class="mb-16 text-center">
-            <h2 class="text-2xl font-bold text-gray-900 mb-8">Bagan Struktur Organisasi</h2>
-            <div class="bg-gray-50 border-2 border-dashed border-gray-300 rounded-xl p-8 flex items-center justify-center min-h-[400px]">
-                <div class="text-center">
-                    <svg class="w-16 h-16 text-gray-400 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
-                    <p class="text-gray-500 font-medium">Masukan Gambar Bagan Struktur Organisasi Disini</p>
-                    <p class="text-xs text-gray-400 mt-1">(Upload via Admin Panel atau simpan di public/storage)</p>
+        <!-- Breadcrumb -->
+        <nav class="flex mb-12 text-gray-500 text-sm" aria-label="Breadcrumb">
+            <ol class="inline-flex items-center space-x-1 md:space-x-3">
+                <li class="inline-flex items-center">
+                    <a href="{{ route('home') }}" class="inline-flex items-center hover:text-blue-600">
+                        <svg class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20"><path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"></path></svg>
+                        Beranda
+                    </a>
+                </li>
+                <li>
+                    <div class="flex items-center">
+                        <svg class="w-6 h-6 text-gray-400" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"></path></svg>
+                        <span class="ml-1 text-gray-500 md:ml-2">Profil Desa</span>
+                    </div>
+                </li>
+                <li aria-current="page">
+                    <div class="flex items-center">
+                        <svg class="w-6 h-6 text-gray-400" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"></path></svg>
+                        <span class="ml-1 text-gray-900 md:ml-2 font-medium">Struktur Organisasi</span>
+                    </div>
+                </li>
+            </ol>
+        </nav>
+
+        <!-- Digital Structure Chart -->
+        <div class="mb-16 overflow-x-auto pb-8">
+            <div class="min-w-[1000px] flex flex-col items-center">
+                <!-- Kepala Desa -->
+                <div class="flex flex-col items-center mb-8 relative z-10">
+                    <div class="bg-blue-700 text-white rounded-lg shadow-lg p-4 w-64 text-center border-l-4 border-yellow-400 transform hover:scale-105 transition-transform duration-300">
+                        <div class="font-bold text-sm opacity-80 mb-1">KEPALA DESA</div>
+                        <div class="font-bold text-xl">WAWAN</div>
+                    </div>
+                    <div class="h-8 w-0.5 bg-gray-400"></div>
+                </div>
+
+                <!-- Sekretaris Desa -->
+                <div class="flex flex-col items-center mb-12 relative z-10 w-full">
+                    <!-- Garis Horizontal Penghubung ke Bawah -->
+                    <div class="absolute top-0 h-0.5 bg-gray-400 w-1/2"></div>
+                    
+                    <div class="bg-blue-600 text-white rounded-lg shadow-md p-3 w-60 text-center border-l-4 border-yellow-400 transform hover:scale-105 transition-transform duration-300">
+                        <div class="font-bold text-xs opacity-80 mb-1">SEKRETARIS DESA</div>
+                        <div class="font-bold text-lg">DEVI FITRIA</div>
+                    </div>
+                    <div class="h-8 w-0.5 bg-gray-400"></div>
+                    <!-- Garis Cabang Utama -->
+                    <div class="h-0.5 bg-gray-400 w-[90%]"></div>
+                </div>
+
+                <!-- Three Main Columns: Kaur, Kasie, Kadus -->
+                <div class="grid grid-cols-3 gap-8 w-full px-4">
+                    
+                    <!-- Kolom Kepala Urusan (Kaur) -->
+                    <div class="flex flex-col items-center space-y-6 relative">
+                        <div class="h-6 w-0.5 bg-gray-400 absolute -top-6"></div>
+                        <h3 class="font-bold text-gray-500 uppercase tracking-widest text-sm mb-2">Urusan (Staff)</h3>
+                        
+                        <div class="bg-white border border-gray-200 rounded-lg shadow p-3 w-full max-w-[280px] text-center hover:shadow-md transition-shadow">
+                            <div class="text-xs text-blue-600 font-bold mb-1">KAUR UMUM</div>
+                            <div class="font-bold text-gray-800">ANWAR</div>
+                        </div>
+                        <div class="bg-white border border-gray-200 rounded-lg shadow p-3 w-full max-w-[280px] text-center hover:shadow-md transition-shadow">
+                            <div class="text-xs text-blue-600 font-bold mb-1">KAUR KEUANGAN</div>
+                            <div class="font-bold text-gray-800">SAPUAH</div>
+                        </div>
+                        <div class="bg-white border border-gray-200 rounded-lg shadow p-3 w-full max-w-[280px] text-center hover:shadow-md transition-shadow">
+                            <div class="text-xs text-blue-600 font-bold mb-1">KAUR PERENCANAAN</div>
+                            <div class="font-bold text-gray-800">DENI RAY</div>
+                        </div>
+                    </div>
+
+                    <!-- Kolom Kepala Seksi (Kasie) -->
+                    <div class="flex flex-col items-center space-y-6 relative">
+                        <div class="h-6 w-0.5 bg-gray-400 absolute -top-6"></div>
+                        <h3 class="font-bold text-gray-500 uppercase tracking-widest text-sm mb-2">Seksi (Pelaksana)</h3>
+
+                        <div class="bg-white border border-gray-200 rounded-lg shadow p-3 w-full max-w-[280px] text-center hover:shadow-md transition-shadow">
+                            <div class="text-xs text-green-600 font-bold mb-1">KASIE PEMERINTAHAN</div>
+                            <div class="font-bold text-gray-800">AEN SUHENDI</div>
+                        </div>
+                        <div class="bg-white border border-gray-200 rounded-lg shadow p-3 w-full max-w-[280px] text-center hover:shadow-md transition-shadow">
+                            <div class="text-xs text-green-600 font-bold mb-1">KASIE PELAYANAN</div>
+                            <div class="font-bold text-gray-800">SITI NENENG NURSAIDAH</div>
+                        </div>
+                        <div class="bg-white border border-gray-200 rounded-lg shadow p-3 w-full max-w-[280px] text-center hover:shadow-md transition-shadow">
+                            <div class="text-xs text-green-600 font-bold mb-1">KASIE PEMBERDAYAAN</div>
+                            <div class="font-bold text-gray-800">NURDIN</div>
+                        </div>
+                    </div>
+
+                    <!-- Kolom Kepala Dusun / Lingkungan / Kejaroan -->
+                    <div class="flex flex-col items-center space-y-6 relative">
+                        <div class="h-6 w-0.5 bg-gray-400 absolute -top-6"></div>
+                        <h3 class="font-bold text-gray-500 uppercase tracking-widest text-sm mb-2">Kewilayahan</h3>
+
+                        <div class="bg-white border border-gray-200 rounded-lg shadow p-3 w-full max-w-[280px] text-center hover:shadow-md transition-shadow">
+                            <div class="text-xs text-purple-600 font-bold mb-1">KEJAROAN I</div>
+                            <div class="font-bold text-gray-800">SULAEMAN</div>
+                        </div>
+                        <div class="bg-white border border-gray-200 rounded-lg shadow p-3 w-full max-w-[280px] text-center hover:shadow-md transition-shadow">
+                            <div class="text-xs text-purple-600 font-bold mb-1">KEJAROAN II</div>
+                            <div class="font-bold text-gray-800">DIDI JAHUDI</div>
+                        </div>
+                    </div>
+
                 </div>
             </div>
         </div>
 
-        <!-- List Pejabat Grid -->
-        <h2 class="text-2xl font-bold text-gray-900 mb-8 text-center">Pejabat Desa</h2>
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-            
-            <!-- Kepala Desa -->
-            <div class="bg-white rounded-lg shadow-lg overflow-hidden border border-gray-100 text-center group">
-                <div class="h-64 bg-gray-200 overflow-hidden relative">
-                    <img src="{{ asset('storage/images/background-renged.jpeg') }}" alt="Kepala Desa" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500 grayscale group-hover:grayscale-0">
-                </div>
-                <div class="p-6">
-                    <h3 class="font-bold text-lg text-gray-900">Nama Kepala Desa</h3>
-                    <p class="text-blue-600 font-medium mb-2">Kepala Desa</p>
-                    <p class="text-gray-500 text-sm">NIP. 19750101 200001 1 001</p>
-                </div>
+        <!-- Document Preview -->
+        <h2 class="text-2xl font-bold text-gray-900 mb-6 border-l-4 border-blue-600 pl-4">Dokumen Resmi</h2>
+        <div class="bg-gray-100 p-4 rounded-lg">
+            <div class="flex flex-col items-center">
+                <img src="{{ asset('storage/images/struktur-organisasi.jpg') }}" alt="Dokumen Struktur Organisasi" class="max-w-full h-auto rounded shadow-lg border border-gray-300">
+                <p class="mt-2 text-sm text-gray-500">Lampiran Surat Keputusan Kepala Desa Renged tentang Susunan Organisasi Pemerintah Desa.</p>
             </div>
-
-            <!-- Sekretaris Desa -->
-            <div class="bg-white rounded-lg shadow-lg overflow-hidden border border-gray-100 text-center group">
-                <div class="h-64 bg-gray-200 overflow-hidden relative">
-                    <div class="flex items-center justify-center h-full bg-gray-100 text-gray-400">
-                        <svg class="w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
-                    </div>
-                </div>
-                <div class="p-6">
-                    <h3 class="font-bold text-lg text-gray-900">Nama Sekretaris</h3>
-                    <p class="text-blue-600 font-medium mb-2">Sekretaris Desa</p>
-                    <p class="text-gray-500 text-sm">NIP. -</p>
-                </div>
-            </div>
-
-             <!-- Kaur Keuangan -->
-             <div class="bg-white rounded-lg shadow-lg overflow-hidden border border-gray-100 text-center group">
-                <div class="h-64 bg-gray-200 overflow-hidden relative">
-                    <div class="flex items-center justify-center h-full bg-gray-100 text-gray-400">
-                        <svg class="w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
-                    </div>
-                </div>
-                <div class="p-6">
-                    <h3 class="font-bold text-lg text-gray-900">Nama Kaur</h3>
-                    <p class="text-blue-600 font-medium mb-2">Kaur Keuangan</p>
-                    <p class="text-gray-500 text-sm">NIP. -</p>
-                </div>
-            </div>
-
-             <!-- Kasi Pelayanan -->
-             <div class="bg-white rounded-lg shadow-lg overflow-hidden border border-gray-100 text-center group">
-                <div class="h-64 bg-gray-200 overflow-hidden relative">
-                    <div class="flex items-center justify-center h-full bg-gray-100 text-gray-400">
-                        <svg class="w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
-                    </div>
-                </div>
-                <div class="p-6">
-                    <h3 class="font-bold text-lg text-gray-900">Nama Kasi</h3>
-                    <p class="text-blue-600 font-medium mb-2">Kasi Pelayanan</p>
-                    <p class="text-gray-500 text-sm">NIP. -</p>
-                </div>
-            </div>
-
         </div>
+
     </div>
 </div>
 @endsection

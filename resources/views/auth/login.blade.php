@@ -87,8 +87,8 @@
     </div>
 
     <!-- Submit Button -->
-    <button type="submit" class="w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-bold rounded-lg text-sm px-5 py-3 text-center transition-all shadow-md hover:shadow-lg">
-        MASUK SISTEM
+    <button type="submit" class="w-full text-blue-900 bg-yellow-400 hover:bg-yellow-300 focus:ring-4 focus:ring-yellow-200 font-bold rounded-lg text-sm px-5 py-3 text-center transition-all shadow-md hover:shadow-lg hover:-translate-y-0.5">
+        MASUK
     </button>
 
     <!-- Register Link -->
