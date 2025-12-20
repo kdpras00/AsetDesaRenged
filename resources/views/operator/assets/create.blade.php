@@ -55,9 +55,9 @@
                                 <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                                     <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v1m6 11h2m-6 0h-2v4h-4v-4H8m13-4V4H3v7h2m12-6h-2m4 4h-2m0 4h-2m-2 4h-2m6 0v4h-4v-4m-4 0v4H9v-4m6 0h2m-2 4h2m-2-4v4m0 0h4m-4-2H9m0 0v2m0-2H7m2 0v-2"></path></svg>
                                 </div>
-                                <input type="text" name="code" value="{{ old('code') }}" required
-                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-3 transition-all placeholder-gray-400 focus:bg-white font-mono" 
-                                    placeholder="INV-2025-001">
+                                <input type="text" name="code" value="{{ old('code', $newCode) }}" required readonly
+                                    class="bg-gray-100 border border-gray-300 text-gray-700 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-3 transition-all font-mono cursor-not-allowed" 
+                                    title="Kode dibuat otomatis oleh sistem">
                             </div>
                         </div>
 

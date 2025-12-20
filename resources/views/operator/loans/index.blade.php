@@ -113,6 +113,8 @@
                                 <span class="bg-yellow-100 text-yellow-800 text-xs font-bold px-2.5 py-0.5 rounded border border-yellow-200">Pending</span>
                             @elseif($loan->status == 'approved')
                                 <span class="bg-blue-100 text-blue-800 text-xs font-bold px-2.5 py-0.5 rounded border border-blue-200">Dipinjam</span>
+                            @elseif($loan->status == 'returning')
+                                <span class="bg-purple-100 text-purple-800 text-xs font-bold px-2.5 py-0.5 rounded border border-purple-200">Pengajuan Kembali</span>
                             @elseif($loan->status == 'returned')
                                 <span class="bg-green-100 text-green-800 text-xs font-bold px-2.5 py-0.5 rounded border border-green-200">Dikembalikan</span>
                             @else
@@ -139,6 +141,18 @@
                                         Terima Kembali
                                     </button>
                                 </form>
+                            @elseif($loan->status == 'returning')
+                                <div class="flex justify-center space-x-2">
+                                    <form action="{{ route('operator.loans.return', $loan) }}" method="POST" id="return-form-{{ $loan->id }}">
+                                        @csrf
+                                        <button type="button" onclick="confirmReturn({{ $loan->id }})" class="text-white bg-green-600 hover:bg-green-700 focus:ring-4 focus:ring-green-300 font-medium rounded text-xs px-3 py-1.5 focus:outline-none transition">
+                                            Setujui Kembali
+                                        </button>
+                                    </form>
+                                    <button type="button" onclick="openRejectModal('{{ route('operator.loans.reject', $loan) }}')" class="text-white bg-red-600 hover:bg-red-700 focus:ring-4 focus:ring-red-300 font-medium rounded text-xs px-3 py-1.5 focus:outline-none transition">
+                                        Tolak
+                                    </button>
+                                </div>
                             @else
                                 <span class="text-gray-400 text-xs">-</span>
                             @endif

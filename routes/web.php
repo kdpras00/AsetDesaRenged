@@ -112,4 +112,7 @@ Route::middleware(['auth', 'role:kepala_desa'])->prefix('kepala-desa')->name('ke
     Route::post('/letters/{letter}/reject', [\App\Http\Controllers\KepalaDesa\LetterVerificationController::class, 'reject'])->name('letters.reject');
     // Report routes
     Route::get('/reports', [\App\Http\Controllers\KepalaDesa\ReportController::class, 'index'])->name('reports.index');
+    Route::get('/reports/print-assets', [\App\Http\Controllers\KepalaDesa\ReportController::class, 'printAssets'])->name('reports.print-assets');
+    Route::get('/reports/print-loans', [\App\Http\Controllers\KepalaDesa\ReportController::class, 'printLoans'])->name('reports.print-loans');
+    Route::get('/reports/print-letters', [\App\Http\Controllers\KepalaDesa\ReportController::class, 'printLetters'])->name('reports.print-letters');
 });

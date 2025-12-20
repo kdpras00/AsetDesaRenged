@@ -9,6 +9,7 @@ use App\Models\User;
 use App\Notifications\NewLoanRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Notification;
+use Illuminate\Support\Facades\DB;
 
 class LoanRequestController extends Controller
 {
@@ -63,30 +64,32 @@ class LoanRequestController extends Controller
 
         $asset = Asset::findOrFail($request->asset_id);
         
-        // Check availability for specific date range
-        $availableStock = $asset->getAvailableStockForDateRange($request->loan_date, $request->return_date);
-
-        if ($request->quantity > $availableStock) {
-             return back()->withInput()->with('error', "Stok tidak mencukupi untuk periode tanggal tersebut. Hanya tersedia {$availableStock} unit.");
+        if ($request->quantity > $asset->quantity) {
+             return back()->withInput()->with('error', "Stok tidak mencukupi. Hanya tersedia {$asset->quantity} unit.");
         }
 
-        $loan = Loan::create([
-            'user_id' => auth()->id(),
-            'asset_id' => $request->asset_id,
-            'loan_date' => $request->loan_date,
-            'return_date' => $request->return_date,
-            'quantity' => $request->quantity,
-            'purpose' => $request->purpose,
-            'status' => 'pending',
-        ]);
+        DB::transaction(function () use ($request, $asset) {
+            $loan = Loan::create([
+                'user_id' => auth()->id(),
+                'asset_id' => $request->asset_id,
+                'loan_date' => $request->loan_date,
+                'return_date' => $request->return_date,
+                'quantity' => $request->quantity,
+                'purpose' => $request->purpose,
+                'status' => 'pending',
+            ]);
 
-        // Notify Operators
-        $operators = User::where('role', 'operator')
-                        ->where('id', '!=', auth()->id())
-                        ->get();
-        Notification::send($operators, new NewLoanRequest($loan));
+            // Decrement Stock Immediately (Physical Booking)
+            $asset->decrement('quantity', $request->quantity);
 
-        return redirect()->route('warga.loans.index', ['view' => 'history'])->with('success', 'Permintaan peminjaman berhasil diajukan. Menunggu persetujuan.');
+            // Notify Operators
+            $operators = User::where('role', 'operator')
+                            ->where('id', '!=', auth()->id())
+                            ->get();
+            Notification::send($operators, new NewLoanRequest($loan));
+        });
+
+        return redirect()->route('warga.loans.index', ['view' => 'history'])->with('success', 'Permintaan peminjaman berhasil diajukan. Stok aset telah diamankan.');
     }
 
     /**

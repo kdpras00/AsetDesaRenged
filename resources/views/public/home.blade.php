@@ -190,6 +190,7 @@
     .animate-fade-in-up { animation: fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards; opacity: 0; }
     .animate-fade-in-down { animation: fadeInDown 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards; opacity: 0; }
     .animate-marquee { display: inline-block; animation: marquee 25s linear infinite; }
+    .animate-marquee:hover { animation-play-state: paused; cursor: pointer; }
     .delay-100 { animation-delay: 0.1s; }
     .delay-200 { animation-delay: 0.2s; }
 </style>

@@ -25,7 +25,24 @@ class AssetController extends Controller
     public function create()
     {
         $categories = AssetCategory::all();
-        return view('operator.assets.create', compact('categories'));
+
+        // Generate Auto Code
+        $year = date('Y');
+        $prefix = "INV-{$year}-";
+        $latestAsset = Asset::where('code', 'like', "{$prefix}%")
+                            ->orderBy('id', 'desc')
+                            ->first();
+
+        if ($latestAsset) {
+            $lastNumber = (int) substr($latestAsset->code, -3); // Get last 3 digits
+            $newNumber = $lastNumber + 1;
+        } else {
+            $newNumber = 1;
+        }
+
+        $newCode = $prefix . str_pad($newNumber, 3, '0', STR_PAD_LEFT);
+
+        return view('operator.assets.create', compact('categories', 'newCode'));
     }
 
     /**
