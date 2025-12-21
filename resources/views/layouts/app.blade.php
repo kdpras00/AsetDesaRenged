@@ -91,57 +91,7 @@
 
     @stack('scripts')
     
-    <script>
-        // Handle Session Flash Messages (using Swal from app.js)
-        // Handle Session Flash Messages (using Swal from app.js)
-        @if(session('success'))
-            window.hideLoading(); // Ensure loader is hidden
-            Swal.fire({
-                icon: 'success',
-                title: 'Berhasil',
-                text: "{{ session('success') }}",
-                timer: 3000,
-                showConfirmButton: false
-            });
-        @endif
 
-        @if(session('error'))
-            window.hideLoading(); // Ensure loader is hidden
-            Swal.fire({
-                icon: 'error',
-                title: 'Gagal',
-                text: "{{ session('error') }}",
-            });
-        @endif
-
-        @if(session('warning'))
-            window.hideLoading(); // Ensure loader is hidden
-            Swal.fire({
-                icon: 'warning',
-                title: 'Peringatan',
-                text: "{{ session('warning') }}",
-            });
-        @endif
-
-        // Global Delete Confirmation
-        function confirmDelete(id) {
-            Swal.fire({
-                title: 'Apakah Anda yakin?',
-                text: "Data yang dihapus tidak dapat dikembalikan!",
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#d33',
-                cancelButtonColor: '#3085d6',
-                confirmButtonText: 'Ya, hapus!',
-                cancelButtonText: 'Batal'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    document.getElementById('delete-form-' + id).submit();
-                }
-            })
-        }
-
-    </script>
 
     <!-- Global Loading Overlay -->
     <div id="global-loading-overlay" class="fixed inset-0 z-[100] bg-gray-50 dark:bg-gray-900 hidden flex-col items-center justify-center transition-opacity duration-300">
