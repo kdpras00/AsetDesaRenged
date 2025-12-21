@@ -91,10 +91,7 @@
         MASUK
     </button>
 
-    <!-- Register Link -->
-    <div class="text-sm font-medium text-gray-500 text-center mt-6">
-        Belum memiliki akun warga? <br><a href="{{ route('register') }}" class="text-blue-700 font-bold hover:underline">Daftar Akun Baru</a>
-    </div>
+
 
     <div class="mt-8 pt-8 border-t border-gray-100 text-center">
          <a href="{{ route('home') }}" class="text-gray-400 hover:text-gray-600 text-sm flex items-center justify-center">

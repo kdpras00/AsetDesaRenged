@@ -150,7 +150,7 @@ class LetterController extends Controller
         // Operator can download any letter, but maybe usually Processed or Verified?
         // Let's allow downloading at any stage for previewing content.
         
-        $view = $letter->letterType->form_config['pdf_view'] ?? null;
+        $view = $letter->letterType->form_config['pdf_view'] ?? 'pdf.generic';
         
         // Specific fix for KTP to ensure PDF generation
         if ($letter->letterType->slug === 'KTP') {

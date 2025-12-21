@@ -32,9 +32,9 @@ class Letter extends Model
     ];
 
     protected $casts = [
-        'request_date' => 'date',
-        'process_date' => 'date',
-        'approved_date' => 'date',
+        'request_date' => 'datetime',
+        'process_date' => 'datetime',
+        'approved_date' => 'datetime',
         'data' => 'array',
     ];
 

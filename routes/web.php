@@ -33,9 +33,7 @@ Route::post('/verify/captcha', [VerificationController::class, 'submitCaptcha'])
 Route::middleware('guest')->group(function () {
     Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
     Route::post('/login', [LoginController::class, 'login']);
-    Route::get('/register', [RegisterController::class, 'showRegistrationForm'])->name('register');
-    Route::get('/register', [RegisterController::class, 'showRegistrationForm'])->name('register');
-    Route::post('/register', [RegisterController::class, 'register']);
+
 
     // Password Reset Routes
     Route::get('/forgot-password', [App\Http\Controllers\Auth\ForgotPasswordController::class, 'showLinkRequestForm'])->name('password.request');
@@ -66,6 +64,8 @@ Route::middleware(['auth', 'role:operator'])->prefix('operator')->name('operator
     
     // Asset management routes
     Route::resource('assets', \App\Http\Controllers\Operator\AssetController::class);
+    // Letter Type management
+    Route::resource('letter-types', \App\Http\Controllers\Operator\LetterTypeController::class);
     // Loan management
     Route::get('/loans', [\App\Http\Controllers\Operator\LoanController::class, 'index'])->name('loans.index');
     Route::post('/loans/{loan}/approve', [\App\Http\Controllers\Operator\LoanController::class, 'approve'])->name('loans.approve');

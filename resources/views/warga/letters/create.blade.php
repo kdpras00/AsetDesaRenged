@@ -470,6 +470,30 @@
                 </div>
                 @endif
 
+                <!-- Section: Dokumen Persyaratan (Wajib) -->
+                <div class="bg-white p-6 rounded-xl border border-gray-100 shadow-sm relative mt-8">
+                     <div class="absolute -top-3 left-4 bg-white px-2 text-sm font-bold text-blue-600 flex items-center">
+                        Dokumen Persyaratan (Wajib)
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-2">
+                        <!-- Upload KTP -->
+                        <div>
+                            <label class="block mb-2 text-sm font-semibold text-gray-700">Foto KTP <span class="text-red-500">*</span></label>
+                            <input type="file" name="ktp_file" accept=".jpg,.jpeg,.png,.pdf" required
+                                class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 transition-all border border-gray-300 rounded-lg cursor-pointer bg-gray-50 focus:outline-none">
+                            <p class="mt-1 text-xs text-gray-500">Format: JPG, PNG, PDF. Maks: 2MB.</p>
+                        </div>
+
+                        <!-- Upload KK -->
+                        <div>
+                            <label class="block mb-2 text-sm font-semibold text-gray-700">Foto Kartu Keluarga (KK) <span class="text-red-500">*</span></label>
+                            <input type="file" name="kk_file" accept=".jpg,.jpeg,.png,.pdf" required
+                                class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 transition-all border border-gray-300 rounded-lg cursor-pointer bg-gray-50 focus:outline-none">
+                            <p class="mt-1 text-xs text-gray-500">Format: JPG, PNG, PDF. Maks: 2MB.</p>
+                        </div>
+                    </div>
+                </div>
 
                 <!-- Section 2: Detail Permohonan -->
                 <div class="bg-white p-6 rounded-xl border border-gray-100 shadow-sm relative mt-8">
@@ -490,24 +514,7 @@
                             </div>
                         </div>
 
-                        <!-- Lampiran -->
-                        <div>
-                            <label class="block mb-2 text-sm font-semibold text-gray-700">Lampiran Dokumen (Opsional)</label>
-                            <div class="flex items-center justify-center w-full">
-                                <label for="dropzone-file" class="flex flex-col items-center justify-center w-full h-32 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 hover:bg-gray-100 transition-colors">
-                                    <div class="flex flex-col items-center justify-center pt-5 pb-6">
-                                        <svg class="w-8 h-8 mb-3 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path></svg>
-                                        <p class="mb-2 text-sm text-gray-500"><span class="font-semibold">Klik untuk upload</span> atau drag and drop</p>
-                                        <p class="text-xs text-gray-500">PDF, JPG, PNG (MAX. 5MB)</p>
-                                    </div>
-                                    <input id="dropzone-file" type="file" name="attachment" class="hidden" onchange="previewFile(this)" />
-                                </label>
-                            </div>
-                             <div id="file-preview" class="mt-4 hidden p-3 bg-blue-50 border border-blue-100 rounded-lg flex items-center">
-                                <svg class="w-5 h-5 text-blue-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
-                                <span id="filename-preview" class="text-sm text-blue-800 font-medium truncate">Filename.pdf</span>
-                            </div>
-                        </div>
+
                     </div>
                 </div>
 

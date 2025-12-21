@@ -73,13 +73,53 @@
                         <p class="text-sm font-semibold text-gray-900 mb-3">Data Khusus Surat</p>
                         <div class="grid grid-cols-1 gap-4">
                             @foreach($letter->data as $key => $value)
-                            <div>
-                                <p class="text-xs text-uppercase text-gray-500 mb-1">{{ ucwords(str_replace('_', ' ', $key)) }}</p>
-                                <p class="text-sm font-medium text-gray-900">{{ is_array($value) ? json_encode($value) : $value }}</p>
-                            </div>
+                                @if(!in_array($key, ['ktp_file_path', 'kk_file_path']))
+                                <div>
+                                    <p class="text-xs text-uppercase text-gray-500 mb-1">{{ ucwords(str_replace('_', ' ', $key)) }}</p>
+                                    <p class="text-sm font-medium text-gray-900">{{ is_array($value) ? json_encode($value) : $value }}</p>
+                                </div>
+                                @endif
                             @endforeach
                         </div>
                     </div>
+
+                    <!-- Dokumen Persyaratan Wajib (KTP & KK) -->
+                    @if(isset($letter->data['ktp_file_path']) || isset($letter->data['kk_file_path']))
+                    <div class="border-t border-gray-100 pt-4 mt-4">
+                        <p class="text-sm font-semibold text-gray-900 mb-3">Dokumen Persyaratan</p>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            @if(isset($letter->data['ktp_file_path']))
+                            <div class="border rounded-lg p-3 bg-gray-50">
+                                <p class="text-xs font-bold text-gray-500 mb-2 uppercase">KTP Pemohon</p>
+                                @php $ktpExt = pathinfo($letter->data['ktp_file_path'], PATHINFO_EXTENSION); @endphp
+                                @if(in_array(strtolower($ktpExt), ['jpg', 'jpeg', 'png']))
+                                    <img src="{{ Storage::url($letter->data['ktp_file_path']) }}" alt="KTP" class="w-full h-48 object-cover rounded-lg mb-2 hover:opacity-90 transition cursor-pointer" onclick="window.open(this.src, '_blank')">
+                                @else
+                                    <div class="flex items-center justify-center h-32 bg-gray-200 rounded-lg mb-2 text-gray-500">
+                                        <span class="text-xs">Preview tidak tersedia (PDF)</span>
+                                    </div>
+                                @endif
+                                <a href="{{ Storage::url($letter->data['ktp_file_path']) }}" target="_blank" class="block text-center text-xs text-blue-600 hover:text-blue-800 font-bold border border-blue-200 rounded py-1 bg-white hover:bg-blue-50">Preview KTP</a>
+                            </div>
+                            @endif
+
+                            @if(isset($letter->data['kk_file_path']))
+                            <div class="border rounded-lg p-3 bg-gray-50">
+                                <p class="text-xs font-bold text-gray-500 mb-2 uppercase">Kartu Keluarga (KK)</p>
+                                @php $kkExt = pathinfo($letter->data['kk_file_path'], PATHINFO_EXTENSION); @endphp
+                                @if(in_array(strtolower($kkExt), ['jpg', 'jpeg', 'png']))
+                                    <img src="{{ Storage::url($letter->data['kk_file_path']) }}" alt="KK" class="w-full h-48 object-cover rounded-lg mb-2 hover:opacity-90 transition cursor-pointer" onclick="window.open(this.src, '_blank')">
+                                @else
+                                    <div class="flex items-center justify-center h-32 bg-gray-200 rounded-lg mb-2 text-gray-500">
+                                        <span class="text-xs">Preview tidak tersedia (PDF)</span>
+                                    </div>
+                                @endif
+                                <a href="{{ Storage::url($letter->data['kk_file_path']) }}" target="_blank" class="block text-center text-xs text-blue-600 hover:text-blue-800 font-bold border border-blue-200 rounded py-1 bg-white hover:bg-blue-50">Preview KK</a>
+                            </div>
+                            @endif
+                        </div>
+                    </div>
+                    @endif
                     @endif
                     
                      @if($letter->attachment_path)

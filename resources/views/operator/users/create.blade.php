@@ -70,7 +70,6 @@
                                     <option value="warga" {{ old('role') == 'warga' ? 'selected' : '' }}>Warga</option>
                                     <option value="operator" {{ old('role') == 'operator' ? 'selected' : '' }}>Operator</option>
                                     <option value="kepala_desa" {{ old('role') == 'kepala_desa' ? 'selected' : '' }}>Kepala Desa</option>
-                                    <option value="admin" {{ old('role') == 'admin' ? 'selected' : '' }}>Admin</option>
                                 </select>
                                 <div class="absolute inset-y-0 right-0 flex items-center px-2 pointer-events-none">
                                     <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
@@ -142,8 +141,9 @@
                         <span class="w-6 h-6 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center mr-2 text-xs">3</span>
                         Biodata & Kontak
                     </div>
+                    
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-2">
-                        <!-- NIK -->
+                        <!-- NIK (Required for Warga) -->
                         <div>
                             <label class="block mb-2 text-sm font-semibold text-gray-700">NIK (Nomor Induk Kependudukan)</label>
                              <div class="relative">
@@ -155,15 +155,72 @@
                             </div>
                         </div>
 
-                        <!-- Phone -->
+                         <!-- Phone -->
                         <div>
-                            <label class="block mb-2 text-sm font-semibold text-gray-700">Nomor Telepon</label>
+                            <label class="block mb-2 text-sm font-semibold text-gray-700">WhatsApp / Telepon</label>
                              <div class="relative">
                                 <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                                     <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C7.82 21 2 15.18 2 5V3z"></path></svg>
                                 </div>
                                 <input type="text" name="phone" value="{{ old('phone') }}" maxlength="13" inputmode="numeric" oninput="this.value = this.value.replace(/[^0-9]/g, '')"
                                     class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-3 transition-all focus:bg-white placeholder-gray-400" placeholder="08xxxxxxxxxx">
+                            </div>
+                        </div>
+
+                        <!-- Warga Specific Fields -->
+                        <div id="warga-fields" class="md:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-6 hidden">
+                            <!-- KK -->
+                            <div>
+                                <label class="block mb-2 text-sm font-semibold text-gray-700">No. KK <span class="text-red-500">*</span></label>
+                                <div class="relative">
+                                    <input type="text" name="kk" value="{{ old('kk') }}" maxlength="16" inputmode="numeric" oninput="this.value = this.value.replace(/[^0-9]/g, '')"
+                                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-3 transition-all focus:bg-white placeholder-gray-400 font-mono" placeholder="16 digit No. KK">
+                                </div>
+                            </div>
+
+                            <!-- Gender -->
+                            <div>
+                                <label class="block mb-2 text-sm font-semibold text-gray-700">Jenis Kelamin <span class="text-red-500">*</span></label>
+                                <select name="gender" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-3 transition-all focus:bg-white">
+                                    <option value="">-- Pilih --</option>
+                                    <option value="L" {{ old('gender') == 'L' ? 'selected' : '' }}>Laki-laki</option>
+                                    <option value="P" {{ old('gender') == 'P' ? 'selected' : '' }}>Perempuan</option>
+                                </select>
+                            </div>
+
+                             <!-- Birth Place -->
+                            <div>
+                                <label class="block mb-2 text-sm font-semibold text-gray-700">Tempat Lahir <span class="text-red-500">*</span></label>
+                                <input type="text" name="birth_place" value="{{ old('birth_place') }}" 
+                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-3 transition-all focus:bg-white" placeholder="Kota Kelahiran">
+                            </div>
+
+                             <!-- Birth Date -->
+                            <div>
+                                <label class="block mb-2 text-sm font-semibold text-gray-700">Tanggal Lahir <span class="text-red-500">*</span></label>
+                                <input type="date" name="birth_date" value="{{ old('birth_date') }}" 
+                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-3 transition-all focus:bg-white">
+                            </div>
+
+                            <!-- Religion -->
+                            <div>
+                                <label class="block mb-2 text-sm font-semibold text-gray-700">Agama <span class="text-red-500">*</span></label>
+                                <select name="religion" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-3 transition-all focus:bg-white">
+                                    <option value="">-- Pilih --</option>
+                                    <option value="Islam" {{ old('religion') == 'Islam' ? 'selected' : '' }}>Islam</option>
+                                    <option value="Kristen" {{ old('religion') == 'Kristen' ? 'selected' : '' }}>Kristen</option>
+                                    <option value="Katolik" {{ old('religion') == 'Katolik' ? 'selected' : '' }}>Katolik</option>
+                                    <option value="Hindu" {{ old('religion') == 'Hindu' ? 'selected' : '' }}>Hindu</option>
+                                    <option value="Buddha" {{ old('religion') == 'Buddha' ? 'selected' : '' }}>Buddha</option>
+                                    <option value="Konghucu" {{ old('religion') == 'Konghucu' ? 'selected' : '' }}>Konghucu</option>
+                                </select>
+                            </div>
+
+                            <!-- Job -->
+                            <div>
+                                <label class="block mb-2 text-sm font-semibold text-gray-700">Pekerjaan <span class="text-red-500">*</span></label>
+                                <input type="text" name="job" value="{{ old('job') }}" 
+                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-3 transition-all focus:bg-white" placeholder="Pekerjaan saat ini">
                             </div>
                         </div>
 
@@ -179,6 +236,28 @@
                         </div>
                     </div>
                 </div>
+                
+                <script>
+                    document.addEventListener('DOMContentLoaded', function() {
+                        const roleSelect = document.querySelector('select[name="role"]');
+                        const wargaFields = document.getElementById('warga-fields');
+                        
+                        function toggleFields() {
+                            if (roleSelect.value === 'warga') {
+                                wargaFields.classList.remove('hidden');
+                                // Enable required to inputs inside
+                                wargaFields.querySelectorAll('input, select').forEach(el => el.required = true);
+                            } else {
+                                wargaFields.classList.add('hidden');
+                                // Disable required
+                                wargaFields.querySelectorAll('input, select').forEach(el => el.required = false);
+                            }
+                        }
+
+                        roleSelect.addEventListener('change', toggleFields);
+                        toggleFields(); // Run on load (for validation errors redirection)
+                    });
+                </script>
 
                 <div class="pt-6 border-t border-gray-100 flex justify-end space-x-3">
                     <a href="{{ route('operator.users.index') }}" class="px-6 py-2.5 bg-gray-100 text-gray-700 font-medium rounded-lg hover:bg-gray-200 transition focus:ring-4 focus:ring-gray-100">Batal</a>

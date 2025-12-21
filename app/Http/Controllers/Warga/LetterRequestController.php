@@ -73,7 +73,8 @@ class LetterRequestController extends Controller
         $rules = [
             'letter_type_id' => 'required|exists:letter_types,id',
             'purpose' => 'required|string|max:1000',
-            'attachment' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:5120', // 5MB
+            'ktp_file' => 'required|file|mimes:jpg,jpeg,png,pdf|max:2048', // 2MB
+            'kk_file' => 'required|file|mimes:jpg,jpeg,png,pdf|max:2048', // 2MB
         ];
 
         // Load Dynamic Rules from Config
@@ -89,19 +90,29 @@ class LetterRequestController extends Controller
             'purpose' => $request->purpose,
             'request_date' => now(),
             'status' => 'pending',
+            'data' => [], // Initialize data array
         ];
 
         // Store Dynamic Data Fields
         // Only store fields defined in config to avoid polluting the JSON
         $fieldsToStore = $letterType->form_config['fields'] ?? [];
         
+        $storedData = [];
         if (!empty($fieldsToStore)) {
-             $data['data'] = $request->only($fieldsToStore);
+             $storedData = $request->only($fieldsToStore);
         }
 
-        if ($request->hasFile('attachment')) {
-            $data['attachment'] = $request->file('attachment')->store('attachments', 'public');
+        // Handle Mandatory KTP & KK Uploads
+        if ($request->hasFile('ktp_file')) {
+            $storedData['ktp_file_path'] = $request->file('ktp_file')->store('letters/ktp', 'public');
         }
+        if ($request->hasFile('kk_file')) {
+            $storedData['kk_file_path'] = $request->file('kk_file')->store('letters/kk', 'public');
+        }
+
+        $data['data'] = $storedData;
+
+
 
         $letter = Letter::create($data);
 
@@ -128,7 +139,7 @@ class LetterRequestController extends Controller
             return back()->with('error', 'Surat belum terverifikasi. Status saat ini: ' . ucfirst($letter->status) . '.');
         }
 
-        $view = $letter->letterType->form_config['pdf_view'] ?? null;
+        $view = $letter->letterType->form_config['pdf_view'] ?? 'pdf.generic';
         
         // Specific fix for KTP to ensure PDF generation
         if ($letter->letterType->slug === 'KTP') {

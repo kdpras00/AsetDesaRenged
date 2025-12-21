@@ -94,9 +94,6 @@
                         <a href="{{ route('login') }}" class="text-gray-700 hover:text-blue-700 font-medium text-sm transition-colors">
                             Masuk
                         </a>
-                        <a href="{{ route('register') }}" class="text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 shadow-sm transition-all">
-                            Daftar
-                        </a>
                     @endauth
                 </div>
 
@@ -124,7 +121,6 @@
                 @else
                     <div class="grid grid-cols-2 gap-2 mt-4">
                         <a href="{{ route('login') }}" class="block text-center px-4 py-3 rounded-md text-base font-medium bg-gray-100 text-gray-700 hover:bg-gray-200">Masuk</a>
-                        <a href="{{ route('register') }}" class="block text-center px-4 py-3 rounded-md text-base font-medium bg-blue-600 text-white hover:bg-blue-700">Daftar</a>
                     </div>
                 @endauth
             </div>

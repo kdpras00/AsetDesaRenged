@@ -38,15 +38,29 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate([
+        $rules = [
             'name' => ['required', 'string', 'max:255', 'regex:/^[a-zA-Z\s\.]+$/'],
             'email' => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|min:8|confirmed',
-            'role' => 'required|in:admin,operator,kepala_desa,warga',
-            'nik' => 'nullable|numeric|digits:16|unique:users',
+            'role' => 'required|in:operator,kepala_desa,warga',
             'phone' => 'nullable|numeric|digits_between:10,13',
             'address' => 'nullable|string',
-        ]);
+        ];
+
+        // Additional validation for Warga
+        if ($request->role === 'warga') {
+            $rules['nik'] = 'required|numeric|digits:16|unique:users';
+            $rules['kk'] = 'required|numeric|digits:16';
+            $rules['gender'] = 'required|in:L,P';
+            $rules['birth_place'] = 'required|string|max:255';
+            $rules['birth_date'] = 'required|date';
+            $rules['religion'] = 'required|string|max:50';
+            $rules['job'] = 'required|string|max:100';
+        } else {
+            $rules['nik'] = 'nullable|numeric|digits:16|unique:users';
+        }
+
+        $request->validate($rules);
 
         User::create([
             'name' => $request->name,
@@ -54,8 +68,14 @@ class UserController extends Controller
             'password' => Hash::make($request->password),
             'role' => $request->role,
             'nik' => $request->nik,
+            'kk' => $request->kk,
             'phone' => $request->phone,
             'address' => $request->address,
+            'gender' => $request->gender,
+            'birth_place' => $request->birth_place,
+            'birth_date' => $request->birth_date,
+            'religion' => $request->religion,
+            'job' => $request->job,
         ]);
 
         return redirect()->route('operator.users.index')->with('success', 'Pengguna berhasil ditambahkan.');
@@ -74,23 +94,42 @@ class UserController extends Controller
      */
     public function update(Request $request, User $user)
     {
-        $request->validate([
+        $rules = [
             'name' => ['required', 'string', 'max:255', 'regex:/^[a-zA-Z\s\.]+$/'],
             'email' => 'required|string|email|max:255|unique:users,email,' . $user->id,
             'password' => 'nullable|string|min:8|confirmed',
-            'role' => 'required|in:admin,operator,kepala_desa,warga',
-            'nik' => 'nullable|numeric|digits:16|unique:users,nik,' . $user->id,
+            'role' => 'required|in:operator,kepala_desa,warga',
             'phone' => 'nullable|numeric|digits_between:10,13',
             'address' => 'nullable|string',
-        ]);
+        ];
+
+        if ($request->role === 'warga') {
+            $rules['nik'] = 'required|numeric|digits:16|unique:users,nik,' . $user->id;
+            $rules['kk'] = 'required|numeric|digits:16';
+            $rules['gender'] = 'required|in:L,P';
+            $rules['birth_place'] = 'required|string|max:255';
+            $rules['birth_date'] = 'required|date';
+            $rules['religion'] = 'required|string|max:50';
+            $rules['job'] = 'required|string|max:100';
+        } else {
+             $rules['nik'] = 'nullable|numeric|digits:16|unique:users,nik,' . $user->id;
+        }
+
+        $request->validate($rules);
 
         $data = [
             'name' => $request->name,
             'email' => $request->email,
             'role' => $request->role,
             'nik' => $request->nik,
+            'kk' => $request->kk,
             'phone' => $request->phone,
             'address' => $request->address,
+            'gender' => $request->gender,
+            'birth_place' => $request->birth_place,
+            'birth_date' => $request->birth_date,
+            'religion' => $request->religion,
+            'job' => $request->job,
         ];
 
         if ($request->filled('password')) {
