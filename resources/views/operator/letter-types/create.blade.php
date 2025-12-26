@@ -9,12 +9,30 @@
 @section('content')
 <div class="container mx-auto px-4 py-8">
     <div class="max-w-3xl mx-auto">
-        <div class="mb-6">
-            <a href="{{ route('operator.letter-types.index') }}" class="text-gray-500 hover:text-gray-700 flex items-center">
-                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
-                Kembali ke Manajemen Surat
-            </a>
-        </div>
+        <!-- Breadcrumb -->
+        <nav class="flex mb-4" aria-label="Breadcrumb">
+            <ol class="inline-flex items-center space-x-1 md:space-x-3">
+                <li class="inline-flex items-center">
+                    <a href="{{ route('operator.dashboard') }}" class="inline-flex items-center text-sm font-medium text-gray-700 hover:text-blue-600">
+                        Dashboard
+                    </a>
+                </li>
+                <li>
+                    <div class="flex items-center">
+                        <span class="mx-2 text-gray-400">/</span>
+                        <a href="{{ route('operator.letter-types.index') }}" class="text-sm font-medium text-gray-700 hover:text-blue-600">Manajemen Jenis Surat</a>
+                    </div>
+                </li>
+                <li aria-current="page">
+                    <div class="flex items-center">
+                        <span class="mx-2 text-gray-400">/</span>
+                        <span class="text-sm font-medium text-gray-500">{{ isset($letterType) ? 'Edit' : 'Tambah Baru' }}</span>
+                    </div>
+                </li>
+            </ol>
+        </nav>
+
+
 
         <div class="bg-white rounded-xl shadow-lg overflow-hidden">
             <div class="p-6 border-b border-gray-100 bg-gray-50">

@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>@yield('title', 'Sistem Manajemen Aset Desa Renged')</title>
+    <link rel="icon" type="image/png" href="{{ asset('storage/images/logo-renged.png') }}?v={{ time() }}">
     
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -60,7 +61,7 @@
                                     </a>
                                 </li>
                                 <li>
-                                    <form method="POST" action="{{ route('logout') }}">
+                                    <form id="logout-form" method="POST" action="{{ route('logout') }}">
                                         @csrf
                                         <button type="submit" class="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white">
                                             Keluar
@@ -210,6 +211,7 @@
         });
 
 
+
         // Global Delete Confirmation
         function confirmDelete(id) {
             Swal.fire({
@@ -227,6 +229,58 @@
                 }
             })
         }
+
+        // Auto Logout Script
+        document.addEventListener('DOMContentLoaded', function() {
+            @auth
+                // Session lifetime in minutes from config
+                const lifetimeMinutes = {{ config('session.lifetime') }};
+                // Warn 5 minutes before (or 1 minute if session is short)
+                const warningMinutes = 5; 
+                
+                const lifetimeMs = lifetimeMinutes * 60 * 1000;
+                let warningMs = warningMinutes * 60 * 1000;
+
+                // Adjust warning time if session is too short
+                if (lifetimeMs <= warningMs) {
+                    warningMs = 60 * 1000; // 1 minute
+                }
+                
+                const timeUntilWarning = lifetimeMs - warningMs;
+
+                // Only enable if time is valid
+                if (timeUntilWarning > 0) {
+                    setTimeout(function() {
+                        Swal.fire({
+                            title: 'Sesi Akan Berakhir!',
+                            text: 'Anda tidak aktif dalam waktu lama. Sesi Anda akan berakhir dalam beberapa menit. Klik tombol di bawah agar tidak logout.',
+                            icon: 'warning',
+                            timer: warningMs,
+                            timerProgressBar: true,
+                            showConfirmButton: true,
+                            confirmButtonText: 'Saya Masih Aktif',
+                            allowOutsideClick: false
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                // Reload to refresh session
+                                window.location.reload();
+                            }
+                        });
+
+                        // Final logout timer
+                        setTimeout(function() {
+                            const form = document.getElementById('logout-form');
+                            if (form) {
+                                form.submit();
+                            } else {
+                                window.location.reload(); // Fallback
+                            }
+                        }, warningMs);
+
+                    }, timeUntilWarning);
+                }
+            @endauth
+        });
 
     </script>
 
