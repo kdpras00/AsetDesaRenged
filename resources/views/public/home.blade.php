@@ -32,9 +32,12 @@
     <div class="relative z-10 container mx-auto px-4 pt-32 pb-32">
         <div class="max-w-3xl">
             <!-- Badge -->
-            <div class="inline-flex items-center bg-yellow-500/10 border border-yellow-500/30 rounded-full px-4 py-1.5 mb-8 backdrop-blur-sm">
+            <div class="inline-flex items-center bg-yellow-500/10 border border-yellow-500/30 rounded-xl px-4 py-2 mb-8 backdrop-blur-sm">
                 <span class="w-2 h-2 bg-yellow-400 rounded-full mr-3 animate-pulse"></span>
-                <span class="text-yellow-100 text-sm font-semibold tracking-wide uppercase">Website Resmi Pemerintah</span>
+                <div class="flex flex-col text-left">
+                    <span class="text-yellow-100 text-sm font-semibold tracking-wide uppercase">Website Resmi Pemerintah</span>
+                    <span class="text-yellow-200 text-xs font-medium tracking-wide uppercase mt-0.5">Pembuatan Surat Digital dan Peminjaman Asset</span>
+                </div>
             </div>
             
             <!-- Headline -->
